@@ -19,4 +19,5 @@ export const ENV = {
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   geminiApiKey: process.env.GEMINI_API_KEY ?? "",
   geminiModel: process.env.GEMINI_MODEL ?? "",
+  openWeatherApiKey: process.env.OPENWEATHER_API_KEY ?? "",
 };

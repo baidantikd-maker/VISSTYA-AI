@@ -144,11 +144,17 @@ export default function Report() {
                 {Math.round(Number(report.metadataScore))}/15
               </div>
               <div className="space-y-2 text-sm text-[hsl(var(--muted))]">
-                {report.metadataFindings && typeof report.metadataFindings === "object" ? (
+                {(report.metadataFindings as any)?.findings ? (
+                  (report.metadataFindings as any).findings.map((finding: string, i: number) => (
+                    <p key={i}>• {finding}</p>
+                  ))
+                ) : report.metadataFindings && typeof report.metadataFindings === "object" ? (
                   Object.entries(report.metadataFindings).map(([key, value]) => (
-                    <p key={key}>
-                      <strong>{key}:</strong> {String(value as unknown)}
-                    </p>
+                    key !== "findings" && (
+                      <p key={key}>
+                        <strong>{key}:</strong> {String(value as unknown)}
+                      </p>
+                    )
                   ))
                 ) : (
                   <p>No metadata findings</p>
@@ -163,11 +169,17 @@ export default function Report() {
                 {Math.round(Number(report.visionScore))}/25
               </div>
               <div className="space-y-2 text-sm text-[hsl(var(--muted))]">
-                {report.visionFindings && typeof report.visionFindings === "object" ? (
+                {(report.visionFindings as any)?.findings ? (
+                  (report.visionFindings as any).findings.map((finding: string, i: number) => (
+                    <p key={i}>• {finding}</p>
+                  ))
+                ) : report.visionFindings && typeof report.visionFindings === "object" ? (
                   Object.entries(report.visionFindings).map(([key, value]) => (
-                    <p key={key}>
-                      <strong>{key}:</strong> {String(value as unknown)}
-                    </p>
+                    key !== "findings" && (
+                      <p key={key}>
+                        <strong>{key}:</strong> {String(value as unknown)}
+                      </p>
+                    )
                   ))
                 ) : (
                   <p>No vision findings</p>
@@ -176,17 +188,28 @@ export default function Report() {
             </div>
 
             {/* Weather */}
-            <div className="card-minimal">
+            <div className="card-minimal relative overflow-hidden">
+              {(report.weatherFindings as any)?.isNotRequired && (
+                <div className="absolute top-0 right-0 bg-accent/20 text-accent text-[10px] px-2 py-0.5 rounded-bl font-bold uppercase tracking-wider">
+                  Not Required
+                </div>
+              )}
               <h3 className="text-lg font-semibold mb-2">Weather Verification</h3>
               <div className="text-3xl font-bold text-accent mb-4">
                 {Math.round(Number(report.weatherScore))}/25
               </div>
               <div className="space-y-2 text-sm text-[hsl(var(--muted))]">
-                {report.weatherFindings && typeof report.weatherFindings === "object" ? (
+                {(report.weatherFindings as any)?.findings ? (
+                  (report.weatherFindings as any).findings.map((finding: string, i: number) => (
+                    <p key={i}>• {finding}</p>
+                  ))
+                ) : report.weatherFindings && typeof report.weatherFindings === "object" ? (
                   Object.entries(report.weatherFindings).map(([key, value]) => (
-                    <p key={key}>
-                      <strong>{key}:</strong> {String(value as unknown)}
-                    </p>
+                    key !== "findings" && key !== "isNotRequired" && (
+                      <p key={key}>
+                        <strong>{key}:</strong> {String(value as unknown)}
+                      </p>
+                    )
                   ))
                 ) : (
                   <p>No weather findings</p>
@@ -201,11 +224,17 @@ export default function Report() {
                 {Math.round(Number(report.evidenceScore))}/35
               </div>
               <div className="space-y-2 text-sm text-[hsl(var(--muted))]">
-                {report.evidenceFindings && typeof report.evidenceFindings === "object" ? (
+                {(report.evidenceFindings as any)?.findings ? (
+                  (report.evidenceFindings as any).findings.map((finding: string, i: number) => (
+                    <p key={i}>• {finding}</p>
+                  ))
+                ) : report.evidenceFindings && typeof report.evidenceFindings === "object" ? (
                   Object.entries(report.evidenceFindings).map(([key, value]) => (
-                    <p key={key}>
-                      <strong>{key}:</strong> {String(value as unknown)}
-                    </p>
+                    key !== "findings" && (
+                      <p key={key}>
+                        <strong>{key}:</strong> {String(value as unknown)}
+                      </p>
+                    )
                   ))
                 ) : (
                   <p>No evidence findings</p>

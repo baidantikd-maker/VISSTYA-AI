@@ -49,6 +49,32 @@ export default function Share() {
     TRUSTABLE: "bg-green-100",
   };
 
+  const renderFindings = (findingsObj: any) => {
+    if (findingsObj?.findings && Array.isArray(findingsObj.findings)) {
+      return (
+        <div className="text-sm text-[hsl(var(--muted))] space-y-1">
+          {findingsObj.findings.map((finding: string, i: number) => (
+            <p key={i}>• {finding}</p>
+          ))}
+        </div>
+      );
+    }
+    if (findingsObj && typeof findingsObj === "object") {
+      return (
+        <div className="text-sm text-[hsl(var(--muted))] space-y-1">
+          {Object.entries(findingsObj).map(([key, value]) => (
+            key !== "findings" && key !== "isNotRequired" && (
+              <p key={key}>
+                <strong>{key}:</strong> {String(value as unknown)}
+              </p>
+            )
+          ))}
+        </div>
+      );
+    }
+    return <p className="text-sm text-[hsl(var(--muted))]">No findings available</p>;
+  };
+
   return (
     <div className="min-h-screen bg-[hsl(var(--background))]">
       {/* Header */}
@@ -91,19 +117,7 @@ export default function Share() {
               <div className="text-3xl font-bold text-accent mb-4">
                 {Math.round(Number(report.metadataScore))}/15
               </div>
-              <div className="space-y-2">
-                {report.metadataFindings && typeof report.metadataFindings === "object" ? (
-                  <div className="text-sm text-[hsl(var(--muted))] space-y-1">
-                    {Object.entries(report.metadataFindings).map(([key, value]) => (
-                      <p key={key}>
-                        <strong>{key}:</strong> {String(value as unknown)}
-                      </p>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[hsl(var(--muted))]">No metadata findings</p>
-                )}
-              </div>
+              {renderFindings(report.metadataFindings)}
             </div>
 
             {/* Vision */}
@@ -112,40 +126,21 @@ export default function Share() {
               <div className="text-3xl font-bold text-accent mb-4">
                 {Math.round(Number(report.visionScore))}/25
               </div>
-              <div className="space-y-2">
-                {report.visionFindings && typeof report.visionFindings === "object" ? (
-                  <div className="text-sm text-[hsl(var(--muted))] space-y-1">
-                    {Object.entries(report.visionFindings).map(([key, value]) => (
-                      <p key={key}>
-                        <strong>{key}:</strong> {String(value as unknown)}
-                      </p>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[hsl(var(--muted))]">No vision findings</p>
-                )}
-              </div>
+              {renderFindings(report.visionFindings)}
             </div>
 
             {/* Weather */}
-            <div className="card-minimal">
+            <div className="card-minimal relative overflow-hidden">
+              {(report.weatherFindings as any)?.isNotRequired && (
+                <div className="absolute top-0 right-0 bg-accent/20 text-accent text-[10px] px-2 py-0.5 rounded-bl font-bold uppercase tracking-wider">
+                  Not Required
+                </div>
+              )}
               <h3 className="text-lg font-semibold mb-2">Weather Verification</h3>
               <div className="text-3xl font-bold text-accent mb-4">
                 {Math.round(Number(report.weatherScore))}/25
               </div>
-              <div className="space-y-2">
-                {report.weatherFindings && typeof report.weatherFindings === "object" ? (
-                  <div className="text-sm text-[hsl(var(--muted))] space-y-1">
-                    {Object.entries(report.weatherFindings).map(([key, value]) => (
-                      <p key={key}>
-                        <strong>{key}:</strong> {String(value as unknown)}
-                      </p>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[hsl(var(--muted))]">No weather findings</p>
-                )}
-              </div>
+              {renderFindings(report.weatherFindings)}
             </div>
 
             {/* Evidence */}
@@ -154,19 +149,7 @@ export default function Share() {
               <div className="text-3xl font-bold text-accent mb-4">
                 {Math.round(Number(report.evidenceScore))}/35
               </div>
-              <div className="space-y-2">
-                {report.evidenceFindings && typeof report.evidenceFindings === "object" ? (
-                  <div className="text-sm text-[hsl(var(--muted))] space-y-1">
-                    {Object.entries(report.evidenceFindings).map(([key, value]) => (
-                      <p key={key}>
-                        <strong>{key}:</strong> {String(value as unknown)}
-                      </p>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[hsl(var(--muted))]">No evidence findings</p>
-                )}
-              </div>
+              {renderFindings(report.evidenceFindings)}
             </div>
           </div>
 

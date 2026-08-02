@@ -3,14 +3,14 @@
 ## Architecture & Setup
 - [x] Initialize web-db-user project scaffold
 - [x] Create database schema (verifications, reports, users)
-- [ ] Set up environment variables for external APIs (Gemini, OpenWeatherMap, Nominatim, Fact Check APIs)
+- [x] Set up environment variables for external APIs (Gemini, OpenWeatherMap, Nominatim, Fact Check APIs)
 - [ ] Set up file storage for media uploads (S3 integration)
 
 ## Backend — Verification Modules
 - [x] Module 1: Metadata Analysis (EXIF extraction, integrity checks, score /15)
 - [x] Module 2: Vision Analysis (Gemini 2.5 Flash integration, claim consistency, score /25)
-- [x] Module 3: Weather Verification (Nominatim geocoding, OpenWeatherMap API, score /25)
-- [x] Module 4: Evidence Corroboration (Search queries, trusted sources, deduplication, score /35)
+- [x] Module 3: Weather Verification (Nominatim geocoding, OpenWeatherMap API integration, conditional skip for indoor scenes, score /25)
+- [x] Module 4: Evidence Corroboration (Search queries, news verification with trusted sources, veracity scoring, score /35)
 - [x] Trust Engine Orchestrator (parallel execution, score aggregation, status band assignment)
 - [x] tRPC procedures for verification workflow
 

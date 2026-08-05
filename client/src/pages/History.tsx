@@ -1,132 +1,152 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/AppShell";
+import { EmptyState } from "@/components/States";
+import { StatusBadge } from "@/components/StatusBadge";
+import { formatDate } from "@/lib/format";
+import { STATUS_META, scoreToBand } from "@/lib/status";
+import { cn } from "@/lib/utils";
+import { mockStore } from "@/mock/store";
+import type { StatusBand } from "@/mock/types";
+import { ArrowRight, FileSearch, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { trpc } from "@/lib/trpc";
-import { AlertCircle, Loader2, ChevronRight } from "lucide-react";
+
+const FILTERS: Array<{ key: StatusBand | "ALL"; label: string }> = [
+  { key: "ALL", label: "All" },
+  { key: "FALSE", label: "False" },
+  { key: "AVERAGE", label: "Average" },
+  { key: "TRUSTABLE", label: "Trustable" },
+];
 
 export default function History() {
-  const { isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<StatusBand | "ALL">("ALL");
 
-  const { data: reports, isLoading, error } = trpc.verification.getHistory.useQuery(
-    { limit: 50 },
-    { enabled: isAuthenticated }
-  );
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[hsl(var(--background))] flex items-center justify-center p-4">
-        <div className="max-w-md text-center space-y-4">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
-          <h1 className="text-2xl font-bold">Sign In Required</h1>
-          <Button onClick={() => setLocation("/")} className="w-full">
-            Back to Home
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  const statusColor = {
-    FALSE: "text-red-600 bg-red-50",
-    AVERAGE: "text-yellow-600 bg-yellow-50",
-    TRUSTABLE: "text-green-600 bg-green-50",
-  };
+  const reports = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return mockStore.list().filter((r) => {
+      if (filter !== "ALL" && r.statusBand !== filter) return false;
+      if (!q) return true;
+      const haystack = [
+        r.claim.event,
+        r.claim.location ?? "",
+        r.claim.date ?? "",
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [query, filter]);
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))]">
-      {/* Header */}
-      <div className="border-b" style={{ borderBottomColor: "hsl(var(--border))" }}>
-        <div className="container py-6">
-          <h1 className="text-3xl font-bold">Verification History</h1>
-          <p className="text-[hsl(var(--muted))] mt-2">View your past verification reports</p>
+    <AppShell>
+      <div className="container max-w-5xl py-10 md:py-14">
+        <div className="fade-in text-center">
+          <p className="section-label">Archive</p>
+          <h1 className="mt-3 text-balance text-3xl md:text-4xl">
+            Verification history
+          </h1>
+          <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
+            Every claim you've run through Visstya, with its evidence score.
+          </p>
+        </div>
+
+        {/* Search + filters */}
+        <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[hsl(var(--muted))]" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search claims, locations or reports…"
+              className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--card))] pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
+            />
+          </div>
+          <div className="flex items-center gap-1">
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => setFilter(f.key)}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-sm transition-colors",
+                  filter === f.key
+                    ? "bg-[hsl(var(--primary))] font-medium text-[hsl(var(--primary-foreground))]"
+                    : "text-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--foreground))]"
+                )}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Rows */}
+        <div className="mt-6">
+          {reports.length === 0 ? (
+            <EmptyState
+              icon={<FileSearch className="size-7" strokeWidth={1.5} />}
+              title="No verifications found"
+              description={
+                query || filter !== "ALL"
+                  ? "Try a different search term or filter."
+                  : "Run your first verification to build your evidence archive."
+              }
+            />
+          ) : (
+            <div className="panel divide-y divide-[hsl(var(--border))] overflow-hidden">
+              {reports.map((report) => {
+                const band = scoreToBand(report.totalScore);
+                const meta = STATUS_META[band];
+                return (
+                  <button
+                    key={report.id}
+                    type="button"
+                    onClick={() => setLocation(`/report/${report.id}`)}
+                    className="group flex w-full items-center gap-4 px-4 py-4 text-left transition-colors hover:bg-[hsl(var(--secondary))/40]"
+                  >
+                    <span
+                      className={cn(
+                        "hidden h-12 w-16 shrink-0 items-center justify-center rounded-md border text-[10px] font-medium sm:flex",
+                        meta.bgClass,
+                        meta.borderClass,
+                        meta.textClass
+                      )}
+                    >
+                      {report.media.kind}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-[hsl(var(--foreground))]">
+                        {report.claim.event}
+                      </span>
+                      <span className="mt-0.5 block truncate text-xs text-[hsl(var(--muted))]">
+                        {[report.claim.location, report.claim.date]
+                          .filter(Boolean)
+                          .join(" · ") || "No context"}
+                        {" · "}
+                        {formatDate(report.createdAt)}
+                      </span>
+                    </span>
+                    <span className="hidden shrink-0 items-center gap-2 md:flex">
+                      <StatusBadge score={report.totalScore} size="sm" />
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className="block text-lg font-medium tabular-nums text-[hsl(var(--foreground))]">
+                        {report.totalScore}
+                      </span>
+                      <span className="block text-[10px] text-[hsl(var(--muted))]">/ 100</span>
+                    </span>
+                    <span className="link-arrow hidden sm:inline-flex">
+                      Open Report
+                      <ArrowRight className="size-4" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Main Content */}
-      <div className="container py-12">
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-accent" />
-          </div>
-        ) : error ? (
-          <div className="max-w-md mx-auto text-center space-y-4">
-            <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
-            <h2 className="text-xl font-bold">Error Loading History</h2>
-            <p className="text-[hsl(var(--muted))]">{error.message}</p>
-            <Button onClick={() => setLocation("/")} className="w-full">
-              Back to Home
-            </Button>
-          </div>
-        ) : !reports || reports.length === 0 ? (
-          <div className="max-w-md mx-auto text-center space-y-4 py-12">
-            <h2 className="text-xl font-bold">No Verifications Yet</h2>
-            <p className="text-[hsl(var(--muted))]">Start by verifying your first piece of media</p>
-            <Button
-              onClick={() => setLocation("/verify")}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
-            >
-              Verify Media
-            </Button>
-          </div>
-        ) : (
-          <div className="max-w-4xl mx-auto space-y-4">
-            <div className="mb-6">
-              <p className="text-sm text-[hsl(var(--muted))]">{reports.length} verification(s)</p>
-            </div>
-
-            <div className="space-y-3">
-              {reports.map((report) => (
-                <div
-                  key={report.id}
-                  className="card-minimal cursor-pointer hover:shadow-lg transition-all"
-                  onClick={() => setLocation(`/report/${report.id}`)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-2">
-                        <div className={`px-3 py-1 rounded-full text-sm font-semibold ${statusColor[report.statusBand]}`}>
-                          {report.statusBand}
-                        </div>
-                        <div className="text-2xl font-bold text-accent">
-                          {Math.round(Number(report.totalScore))}/100
-                        </div>
-                      </div>
-
-                      <div className="text-sm text-[hsl(var(--muted))] space-y-1">
-                        {report.claimEvent && <p><strong>Event:</strong> {report.claimEvent.substring(0, 60)}...</p>}
-                        {report.claimLocation && <p><strong>Location:</strong> {report.claimLocation}</p>}
-                        {report.claimDate && <p><strong>Date:</strong> {new Date(report.claimDate).toLocaleDateString()}</p>}
-                      </div>
-
-                      <p className="text-xs text-[hsl(var(--muted))] mt-2">
-                        {new Date(report.createdAt).toLocaleDateString()} at {new Date(report.createdAt).toLocaleTimeString()}
-                      </p>
-                    </div>
-
-                    <ChevronRight className="w-5 h-5 text-[hsl(var(--muted))] flex-shrink-0" />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-4 justify-center pt-8">
-              <Button
-                onClick={() => setLocation("/verify")}
-                className="bg-accent hover:bg-accent/90 text-accent-foreground"
-              >
-                Verify Another
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/")}
-              >
-                Back to Home
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    </AppShell>
   );
 }

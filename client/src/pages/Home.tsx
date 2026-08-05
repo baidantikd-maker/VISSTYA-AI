@@ -1,252 +1,283 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { ScoreBar } from "@/components/ScoreBar";
+import { TrustScale, TrustScore } from "@/components/TrustScore";
+import { SAMPLE_REPORT_84 } from "@/mock/data";
+import { ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
-import { ChevronRight, Shield, Zap, BarChart3 } from "lucide-react";
-import { startLogin } from "@/const";
+
+const STEPS = [
+  {
+    n: "01",
+    title: "Upload",
+    detail: "Drop a photo, video or pasted URL into the verification queue.",
+  },
+  {
+    n: "02",
+    title: "Parse",
+    detail: "Capture metadata, location, timestamps and editing history.",
+  },
+  {
+    n: "03",
+    title: "Analyze",
+    detail: "Vision and weather signals are checked against the record.",
+  },
+  {
+    n: "04",
+    title: "Corroborate",
+    detail: "Dated, independent sources are gathered and compared.",
+  },
+  {
+    n: "05",
+    title: "Report",
+    detail: "You get a scored, sourced report — not a black-box verdict.",
+  },
+];
+
+const MODULES = [
+  {
+    n: "01",
+    title: "Metadata",
+    max: 15,
+    detail:
+      "Capture time, GPS, camera model and editing history — checked for internal consistency and provenance.",
+  },
+  {
+    n: "02",
+    title: "Vision",
+    max: 25,
+    detail:
+      "Scene, objects, weather cues and generation artifacts, analysed across the full frame.",
+  },
+  {
+    n: "03",
+    title: "Weather",
+    max: 25,
+    detail:
+      "Observational records, advisories and river gauges compared with what the media appears to show.",
+  },
+  {
+    n: "04",
+    title: "Evidence",
+    max: 35,
+    detail:
+      "Dated, independent reporting and official statements weighed for corroboration — or contradiction.",
+  },
+];
+
+function SectionHeading({
+  eyebrow,
+  title,
+  detail,
+}: {
+  eyebrow: string;
+  title: string;
+  detail?: string;
+}) {
+  return (
+    <div className="mx-auto max-w-2xl text-center">
+      <p className="section-label">{eyebrow}</p>
+      <h2 className="mt-3 text-balance">{title}</h2>
+      {detail && (
+        <p className="mt-4 leading-relaxed text-[hsl(var(--muted))]">{detail}</p>
+      )}
+    </div>
+  );
+}
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
-
-  const handleGetStarted = () => {
-    if (isAuthenticated) {
-      setLocation("/verify");
-    } else {
-      startLogin();
-    }
-  };
+  const sample = SAMPLE_REPORT_84;
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b bg-[hsl(var(--background))]/80 backdrop-blur-sm" style={{borderBottomColor: 'hsl(var(--border))'}}>
-        <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <Shield className="w-6 h-6 text-accent" />
-            <span className="text-xl font-semibold">Visstya</span>
-          </div>
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                <Button
-                  variant="ghost"
-                  onClick={() => setLocation("/verify")}
-                  className="text-sm"
-                >
-                  Verify
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => setLocation("/history")}
-                  className="text-sm"
-                >
-                  History
-                </Button>
-              </>
-            ) : (
-              <Button
-                variant="default"
-                onClick={startLogin}
-                className="text-sm"
-              >
-                Sign In
-              </Button>
-            )}
-          </div>
+    <div className="min-h-screen bg-[hsl(var(--background))]">
+      <Navbar />
+
+      {/* Hero */}
+      <section className="container flex flex-col items-center pt-20 pb-16 text-center md:pt-28 md:pb-20">
+        <p className="section-label stagger-item" style={{ animationDelay: "0.02s" }}>
+          Evidence-based verification
+        </p>
+        <h1
+          className="stagger-item mt-5 max-w-4xl text-balance text-[2.5rem] leading-[1.05] text-[hsl(var(--foreground))] md:text-6xl lg:text-7xl"
+          style={{ animationDelay: "0.08s" }}
+        >
+          Don't ask if it's AI.
+          <br />
+          <span className="text-[hsl(var(--muted))]">
+            Ask if the evidence supports it.
+          </span>
+        </h1>
+        <p
+          className="stagger-item mt-6 max-w-xl text-lg leading-relaxed text-[hsl(var(--muted))]"
+          style={{ animationDelay: "0.14s" }}
+        >
+          Visstya analyses the media, the claims and the record — then shows you
+          exactly how the evidence holds up. Metadata, vision, weather and dated
+          sources, scored and laid out in one place.
+        </p>
+        <div
+          className="stagger-item mt-9 flex flex-wrap items-center justify-center gap-3"
+          style={{ animationDelay: "0.2s" }}
+        >
+          <button
+            type="button"
+            onClick={() => setLocation("/verify")}
+            className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+          >
+            Verify Content
+            <ArrowRight className="size-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              document
+                .getElementById("how-it-works")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="inline-flex h-11 items-center rounded-md border border-[hsl(var(--border))] px-6 text-sm font-medium text-[hsl(var(--foreground))] transition-all duration-200 hover:bg-[hsl(var(--secondary))] active:scale-[0.98]"
+          >
+            See how it works
+          </button>
         </div>
-      </nav>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
-        {/* Subtle background gradient */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-secondary via-background to-background" />
-
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center space-y-8 stagger-item">
-            <div className="space-y-4">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance">
-                Trust Through Evidence
-              </h1>
-              <p className="text-lg md:text-xl text-[hsl(var(--muted))] leading-relaxed text-balance">
-                Visstya AI helps you verify digital content by analyzing metadata, visual context, weather patterns, and corroborating evidence from trusted sources. Make informed decisions, not assumptions.
-              </p>
+        {/* Sample report card */}
+        <div
+          className="scale-in mt-16 w-full max-w-xl md:mt-20"
+          style={{ animationDelay: "0.26s" }}
+        >
+          <div className="panel p-6 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)] md:p-8">
+            <div className="flex items-center justify-between">
+              <p className="section-label">Sample report</p>
+              <span className="rounded-full border border-[hsl(var(--border))] px-2.5 py-0.5 text-[11px] text-[hsl(var(--muted))]">
+                {sample.claim.location}
+              </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button
-                size="lg"
-                onClick={handleGetStarted}
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-              >
-                Start Verifying
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => {
-                  const element = document.getElementById("how-it-works");
-                  element?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                Learn More
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="how-it-works" className="py-20 md:py-32 border-t" style={{borderTopColor: 'hsl(var(--border))'}}>
-        <div className="container">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold">How It Works</h2>
-            <p className="text-lg text-[hsl(var(--muted))] max-w-2xl mx-auto">
-              Four specialized verification modules analyze your media from different angles
+            <p className="mt-4 text-[15px] font-medium leading-snug text-[hsl(var(--foreground))]">
+              {sample.claim.event}
             </p>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Module 1 */}
-            <div className="card-minimal group">
-              <div className="w-12 h-12 bg-[hsl(var(--secondary))] rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/10 transition-colors">
-                <Shield className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Metadata Analysis</h3>
-              <p className="text-sm text-[hsl(var(--muted))]">
-                Extract EXIF data, GPS coordinates, and check for signs of tampering or editing.
-              </p>
-              <div className="mt-4 text-xs font-medium text-accent">Max 15 points</div>
+            <div className="mt-6 flex justify-center">
+              <TrustScore score={sample.totalScore} />
             </div>
 
-            {/* Module 2 */}
-            <div className="card-minimal group">
-              <div className="w-12 h-12 bg-[hsl(var(--secondary))] rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/10 transition-colors">
-                <Zap className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Vision Analysis</h3>
-              <p className="text-sm text-[hsl(var(--muted))]">
-                AI analyzes visual content, objects, scene context, and consistency with your claim.
-              </p>
-              <div className="mt-4 text-xs font-medium text-accent">Max 25 points</div>
+            <div className="mt-7 space-y-4">
+              <ScoreBar label="Metadata" score={sample.modules.metadata.score} max={15} />
+              <ScoreBar label="Vision" score={sample.modules.vision.score} max={25} />
+              <ScoreBar label="Weather" score={sample.modules.weather.score} max={25} />
+              <ScoreBar label="Evidence" score={sample.modules.evidence.score} max={35} />
             </div>
 
-            {/* Module 3 */}
-            <div className="card-minimal group">
-              <div className="w-12 h-12 bg-[hsl(var(--secondary))] rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/10 transition-colors">
-                <BarChart3 className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Weather Verification</h3>
-              <p className="text-sm text-[hsl(var(--muted))]">
-                Cross-check location and date against historical weather data for consistency.
+            <div className="mt-6 border-t border-[hsl(var(--border))] pt-4">
+              <p className="text-xs text-[hsl(var(--muted))]">
+                {sample.sources.length} independent sources examined ·{" "}
+                {sample.sources.filter((s) => s.label === "Supporting").length} corroborate ·
+                0 contradict
               </p>
-              <div className="mt-4 text-xs font-medium text-accent">Max 25 points</div>
-            </div>
-
-            {/* Module 4 */}
-            <div className="card-minimal group">
-              <div className="w-12 h-12 bg-[hsl(var(--secondary))] rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/10 transition-colors">
-                <Shield className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Evidence Corroboration</h3>
-              <p className="text-sm text-[hsl(var(--muted))]">
-                Search trusted sources like Reuters and PIB Fact Check for independent support.
-              </p>
-              <div className="mt-4 text-xs font-medium text-accent">Max 35 points</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Score Explanation */}
-      <section className="py-20 md:py-32 bg-[hsl(var(--secondary))]/30 border-t" style={{borderTopColor: 'hsl(var(--border))'}}>
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 md:py-24"
+      >
         <div className="container">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">Understanding Your Trust Score</h2>
+          <SectionHeading
+            eyebrow="Workflow"
+            title="From media to a scored evidence report"
+            detail="Five stages, each traceable. Nothing about the process is hidden — every score in the final report points back to evidence."
+          />
 
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-red-100 text-red-600">
-                    <span className="text-lg font-bold">0–39</span>
-                  </div>
+          <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--border))] md:grid-cols-5">
+            {STEPS.map((step, i) => (
+              <div
+                key={step.n}
+                className="bg-[hsl(var(--card))] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--secondary))/30]"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs text-[hsl(var(--muted))]">{step.n}</span>
+                  <span className="font-mono text-xs text-[hsl(var(--muted))]">
+                    {String(i + 1)} / 5
+                  </span>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">FALSE</h3>
-                  <p className="text-[hsl(var(--muted))]">
-                    Evidence strongly contradicts or fails to support the claim. High risk of misinformation.
-                  </p>
-                </div>
+                <p className="mt-5 text-lg font-medium text-[hsl(var(--foreground))]">{step.title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted))]">{step.detail}</p>
               </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-yellow-100 text-yellow-600">
-                    <span className="text-lg font-bold">40–79</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">AVERAGE</h3>
-                  <p className="text-[hsl(var(--muted))]">
-                    Mixed or incomplete evidence. Review details carefully before trusting.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-green-100 text-green-600">
-                    <span className="text-lg font-bold">80–100</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-1">TRUSTABLE</h3>
-                  <p className="text-[hsl(var(--muted))]">
-                    Strong multi-source support and consistency across modules.
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 md:py-32 border-t" style={{borderTopColor: 'hsl(var(--border))'}}>
-        <div className="container">
-          <div className="max-w-2xl mx-auto text-center space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-4xl md:text-5xl font-bold">Ready to Verify?</h2>
-              <p className="text-lg text-[hsl(var(--muted))]">
-                Upload an image or video and provide context about the claim. Get your trust report in seconds.
-              </p>
-            </div>
-            <Button
-              size="lg"
-              onClick={handleGetStarted}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+      {/* Modules */}
+      <section id="modules" className="scroll-mt-20 container py-16 md:py-24">
+        <SectionHeading
+          eyebrow="Analysis modules"
+          title="Four signals, one score"
+          detail="The trust score combines four weighted modules. You can expand each one in any report to see exactly what was checked."
+        />
+
+        <div className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {MODULES.map((mod) => (
+            <div
+              key={mod.n}
+              className="panel flex flex-col p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
             >
-              Start Now
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs text-[hsl(var(--muted))]">{mod.n}</span>
+                <span className="text-xs text-[hsl(var(--muted))]">weight /{mod.max}</span>
+              </div>
+              <p className="mt-5 text-lg font-medium text-[hsl(var(--foreground))]">{mod.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted))]">{mod.detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Trust scale */}
+      <section
+        id="scale"
+        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 md:py-24"
+      >
+        <div className="container">
+          <SectionHeading
+            eyebrow="Trust scale"
+            title="Three bands, one horizontal scale"
+            detail="Every report places the claim on the same 0–100 scale. Under 40 is unsupported, 40–79 is partially supported, and 80 or above is well-supported by the evidence. The score is always a starting point — the sources are the substance."
+          />
+
+          <div className="panel mx-auto mt-10 max-w-xl p-6">
+            <div className="flex items-baseline justify-center gap-2">
+              <span className="text-sm text-[hsl(var(--muted))]">Sample placement</span>
+              <TrustScore score={84} animated={false} size="md" />
+            </div>
+            <TrustScale score={84} className="mt-6" />
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8 md:py-12 bg-[hsl(var(--secondary))]/20" style={{borderTopColor: 'hsl(var(--border))'}}>
-        <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-accent" />
-              <span className="font-semibold">Visstya AI</span>
-            </div>
-            <p className="text-sm text-[hsl(var(--muted))] text-center md:text-right">
-              © 2026 Visstya AI. Transparent evidence-based trust for digital content.
-            </p>
-          </div>
+      {/* Final CTA */}
+      <section className="container py-16 md:py-24">
+        <div className="panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16">
+          <p className="section-label">Ready when you are</p>
+          <h2 className="max-w-xl text-balance">
+            Have something you don't trust?
+          </h2>
+          <button
+            type="button"
+            onClick={() => setLocation("/verify")}
+            className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-7 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+          >
+            Verify Content
+            <ArrowRight className="size-4" />
+          </button>
         </div>
-      </footer>
+      </section>
+
+      <Footer />
     </div>
   );
 }

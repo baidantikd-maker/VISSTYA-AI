@@ -1,0 +1,221 @@
+import { AppShell } from "@/components/AppShell";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+import { useState } from "react";
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="panel p-6">
+      <p className="text-base font-medium text-[hsl(var(--foreground))]">{title}</p>
+      {description && (
+        <p className="mt-1 text-sm leading-relaxed text-[hsl(var(--muted))]">{description}</p>
+      )}
+      <div className="mt-5">{children}</div>
+    </div>
+  );
+}
+
+function RetentionOption({
+  label,
+  detail,
+  selected,
+  onClick,
+}: {
+  label: string;
+  detail: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        "w-full rounded-lg border px-4 py-3 text-left transition-colors " +
+        (selected
+          ? "border-[hsl(var(--foreground))] bg-[hsl(var(--secondary))]"
+          : "border-[hsl(var(--border))] hover:bg-[hsl(var(--secondary))/40]")
+      }
+    >
+      <p className="text-sm font-medium text-[hsl(var(--foreground))]">{label}</p>
+      <p className="mt-0.5 text-xs text-[hsl(var(--muted))]">{detail}</p>
+    </button>
+  );
+}
+
+export default function Settings() {
+  const { user, logout } = useAuth();
+  const [name, setName] = useState(user?.name ?? "Demo User");
+  const [email] = useState(user?.email ?? "demo@vistya.ai");
+  const [publicProfile, setPublicProfile] = useState(true);
+  const [shareReports, setShareReports] = useState(true);
+  const [retention, setRetention] = useState("none");
+
+  return (
+    <AppShell>
+      <div className="container max-w-3xl py-10 md:py-14">
+        <div className="fade-in text-center">
+          <p className="section-label">Preferences</p>
+          <h1 className="mt-3 text-balance text-3xl md:text-4xl">Settings</h1>
+          <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
+            Your profile, privacy and data controls.
+          </p>
+        </div>
+
+        <div className="mt-8 space-y-6">
+          {/* Profile */}
+          <Section title="Profile" description="How you appear across Visstya.">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="s-name" className="mb-1.5 block text-sm font-medium text-[hsl(var(--foreground))]">
+                  Name
+                </label>
+                <input
+                  id="s-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--card))] px-3 text-sm outline-none focus:border-[hsl(var(--foreground))]"
+                />
+              </div>
+              <div>
+                <label htmlFor="s-email" className="mb-1.5 block text-sm font-medium text-[hsl(var(--foreground))]">
+                  Email
+                </label>
+                <input
+                  id="s-email"
+                  value={email}
+                  readOnly
+                  className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--secondary))] px-3 text-sm text-[hsl(var(--muted))] outline-none"
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <Button
+                size="sm"
+                onClick={() => toast.success("Profile saved")}
+              >
+                Save changes
+              </Button>
+            </div>
+          </Section>
+
+          {/* Privacy */}
+          <Section
+            title="Privacy"
+            description="Control what others can see."
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-[hsl(var(--foreground))]">Public profile</p>
+                  <p className="text-xs text-[hsl(var(--muted))]">Allow others to see your name and organisation.</p>
+                </div>
+                <Switch checked={publicProfile} onCheckedChange={setPublicProfile} />
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-[hsl(var(--foreground))]">Shareable reports</p>
+                  <p className="text-xs text-[hsl(var(--muted))]">Allow reports to be shared via a public link.</p>
+                </div>
+                <Switch checked={shareReports} onCheckedChange={setShareReports} />
+              </div>
+            </div>
+          </Section>
+
+          {/* Verification history */}
+          <Section
+            title="Verification history"
+            description="Manage your saved verification reports."
+          >
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => toast.success("History cleared")}
+            >
+              Clear verification history
+            </Button>
+          </Section>
+
+          {/* Data controls */}
+          <Section
+            title="Data controls"
+            description="Export or delete the data Visstya holds on you."
+          >
+            <div className="flex flex-wrap gap-3">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => toast.success("Data export started")}
+              >
+                Export my data
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => toast.success("Account data deletion requested")}
+              >
+                Delete my data
+              </Button>
+            </div>
+          </Section>
+
+          {/* Media retention */}
+          <Section
+            title="Media retention"
+            description="How long uploaded media is kept on our servers."
+          >
+            <div className="grid gap-3 sm:grid-cols-3">
+              <RetentionOption
+                label="Don't store"
+                detail="Media is analysed in-session only and deleted afterwards. Recommended."
+                selected={retention === "none"}
+                onClick={() => setRetention("none")}
+              />
+              <RetentionOption
+                label="30 days"
+                detail="Keep media for a month, then delete it automatically."
+                selected={retention === "30"}
+                onClick={() => setRetention("30")}
+              />
+              <RetentionOption
+                label="Until deleted"
+                detail="Keep media until you remove it from your account."
+                selected={retention === "keep"}
+                onClick={() => setRetention("keep")}
+              />
+            </div>
+            <p className="mt-4 text-xs leading-relaxed text-[hsl(var(--muted))]">
+              By default, Visstya does not store media permanently. Uploaded
+              content is held only for the duration of analysis unless you opt in
+              to a retention period above.
+            </p>
+          </Section>
+
+          {/* Account */}
+          <Section title="Account" description="Manage your session.">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                void logout();
+                window.location.href = "/";
+              }}
+            >
+              Sign out
+            </Button>
+          </Section>
+        </div>
+      </div>
+    </AppShell>
+  );
+}

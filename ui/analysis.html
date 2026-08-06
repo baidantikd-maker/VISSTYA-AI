@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Visstya AI | Case Analysis In-Progress</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#101418",
+            "on-surface-variant": "#cac6bd",
+            "primary": "#ffffff",
+            "surface-variant": "#31353a",
+            "surface-container": "#1c2024",
+            "on-surface": "#e0e3e8",
+            "outline-variant": "#484740",
+            "outline": "#939188",
+            "surface-container-low": "#181c20",
+            "tertiary-fixed-dim": "#94d5aa"
+          },
+          fontFamily: {
+            "label-caps": ["JetBrains Mono"],
+            "display-case-no": ["Archivo Narrow"],
+            "h2": ["Archivo Narrow"],
+            "body-lg": ["Fira Sans"],
+            "body-md": ["Fira Sans"],
+            "data-mono": ["JetBrains Mono"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-dim text-on-surface flex flex-col min-h-screen">
+  <!-- Dynamic Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay">
+    <div class="transition-spinner"></div>
+    <div class="transition-text" id="transition-message">ANALYZING EVIDENCE NODES...</div>
+  </div>
+
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-16 bg-surface-dim border-b border-outline-variant">
+    <div class="flex items-center gap-8">
+      <a href="index.html" class="font-display-case-no text-2xl uppercase tracking-tighter text-primary font-bold">Visstya AI</a>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-xs" href="index.html">Cases</a>
+        <a class="text-on-surface-variant font-label-caps text-xs hover:text-primary transition-colors" href="archive.html">Archive</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="relative hidden sm:block">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+        <input class="bg-surface-variant border-none text-on-surface font-data-mono text-xs pl-10 pr-4 py-1.5 w-64 focus:ring-1 focus:ring-primary" placeholder="Search Archives..." type="text"/>
+      </div>
+      <a href="index.html" id="new-analysis-btn" onclick="localStorage.removeItem('visstya_audit_complete')" class="btn-green-tab px-4 py-2 font-label-caps text-xs uppercase transition-all font-bold shadow-sm">
+        New Analysis
+      </a>
+      <a href="settings.html" title="System Settings" class="border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary p-2 transition-all flex items-center justify-center">
+        <span class="material-symbols-outlined text-sm">settings</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- SideNavBar -->
+  <aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-[320px] flex flex-col py-6 bg-surface-container border-r border-outline-variant z-40 hidden lg:flex">
+    <div class="px-6 mb-8">
+      <h2 class="font-h2 text-xl text-primary font-bold">Case File #882-Alpha</h2>
+      <p class="font-data-mono text-xs text-on-surface-variant uppercase mt-1">Status: Verification Pending</p>
+    </div>
+
+    <nav class="flex-grow space-y-1">
+      <div class="bg-surface-variant text-primary border-l-4 border-primary px-4 py-3 flex items-center gap-4 cursor-default">
+        <span class="material-symbols-outlined">folder_open</span>
+        <span class="font-label-caps text-xs">Evidence Index</span>
+      </div>
+      <a href="report.html#module-metadata" class="module-nav-link text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer block">
+        <span class="material-symbols-outlined">fingerprint</span>
+        <span class="font-label-caps text-xs">Metadata</span>
+      </a>
+      <a href="report.html#module-vision" class="module-nav-link text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer block">
+        <span class="material-symbols-outlined">visibility</span>
+        <span class="font-label-caps text-xs">Visual Core</span>
+      </a>
+      <a href="report.html#module-weather" class="module-nav-link text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer block">
+        <span class="material-symbols-outlined">cloudy_snowing</span>
+        <span class="font-label-caps text-xs">Atmospherics</span>
+      </a>
+      <a href="report.html#module-evidence" class="module-nav-link text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer block">
+        <span class="material-symbols-outlined">repeat</span>
+        <span class="font-label-caps text-xs">Corroboration</span>
+      </a>
+    </nav>
+
+    <div class="px-6 mt-auto">
+      <a href="report.html" class="w-full border border-outline text-primary py-3 font-label-caps text-xs uppercase hover:bg-primary hover:text-on-primary transition-all text-center block">
+        Export Dossier
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Stage -->
+  <main class="ml-0 lg:ml-[320px] mt-16 flex-grow relative overflow-hidden flex flex-col items-center justify-center p-6 md:p-12">
+    <!-- Animated Matrix Data Stream -->
+    <div class="absolute inset-0 data-stream-bg font-data-mono text-[10px] p-4 leading-tight select-none overflow-hidden" id="bg-stream"></div>
+
+    <div class="relative z-10 w-full max-w-5xl flex flex-col items-center">
+      <!-- Central Pulsing Hub -->
+      <div id="analysis-hub" class="mb-12 relative transition-all duration-500 ease-out">
+        <div class="w-32 h-32 rounded-full border border-primary/20 flex items-center justify-center pulse-hub">
+          <div class="w-24 h-24 rounded-full border-2 border-primary bg-surface-container flex flex-col items-center justify-center text-center p-4">
+            <span class="material-symbols-outlined text-primary text-3xl mb-1">analytics</span>
+            <span class="font-label-caps text-[10px] text-on-surface leading-none font-bold">ANALYZING</span>
+          </div>
+        </div>
+        <!-- Pin Connectors -->
+        <div class="absolute top-1/2 -left-32 w-32 h-[1px] bg-outline-variant hidden md:block"></div>
+        <div class="absolute top-1/2 -right-32 w-32 h-[1px] bg-outline-variant hidden md:block"></div>
+        <div class="absolute -top-16 left-1/2 w-[1px] h-16 bg-outline-variant hidden md:block"></div>
+        <div class="absolute -bottom-16 left-1/2 w-[1px] h-16 bg-outline-variant hidden md:block"></div>
+      </div>
+
+      <!-- Analysis Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <!-- Card 1: Metadata -->
+        <div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 01 // File Integrity</span>
+              <h3 class="font-h2 text-xl font-bold uppercase mt-1">Metadata Verification</h3>
+            </div>
+            <span class="material-symbols-outlined text-2xl">fingerprint</span>
+          </div>
+          <p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Reading EXIF headers and camera signatures...</p>
+          <div class="mt-auto">
+            <div class="flex justify-between items-end mb-2">
+              <span class="font-data-mono text-[10px] uppercase">Processing Core</span>
+              <span class="font-data-mono text-[10px]" id="meta-percent">42%</span>
+            </div>
+            <div class="h-1.5 bg-surface-dim/10 w-full overflow-hidden">
+              <div class="h-full bg-surface-dim progress-fill" id="meta-progress" style="width: 42%"></div>
+            </div>
+          </div>
+          <div class="scan-line"></div>
+        </div>
+
+        <!-- Card 2: Vision -->
+        <div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 02 // Spatial Analysis</span>
+              <h3 class="font-h2 text-xl font-bold uppercase mt-1">Vision Core</h3>
+            </div>
+            <span class="material-symbols-outlined text-2xl">visibility</span>
+          </div>
+          <p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Analyzing pixel lighting and shadow vectors...</p>
+          <div class="mt-auto">
+            <div class="flex justify-between items-end mb-2">
+              <span class="font-data-mono text-[10px] uppercase">Shadow Vector Mapping</span>
+              <span class="font-data-mono text-[10px]" id="vision-percent">68%</span>
+            </div>
+            <div class="h-1.5 bg-surface-dim/10 w-full overflow-hidden">
+              <div class="h-full bg-surface-dim progress-fill" id="vision-progress" style="width: 68%"></div>
+            </div>
+          </div>
+          <div class="scan-line" style="animation-delay: 0.5s"></div>
+        </div>
+
+        <!-- Card 3: Weather -->
+        <div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 03 // Geospatial Archive</span>
+              <h3 class="font-h2 text-xl font-bold uppercase mt-1">Atmospherics</h3>
+            </div>
+            <span class="material-symbols-outlined text-2xl">cloudy_snowing</span>
+          </div>
+          <p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Querying historical meteorological data for Kolkata...</p>
+          <div class="mt-auto">
+            <div class="flex justify-between items-end mb-2">
+              <span class="font-data-mono text-[10px] uppercase">Precipitation Match</span>
+              <span class="font-data-mono text-[10px]" id="weather-percent">15%</span>
+            </div>
+            <div class="h-1.5 bg-surface-dim/10 w-full overflow-hidden">
+              <div class="h-full bg-surface-dim progress-fill" id="weather-progress" style="width: 15%"></div>
+            </div>
+          </div>
+          <div class="scan-line" style="animation-delay: 1.2s"></div>
+        </div>
+
+        <!-- Card 4: Evidence -->
+        <div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 04 // OSINT Network</span>
+              <h3 class="font-h2 text-xl font-bold uppercase mt-1">Evidence Corroboration</h3>
+            </div>
+            <span class="material-symbols-outlined text-2xl">repeat</span>
+          </div>
+          <p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Cross-referencing trusted news databases and social feeds...</p>
+          <div class="mt-auto">
+            <div class="flex justify-between items-end mb-2">
+              <span class="font-data-mono text-[10px] uppercase">Cross-Referencing Index</span>
+              <span class="font-data-mono text-[10px]" id="evidence-percent">89%</span>
+            </div>
+            <div class="h-1.5 bg-surface-dim/10 w-full overflow-hidden">
+              <div class="h-full bg-surface-dim progress-fill" id="evidence-progress" style="width: 89%"></div>
+            </div>
+          </div>
+          <div class="scan-line" style="animation-delay: 0.8s"></div>
+        </div>
+      </div>
+
+      <!-- Summary Status Banner -->
+      <div class="mt-8 flex items-center gap-3 bg-surface-variant/40 px-6 py-3 border border-outline-variant w-full">
+        <div class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></div>
+        <span id="sync-status" class="font-label-caps text-xs text-on-surface">
+          SYNCHRONIZING DATAPOINTS... SECURE HANDSHAKE ESTABLISHED
+        </span>
+      </div>
+
+      <!-- Executive Summary & Total Score Panel (At the Bottom of Evidence Index) -->
+      <div id="executive-summary-panel" class="w-full mt-4 border border-outline-variant bg-surface-container p-6 md:p-8 shadow-hard transition-all duration-700 ease-out opacity-0 translate-y-4 pointer-events-none">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-4 flex flex-col items-center justify-center relative min-h-[220px] border-b lg:border-b-0 lg:border-r border-outline-variant overflow-hidden">
+            <div class="absolute inset-0 w-full h-full opacity-40">
+              <canvas id="analysis-summary-shader" class="w-full h-full block"></canvas>
+            </div>
+            <div class="relative z-10 text-center">
+              <p class="font-label-caps text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Total Score / Convergence Index</p>
+              <h2 class="font-display-case-no text-7xl text-primary font-bold">87<span class="text-2xl opacity-50">/100</span></h2>
+              <div class="mt-4 px-4 py-1 border-2 border-[#aff1c4] text-[#aff1c4] font-label-caps text-sm stamp-border inline-block rotate-[-2deg] font-bold">
+                TRUSTABLE
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-8">
+            <div class="flex items-start gap-4">
+              <span class="material-symbols-outlined text-primary text-4xl">description</span>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-h1 text-2xl text-primary uppercase tracking-tight font-bold">Executive Summary</h2>
+                  <span class="font-data-mono text-xs text-tertiary-fixed-dim border border-tertiary-fixed-dim/30 px-2 py-0.5 uppercase">VERIFIED AUDIT</span>
+                </div>
+                <p class="font-body-lg text-base text-on-surface leading-relaxed max-w-2xl">
+                  Media metadata matches claimed capture device. Weather patterns in-frame are consistent with meteorological records for <span class="font-bold border-b border-primary">Kolkata (2024-03-12)</span>. Three independent sources corroborate the event.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                  <button onclick="alert('Report PDF Saved to Downloads')" class="flex items-center gap-2 px-4 py-2 bg-surface-variant border border-outline-variant hover:border-primary transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    <span class="font-label-caps text-xs uppercase">Save Report as PDF</span>
+                  </button>
+                  <button onclick="navigator.clipboard.writeText(window.location.href); alert('Shareable dossier link copied!');" class="flex items-center gap-2 px-4 py-2 bg-surface-variant border border-outline-variant hover:border-primary transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">link</span>
+                    <span class="font-label-caps text-xs uppercase">Copy Shareable Link</span>
+                  </button>
+                  <a href="report.html" class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-caps text-xs uppercase font-bold hover:opacity-90 transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-sm font-bold">article</span>
+                    <span>View Full Dossier Report</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="flex justify-between items-center w-full px-6 md:px-12 py-4 mt-auto bg-surface-container-lowest border-t border-outline-variant z-50">
+    <div class="flex items-center gap-6">
+      <span class="font-label-caps text-xs text-on-surface font-bold">VISSTYA AI ARCHIVAL DIVISION</span>
+      <div class="hidden sm:flex gap-4 font-label-caps text-[11px] text-on-surface-variant">
+        <a href="report.html" class="hover:text-on-surface cursor-pointer">Save Report</a>
+        <a href="report.html" class="hover:text-on-surface cursor-pointer">Share Dossier</a>
+        <a href="archive.html" class="hover:text-on-surface cursor-pointer">Audit Trail</a>
+      </div>
+    </div>
+    <span class="font-label-caps text-[10px] text-on-surface-variant uppercase opacity-60">© 2024 VISSTYA AI ARCHIVAL DIVISION. ALL DATA ENCRYPTED.</span>
+  </footer>
+
+  <!-- Gate Toast Notification -->
+  <div id="gate-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[999] bg-red-900/90 border border-red-500/60 text-red-200 font-data-mono text-xs px-6 py-3 shadow-hard uppercase tracking-widest transition-all duration-300 opacity-0 translate-y-2 pointer-events-none flex items-center gap-2 max-w-md text-center">
+    <span class="material-symbols-outlined text-red-400 text-sm flex-shrink-0">lock</span>
+    <span id="gate-toast-text">ANALYSIS IN PROGRESS // ACCESS LOCKED UNTIL COMPLETE</span>
+  </div>
+
+  <script>
+    // Hide lock icons on module links that are already unlocked on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const unlocked = localStorage.getItem('visstya_audit_complete') === 'true';
+      document.querySelectorAll('.lock-icon').forEach(icon => {
+        icon.style.display = unlocked ? 'none' : 'inline';
+      });
+
+      // Watch for analysis completion to also hide lock icons
+      const observer = new MutationObserver(() => {
+        if (localStorage.getItem('visstya_audit_complete') === 'true') {
+          document.querySelectorAll('.lock-icon').forEach(icon => {
+            icon.style.display = 'none';
+          });
+          observer.disconnect();
+        }
+      });
+      const summaryPanel = document.getElementById('executive-summary-panel');
+      if (summaryPanel) observer.observe(summaryPanel, { attributes: true, attributeFilter: ['class'] });
+
+      // Show gate redirect message if user was bounced from report.html
+      const gateMsg = sessionStorage.getItem('visstya_gate_msg');
+      if (gateMsg) {
+        sessionStorage.removeItem('visstya_gate_msg');
+        const toast = document.getElementById('gate-toast');
+        if (toast) {
+          toast.textContent = '';
+          const icon = document.createElement('span');
+          icon.className = 'material-symbols-outlined text-red-400 text-sm flex-shrink-0';
+          icon.textContent = 'lock';
+          const text = document.createElement('span');
+          text.textContent = gateMsg;
+          toast.appendChild(icon);
+          toast.appendChild(text);
+          toast.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+          toast.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+          setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-2');
+            toast.classList.remove('opacity-100', 'translate-y-0');
+          }, 4000);
+        }
+      }
+    });
+  </script>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/shader.js"></script>
+  <script src="js/analysis.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

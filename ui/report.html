@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Visstya AI | Enterprise Forensic Audit Report #882-Alpha</title>
+
+  <!-- ── AUDIT GATE GUARD ── redirect back if analysis not complete ── -->
+  <script>
+    (function() {
+      if (localStorage.getItem('visstya_audit_complete') !== 'true') {
+        sessionStorage.setItem('visstya_gate_msg', 'AUDIT IN PROGRESS // COMPLETE FORENSIC ANALYSIS FIRST');
+        window.location.replace('analysis.html');
+      }
+    })();
+  </script>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#101418",
+            "on-surface-variant": "#cac6bd",
+            "primary": "#ffffff",
+            "surface-variant": "#31353a",
+            "surface-container": "#1c2024",
+            "surface-container-low": "#181c20",
+            "on-surface": "#e0e3e8",
+            "outline-variant": "#484740",
+            "outline": "#939188",
+            "tertiary-fixed-dim": "#94d5aa",
+            "tertiary-container": "#aff1c4",
+            "on-tertiary-container": "#32704c",
+            "background": "#101418"
+          },
+          fontFamily: {
+            "label-caps": ["JetBrains Mono"],
+            "display-case-no": ["Archivo Narrow"],
+            "h2": ["Archivo Narrow"],
+            "h1": ["Archivo Narrow"],
+            "body-lg": ["Fira Sans"],
+            "body-md": ["Fira Sans"],
+            "data-mono": ["JetBrains Mono"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .module-view {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .preview-card:hover img {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary selection:text-on-primary min-h-screen flex flex-col">
+  <!-- Dynamic Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay">
+    <div class="transition-spinner"></div>
+    <div class="transition-text" id="transition-message">LOADING ENTERPRISE FORENSIC DOSSIER...</div>
+  </div>
+
+  <!-- TopAppBar Header -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-16 bg-surface-dim border-b border-outline-variant">
+    <div class="flex items-center gap-8">
+      <a href="index.html" class="font-display-case-no text-2xl uppercase tracking-tighter text-primary font-bold">Visstya AI</a>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-xs" href="index.html">Cases</a>
+        <a class="text-on-surface-variant font-label-caps text-xs hover:text-primary transition-colors" href="archive.html">Archive</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="relative hidden lg:block">
+        <input class="bg-surface-container border-none border-b border-outline font-data-mono text-xs text-on-surface px-4 py-1 focus:ring-0 w-64" placeholder="Search Archives..." type="text"/>
+        <span class="material-symbols-outlined absolute right-2 top-1 text-on-surface-variant text-sm">search</span>
+      </div>
+      <a href="index.html" class="btn-green-tab px-6 py-2 font-label-caps text-xs uppercase transition-all font-bold shadow-sm">
+        New Analysis
+      </a>
+      <a href="settings.html" title="System Settings" class="border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary p-2 transition-all flex items-center justify-center">
+        <span class="material-symbols-outlined text-sm">settings</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- SideNavBar -->
+  <aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-[320px] flex flex-col py-6 bg-surface-container border-r border-outline-variant hidden xl:flex z-40">
+    <div class="px-6 mb-8">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 bg-surface-variant flex items-center justify-center border border-outline-variant">
+          <span class="material-symbols-outlined text-primary">shield_person</span>
+        </div>
+        <div>
+          <p class="font-h2 text-primary text-sm font-bold leading-tight">Case File #882-Alpha</p>
+          <p class="font-data-mono text-[10px] text-tertiary-fixed-dim uppercase tracking-wider">Status: VERIFIED & AUDITED</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="flex-1 space-y-1" id="report-sidebar-nav">
+      <!-- Evidence Index Link -->
+      <a href="analysis.html" class="report-nav-item flex items-center text-on-surface-variant px-4 py-3 hover:bg-surface-variant/40 hover:text-on-surface transition-all duration-300 cursor-pointer block group">
+        <span class="material-symbols-outlined mr-3 text-on-surface-variant group-hover:text-primary">folder_open</span>
+        <span class="font-label-caps text-xs uppercase">Evidence Index</span>
+      </a>
+
+      <!-- Metadata Module -->
+      <button data-target="metadata" class="report-nav-item w-full text-left flex items-center px-4 py-3 transition-all duration-300 cursor-pointer block border-l-4 border-[#aff1c4] bg-[#182920] text-white font-bold">
+        <span class="material-symbols-outlined mr-3 text-[#aff1c4]">fingerprint</span>
+        <span class="font-label-caps text-xs uppercase">Metadata</span>
+      </button>
+
+      <!-- Vision Core Module -->
+      <button data-target="vision" class="report-nav-item w-full text-left flex items-center text-on-surface-variant px-4 py-3 hover:bg-surface-variant/40 hover:text-on-surface transition-all duration-300 cursor-pointer block border-l-4 border-transparent">
+        <span class="material-symbols-outlined mr-3 text-on-surface-variant">visibility</span>
+        <span class="font-label-caps text-xs uppercase">Vision Core</span>
+      </button>
+
+      <!-- Atmospherics Module -->
+      <button data-target="weather" class="report-nav-item w-full text-left flex items-center text-on-surface-variant px-4 py-3 hover:bg-surface-variant/40 hover:text-on-surface transition-all duration-300 cursor-pointer block border-l-4 border-transparent">
+        <span class="material-symbols-outlined mr-3 text-on-surface-variant">cloudy_snowing</span>
+        <span class="font-label-caps text-xs uppercase">Atmospherics</span>
+      </button>
+
+      <!-- Corroboration Module -->
+      <button data-target="evidence" class="report-nav-item w-full text-left flex items-center text-on-surface-variant px-4 py-3 hover:bg-surface-variant/40 hover:text-on-surface transition-all duration-300 cursor-pointer block border-l-4 border-transparent">
+        <span class="material-symbols-outlined mr-3 text-on-surface-variant">repeat</span>
+        <span class="font-label-caps text-xs uppercase">Corroboration</span>
+      </button>
+    </nav>
+
+    <div class="mt-auto px-6 pt-6 border-t border-outline-variant">
+      <button onclick="alert('Exporting Enterprise Dossier PDF...')" class="w-full border border-primary text-primary py-3 font-label-caps text-xs uppercase hover:bg-primary hover:text-on-primary transition-all mb-4 font-bold flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+        Export Dossier PDF
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="xl:ml-[320px] pt-24 pb-16 px-6 md:px-12 min-h-screen bg-grid-pattern flex-grow">
+    <div class="max-w-5xl mx-auto space-y-8">
+
+      <!-- Dynamic Breadcrumb -->
+      <div class="font-data-mono text-xs text-on-surface-variant uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-4">
+        <a href="analysis.html" class="hover:text-primary transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">folder_open</span> Evidence Index
+        </a>
+        <span class="material-symbols-outlined text-xs opacity-40">chevron_right</span>
+        <span id="active-breadcrumb" class="text-[#aff1c4] font-bold tracking-wider">Metadata Verification</span>
+      </div>
+
+      <!-- MODULE 1: METADATA -->
+      <div id="module-view-metadata" class="module-view space-y-8">
+        <!-- Page Header Card -->
+        <div class="bg-surface-container border border-emerald-500/30 p-6 md:p-8 shadow-hard relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-3 font-data-mono text-[10px] text-emerald-400/80 border-b border-l border-emerald-500/30 bg-surface-container-low">
+            REF_ID: MD-7742 // METADATA CORE
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-4xl text-emerald-400">fingerprint</span>
+                <div>
+                  <h1 class="font-h1 text-3xl md:text-4xl text-primary font-bold uppercase tracking-tight">Metadata Verification</h1>
+                  <p class="font-data-mono text-xs text-emerald-400">EXIF & HARDWARE INTEGRITY MODULE</p>
+                </div>
+              </div>
+              <p class="font-body-lg text-sm text-on-surface-variant leading-relaxed">
+                Verifies hidden image information including EXIF metadata, GPS coordinates, timestamps, capture device, and file integrity.
+              </p>
+            </div>
+            <!-- Score & Confidence -->
+            <div class="md:col-span-4 bg-surface-container-low border border-emerald-500/30 p-5 text-center space-y-3">
+              <div class="font-data-mono text-xs text-on-surface-variant uppercase">Module Score</div>
+              <div class="font-display-case-no text-5xl text-emerald-400 font-bold leading-none">14<span class="text-xl text-on-surface-variant">/15</span></div>
+              <div class="space-y-1 pt-2 border-t border-outline-variant/40">
+                <div class="flex justify-between font-data-mono text-[11px]">
+                  <span class="text-on-surface-variant">Confidence</span>
+                  <span class="text-emerald-400 font-bold">93%</span>
+                </div>
+                <div class="h-2 bg-surface-variant w-full overflow-hidden">
+                  <div class="h-full bg-emerald-400 transition-all duration-700 w-[93%]"></div>
+                </div>
+                <div class="font-data-mono text-[10px] text-emerald-400 text-right font-bold pt-0.5">Overall Confidence: High</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Badges Grid -->
+        <div class="space-y-3">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-400 text-lg">verified</span>
+            Verification Parameters
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">EXIF Metadata Intact</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Camera focal length, exposure, and aperture headers verified.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">GPS Coordinates Match</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Coordinates 22.5726° N, 88.3639° E match claimed capture site.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Capture Device Verified</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Hardware signature confirmed matching Sony Alpha 7R.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Timestamp Validated</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">EXIF DateTimeOriginal matches 2024-03-12 14:30:12 IST.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">No EXIF Tampering</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Zero editing software signatures (Photoshop/GIMP) detected.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-emerald-400/60 transition-all group">
+              <span class="material-symbols-outlined text-emerald-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">File Integrity Confirmed</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">SHA-256 bitstream checksum verified against original upload.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evidence Details Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-emerald-400 text-lg">info</span>
+            Structured Evidence Details
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 font-data-mono text-xs">
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">photo_camera</span> Camera Device
+              </span>
+              <p class="text-primary font-bold">Sony Alpha 7R (ILCE-7RM4)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">location_on</span> GPS Location
+              </span>
+              <p class="text-primary font-bold">Kolkata (22.5726° N, 88.3639° E)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">schedule</span> Capture Time
+              </span>
+              <p class="text-primary font-bold">14:30:12 IST (2024-03-12)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">description</span> File Format
+              </span>
+              <p class="text-primary font-bold">JPEG (EXIF v2.31 Baseline)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">aspect_ratio</span> Resolution
+              </span>
+              <p class="text-primary font-bold">3840 × 2160 (8.3 MP)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-emerald-400">hard_drive</span> File Size
+              </span>
+              <p class="text-primary font-bold">6.42 MB (SHA-256 Validated)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Explanation Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-emerald-400 text-lg">fact_check</span>
+            Why this Score? (14 / 15)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start font-data-mono text-xs">
+            <div class="md:col-span-7 space-y-2">
+              <span class="text-emerald-400 font-bold uppercase text-[11px] block">Verified Positive Factors:</span>
+              <div class="space-y-1.5 text-on-surface-variant">
+                <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✔</span> EXIF headers fully intact (+5 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✔</span> GPS coordinates matched (+4 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✔</span> Capture device verified (+5 pts)</div>
+              </div>
+            </div>
+            <div class="md:col-span-5 bg-surface-container-low border border-amber-500/40 p-4 space-y-1">
+              <span class="text-amber-400 font-bold uppercase text-[11px] block flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">warning</span> Deduction (-1 pt):
+              </span>
+              <p class="text-on-surface-variant text-[11px] leading-relaxed">
+                ⚠ Camera serial number could not be independently verified against Sony global registry.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 2: VISION CORE -->
+      <div id="module-view-vision" class="module-view space-y-8 hidden">
+        <!-- Page Header Card -->
+        <div class="bg-surface-container border border-blue-500/30 p-6 md:p-8 shadow-hard relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-3 font-data-mono text-[10px] text-blue-400/80 border-b border-l border-blue-500/30 bg-surface-container-low">
+            REF_ID: VN-3109 // VISION CORE
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-4xl text-blue-400">visibility</span>
+                <div>
+                  <h1 class="font-h1 text-3xl md:text-4xl text-primary font-bold uppercase tracking-tight">Vision Core Analysis</h1>
+                  <p class="font-data-mono text-xs text-blue-400">DEEPFAKE & OPTICAL INTEGRITY MODULE</p>
+                </div>
+              </div>
+              <p class="font-body-lg text-sm text-on-surface-variant leading-relaxed">
+                Analyzes lighting consistency, shadows, AI-generated artifacts, object integrity, and visual tampering.
+              </p>
+            </div>
+            <!-- Score & Confidence -->
+            <div class="md:col-span-4 bg-surface-container-low border border-blue-500/30 p-5 text-center space-y-3">
+              <div class="font-data-mono text-xs text-on-surface-variant uppercase">Module Score</div>
+              <div class="font-display-case-no text-5xl text-blue-400 font-bold leading-none">21<span class="text-xl text-on-surface-variant">/25</span></div>
+              <div class="space-y-1 pt-2 border-t border-outline-variant/40">
+                <div class="flex justify-between font-data-mono text-[11px]">
+                  <span class="text-on-surface-variant">Confidence</span>
+                  <span class="text-blue-400 font-bold">84%</span>
+                </div>
+                <div class="h-2 bg-surface-variant w-full overflow-hidden">
+                  <div class="h-full bg-blue-400 transition-all duration-700 w-[84%]"></div>
+                </div>
+                <div class="font-data-mono text-[10px] text-blue-400 text-right font-bold pt-0.5">Overall Confidence: High</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Badges Grid -->
+        <div class="space-y-3">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-400 text-lg">verified</span>
+            Optical Audit Parameters
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Shadow Vector Match</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">3D shadow projections align with calculated solar light source.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Lighting Directionality Sync</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Specular highlights and surface shading vector 94% consistent.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">0% AI Diffusion Artifacts</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Zero generative AI lattice or latent noise diffusion signatures detected.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Edge Noise Consistency</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Sensor PRNU noise pattern uniform across all pixel boundaries.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Facial Geometry Intact</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Biometric facial landmark mesh shows zero deepfake swap traces.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-blue-400/60 transition-all group">
+              <span class="material-symbols-outlined text-blue-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Compression Alignment</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">JPEG 8x8 DCT quantization block structure completely consistent.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evidence Details Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-blue-400 text-lg">tune</span>
+            Optical Details & Inspection Model
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 font-data-mono text-xs">
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">psychology</span> Neural Model
+              </span>
+              <p class="text-primary font-bold">Visstya Vision AI v4.2</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">wb_sunny</span> Solar Illumination
+              </span>
+              <p class="text-primary font-bold">42.5° Solar Altitude Sync</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">smart_toy</span> Deepfake Risk
+              </span>
+              <p class="text-primary font-bold">0.02% (Non-Generative)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">grain</span> Edge Variance
+              </span>
+              <p class="text-primary font-bold">0.0014 (Natural Optic)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">face</span> Facial Biometrics
+              </span>
+              <p class="text-primary font-bold">99.8% Authentic Mesh</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-blue-400">grid_4x4</span> Sensor Signature
+              </span>
+              <p class="text-primary font-bold">Sony PRNU Pattern Valid</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Explanation Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-blue-400 text-lg">fact_check</span>
+            Why this Score? (21 / 25)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start font-data-mono text-xs">
+            <div class="md:col-span-7 space-y-2">
+              <span class="text-blue-400 font-bold uppercase text-[11px] block">Verified Positive Factors:</span>
+              <div class="space-y-1.5 text-on-surface-variant">
+                <div class="flex items-center gap-2"><span class="text-blue-400 font-bold">✔</span> Shadow vectors & solar illumination aligned (+8 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-blue-400 font-bold">✔</span> Zero AI diffusion or deepfake artifacts (+8 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-blue-400 font-bold">✔</span> Facial & spatial geometry intact (+5 pts)</div>
+              </div>
+            </div>
+            <div class="md:col-span-5 bg-surface-container-low border border-amber-500/40 p-4 space-y-1">
+              <span class="text-amber-400 font-bold uppercase text-[11px] block flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">warning</span> Deduction (-4 pts):
+              </span>
+              <p class="text-on-surface-variant text-[11px] leading-relaxed">
+                ⚠ Minor ISO grain compression noise detected in low-contrast background shadow.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE 3: ATMOSPHERICS -->
+      <div id="module-view-weather" class="module-view space-y-8 hidden">
+        <!-- Page Header Card -->
+        <div class="bg-surface-container border border-cyan-500/30 p-6 md:p-8 shadow-hard relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-3 font-data-mono text-[10px] text-cyan-300/80 border-b border-l border-cyan-500/30 bg-surface-container-low">
+            REF_ID: AT-9921 // ATMOSPHERICS CORE
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-4xl text-cyan-300">cloudy_snowing</span>
+                <div>
+                  <h1 class="font-h1 text-3xl md:text-4xl text-primary font-bold uppercase tracking-tight">Atmospherics Correlation</h1>
+                  <p class="font-data-mono text-xs text-cyan-300">METEOROLOGICAL & GEOSPATIAL MODULE</p>
+                </div>
+              </div>
+              <p class="font-body-lg text-sm text-on-surface-variant leading-relaxed">
+                Compares historical weather records with environmental conditions visible in the uploaded evidence.
+              </p>
+            </div>
+            <!-- Score & Confidence -->
+            <div class="md:col-span-4 bg-surface-container-low border border-cyan-500/30 p-5 text-center space-y-3">
+              <div class="font-data-mono text-xs text-on-surface-variant uppercase">Module Score</div>
+              <div class="font-display-case-no text-5xl text-cyan-300 font-bold leading-none">24<span class="text-xl text-on-surface-variant">/25</span></div>
+              <div class="space-y-1 pt-2 border-t border-outline-variant/40">
+                <div class="flex justify-between font-data-mono text-[11px]">
+                  <span class="text-on-surface-variant">Confidence</span>
+                  <span class="text-cyan-300 font-bold">96%</span>
+                </div>
+                <div class="h-2 bg-surface-variant w-full overflow-hidden">
+                  <div class="h-full bg-cyan-300 transition-all duration-700 w-[96%]"></div>
+                </div>
+                <div class="font-data-mono text-[10px] text-cyan-300 text-right font-bold pt-0.5">Overall Confidence: Very High</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Badges Grid -->
+        <div class="space-y-3">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2">
+            <span class="material-symbols-outlined text-cyan-300 text-lg">verified</span>
+            Meteorological Parameters
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Meteo-Database Match</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">IMD station log matches Kolkata partly cloudy record.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Cloud Pattern Synchronization</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">INSAT-3D satellite cloud layer matches photo frame top.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Atmospheric Visibility</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">4.5 km haze index matches historical humidity level.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Surface Moisture Match</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Road surface water reflections match 14mm rainfall log.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Solar Elevation Sync</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Sun angle at 14:30 IST aligns with ambient lighting level.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-cyan-300/60 transition-all group">
+              <span class="material-symbols-outlined text-cyan-300 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Temperature History Sync</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">28.4°C ambient temp matches local weather station archive.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evidence Details Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-cyan-300 text-lg">thermostat</span>
+            Atmospheric & Weather Details
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 font-data-mono text-xs">
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">cloud</span> Weather Condition
+              </span>
+              <p class="text-primary font-bold">Partly Cloudy / Scramble Cumulus</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">device_thermostat</span> Ambient Temp
+              </span>
+              <p class="text-primary font-bold">28.4°C (Station Match)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">humidity_mid</span> Relative Humidity
+              </span>
+              <p class="text-primary font-bold">78% (Post-Rainfall Moisture)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">satellite_alt</span> Satellite Feed
+              </span>
+              <p class="text-primary font-bold">INSAT-3D #20240312-1430</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">air</span> Wind Velocity
+              </span>
+              <p class="text-primary font-bold">12.4 km/h ENE (Sway Verified)</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-cyan-300">rainy</span> 24hr Accumulation
+              </span>
+              <p class="text-primary font-bold">14.2 mm (Kolkata Alipore)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Explanation Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-cyan-300 text-lg">fact_check</span>
+            Why this Score? (24 / 25)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start font-data-mono text-xs">
+            <div class="md:col-span-7 space-y-2">
+              <span class="text-cyan-300 font-bold uppercase text-[11px] block">Verified Positive Factors:</span>
+              <div class="space-y-1.5 text-on-surface-variant">
+                <div class="flex items-center gap-2"><span class="text-cyan-300 font-bold">✔</span> Meteorological weather logs fully matched (+10 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-cyan-300 font-bold">✔</span> Satellite cloud cover & humidity sync (+8 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-cyan-300 font-bold">✔</span> Solar altitude & shadow lighting sync (+6 pts)</div>
+              </div>
+            </div>
+            <div class="md:col-span-5 bg-surface-container-low border border-amber-500/40 p-4 space-y-1">
+              <span class="text-amber-400 font-bold uppercase text-[11px] block flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">warning</span> Deduction (-1 pt):
+              </span>
+              <p class="text-on-surface-variant text-[11px] leading-relaxed">
+                ⚠ Wind speed vector micro-variation estimated within 2% margin.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supporting Evidence Preview Section (ONLY Inside Atmospherics Module) -->
+        <section class="space-y-4 pt-6 border-t border-outline-variant/60">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display-case-no text-2xl text-primary uppercase font-bold flex items-center gap-2">
+              <span class="material-symbols-outlined text-cyan-300">collections</span>
+              Forensic Evidence Imagery
+            </h3>
+            <span class="font-data-mono text-[11px] text-on-surface-variant uppercase">CLICK ANY CARD TO ENLARGE</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            
+            <!-- Card 1: Original Image -->
+            <div class="preview-card bg-surface-container border border-outline-variant p-2 shadow-hard hover:border-cyan-300 transition-all duration-300 cursor-pointer group" onclick="openEvidenceModal('FIG 01: ORIGINAL UPLOAD ANALYSIS', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDT83eqaOqXcSnhDalRRziik6w86zY6hxargteqGEpzTDgVqdRQnY5-Pfnya0kqHG-iQYW9eXPrpZAn-iN8uTtDRcfTo6tZPRN7Sh4dREOJMq49CwnV-5rXfoI3WuJloKCjMtQwI7PlW6QheOz-rZf44t6UZIb3dHLkJrrBQwXbQaZiUuCBYvkFbI-3MX6C1b1xBIq0krIKENMucyYoGFDcYMClXXjyQQKSdwxY4SEas5GKsxgeBlQ', 'Sony Alpha 7R • 3840×2160 • EXIF Verified')">
+              <div class="w-full aspect-video bg-surface-container-low overflow-hidden relative">
+                <img class="w-full h-full object-cover transition-transform duration-500" alt="Original Image Preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDT83eqaOqXcSnhDalRRziik6w86zY6hxargteqGEpzTDgVqdRQnY5-Pfnya0kqHG-iQYW9eXPrpZAn-iN8uTtDRcfTo6tZPRN7Sh4dREOJMq49CwnV-5rXfoI3WuJloKCjMtQwI7PlW6QheOz-rZf44t6UZIb3dHLkJrrBQwXbQaZiUuCBYvkFbI-3MX6C1b1xBIq0krIKENMucyYoGFDcYMClXXjyQQKSdwxY4SEas5GKsxgeBlQ"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-2xl drop-shadow">zoom_in</span>
+                </div>
+              </div>
+              <p class="mt-2 font-data-mono text-[10px] text-center text-primary font-bold uppercase">FIG 01: Original Image</p>
+              <p class="font-data-mono text-[9px] text-center text-on-surface-variant">EXIF Header Verified</p>
+            </div>
+
+            <!-- Card 2: Vision Heatmap -->
+            <div class="preview-card bg-surface-container border border-outline-variant p-2 shadow-hard hover:border-cyan-300 transition-all duration-300 cursor-pointer group" onclick="openEvidenceModal('FIG 02: SHADOW VECTOR HEATMAP', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAz-3ZnS4wyY6JyMs7Ptp7I7_Tj_sZdSvrN7kDF-WtdIC-Q2qfNstEDTV7T-XiI70GNheofXf2SBEscgGDmVhW_JbEZFfgHSwx-zJAS4KMuk2TdO1j1ntNVtLZOHFIpW75dSxM390rMm7qAXz0j6K7ZqSOJZbVGturY2CTF7dh8zEXaeXRU5DsHT_Hu7BUuI9NodyjcLfAzheciBe46i3bt_Al7tkoml4eMOLlVpWyLgsCj1PTkvHc', 'Optical Shadow Vector Mapping • 94% Lighting Sync')">
+              <div class="w-full aspect-video bg-surface-container-low overflow-hidden relative">
+                <img class="w-full h-full object-cover transition-transform duration-500" alt="Shadow Vector Heatmap" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz-3ZnS4wyY6JyMs7Ptp7I7_Tj_sZdSvrN7kDF-WtdIC-Q2qfNstEDTV7T-XiI70GNheofXf2SBEscgGDmVhW_JbEZFfgHSwx-zJAS4KMuk2TdO1j1ntNVtLZOHFIpW75dSxM390rMm7qAXz0j6K7ZqSOJZbVGturY2CTF7dh8zEXaeXRU5DsHT_Hu7BUuI9NodyjcLfAzheciBe46i3bt_Al7tkoml4eMOLlVpWyLgsCj1PTkvHc"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-2xl drop-shadow">zoom_in</span>
+                </div>
+              </div>
+              <p class="mt-2 font-data-mono text-[10px] text-center text-primary font-bold uppercase">FIG 02: Vision Core</p>
+              <p class="font-data-mono text-[9px] text-center text-on-surface-variant">Shadow Vector Map</p>
+            </div>
+
+            <!-- Card 3: Weather Satellite Map -->
+            <div class="preview-card bg-surface-container border border-outline-variant p-2 shadow-hard hover:border-cyan-300 transition-all duration-300 cursor-pointer group" onclick="openEvidenceModal('FIG 03: METEO-SATELLITE CORRELATION', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvEUyW6Stt-i9-HvMmvymRCj1iHF7ITqw193meLIp5mjVsV4bLwEae0C19aJ-bfh0XF64rWS_FeElFSn62npphag_ZTBmSr2UmsMCDtiBifRw1Ogg6UmvZm2ZEe535-3d3ZBqc0nEhiy4xhgMVsRizJ1nh2A1xCaDgG5WkM5X-DNZetUbFFERRlZu4_SDpLMZmO0wd8sziSOKLW73i7LpKlpFbCDphLfGzcAY6aW6uXgpiEOhKbOY', 'INSAT-3D Satellite Grid • 28.4°C • 78% Humidity')">
+              <div class="w-full aspect-video bg-surface-container-low overflow-hidden relative">
+                <img class="w-full h-full object-cover transition-transform duration-500" alt="Weather Satellite Map" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvEUyW6Stt-i9-HvMmvymRCj1iHF7ITqw193meLIp5mjVsV4bLwEae0C19aJ-bfh0XF64rWS_FeElFSn62npphag_ZTBmSr2UmsMCDtiBifRw1Ogg6UmvZm2ZEe535-3d3ZBqc0nEhiy4xhgMVsRizJ1nh2A1xCaDgG5WkM5X-DNZetUbFFERRlZu4_SDpLMZmO0wd8sziSOKLW73i7LpKlpFbCDphLfGzcAY6aW6uXgpiEOhKbOY"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-2xl drop-shadow">zoom_in</span>
+                </div>
+              </div>
+              <p class="mt-2 font-data-mono text-[10px] text-center text-primary font-bold uppercase">FIG 03: Weather Map</p>
+              <p class="font-data-mono text-[9px] text-center text-on-surface-variant">INSAT-3D Satellite Sync</p>
+            </div>
+
+            <!-- Card 4: News Evidence -->
+            <div class="preview-card bg-surface-container border border-outline-variant p-2 shadow-hard hover:border-cyan-300 transition-all duration-300 cursor-pointer group" onclick="openEvidenceModal('FIG 04: NEWS & ARCHIVAL WIRE MATCH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBdyPlFeTYAoO_ljr0hYLMK179DrQBu4n_VmWXwuBqWrxoi9n44Scl5IxP3a0zqozIV-g_6Ve5MvhoUhEs6gzhK_2-U7FfRD5uxwPp3ZJePuLkAH-M239P8AdspQE_dwrdgu5dka2fDX8ZR6HRkXdVA4w_rcxcJ8WeDjtPyT9Cs2SDUPN4CpT1egYHXxgWY5f5O-WmIsrpGNEtrbKUCijbteERqt2M2S8XEbT3fOdjVkxd4sWo41g', 'Associated Press & Reuters Wire Cross-Reference')">
+              <div class="w-full aspect-video bg-surface-container-low overflow-hidden relative">
+                <img class="w-full h-full object-cover transition-transform duration-500" alt="News Evidence Wire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBdyPlFeTYAoO_ljr0hYLMK179DrQBu4n_VmWXwuBqWrxoi9n44Scl5IxP3a0zqozIV-g_6Ve5MvhoUhEs6gzhK_2-U7FfRD5uxwPp3ZJePuLkAH-M239P8AdspQE_dwrdgu5dka2fDX8ZR6HRkXdVA4w_rcxcJ8WeDjtPyT9Cs2SDUPN4CpT1egYHXxgWY5f5O-WmIsrpGNEtrbKUCijbteERqt2M2S8XEbT3fOdjVkxd4sWo41g"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-2xl drop-shadow">zoom_in</span>
+                </div>
+              </div>
+              <p class="mt-2 font-data-mono text-[10px] text-center text-primary font-bold uppercase">FIG 04: News Evidence</p>
+              <p class="font-data-mono text-[9px] text-center text-on-surface-variant">AP / Reuters Wire Match</p>
+            </div>
+
+            <!-- Card 5: Geolocation Satellite Map -->
+            <div class="preview-card bg-surface-container border border-outline-variant p-2 shadow-hard hover:border-cyan-300 transition-all duration-300 cursor-pointer group" onclick="openEvidenceModal('FIG 05: SATELLITE GEOLOCATION TRIANGULATION', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBQHHoyaybLxk4lq0cs3EcERLrlAqyTqVcswXlLSjL48ThhwM9l99WFaC2ztZRCch2-X_ekCI_qLfsI9SFOb18A2sijLZilATQy7jVFWXv243eE3J-KhaIa0ih5zUVVruC_ExG0cdTj4VTeZH5RONmd8IuKyMDIxBNu3kQehlGkL5x7xxjmUIW6cEtSXqeTHPD9oWpify_uoGaItprdWgjWgPH_sV0wQYJiaPFIobkEiWdcrhsf8pM', 'Kolkata 22.5726° N, 88.3639° E • Triangulated Pass')">
+              <div class="w-full aspect-video bg-surface-container-low overflow-hidden relative">
+                <img class="w-full h-full object-cover transition-transform duration-500" alt="Geolocation Satellite Map" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQHHoyaybLxk4lq0cs3EcERLrlAqyTqVcswXlLSjL48ThhwM9l99WFaC2ztZRCch2-X_ekCI_qLfsI9SFOb18A2sijLZilATQy7jVFWXv243eE3J-KhaIa0ih5zUVVruC_ExG0cdTj4VTeZH5RONmd8IuKyMDIxBNu3kQehlGkL5x7xxjmUIW6cEtSXqeTHPD9oWpify_uoGaItprdWgjWgPH_sV0wQYJiaPFIobkEiWdcrhsf8pM"/>
+                <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white text-2xl drop-shadow">zoom_in</span>
+                </div>
+              </div>
+              <p class="mt-2 font-data-mono text-[10px] text-center text-primary font-bold uppercase">FIG 05: Location Map</p>
+              <p class="font-data-mono text-[9px] text-center text-on-surface-variant">Sentinel-2 Satellite Pass</p>
+            </div>
+
+          </div>
+        </section>
+      </div>
+
+      <!-- MODULE 4: CORROBORATION -->
+      <div id="module-view-evidence" class="module-view space-y-8 hidden">
+        <!-- Page Header Card -->
+        <div class="bg-surface-container border border-purple-500/30 p-6 md:p-8 shadow-hard relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-3 font-data-mono text-[10px] text-purple-400/80 border-b border-l border-purple-500/30 bg-surface-container-low">
+            REF_ID: CR-0052 // CORROBORATION CORE
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-8 space-y-3">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-4xl text-purple-400">repeat</span>
+                <div>
+                  <h1 class="font-h1 text-3xl md:text-4xl text-primary font-bold uppercase tracking-tight">Corroboration Network</h1>
+                  <p class="font-data-mono text-xs text-purple-400">OSINT & MEDIA ARCHIVE MODULE</p>
+                </div>
+              </div>
+              <p class="font-body-lg text-sm text-on-surface-variant leading-relaxed">
+                Cross-checks trusted news sources, official reports, public records, and independent evidence to validate the submitted claim.
+              </p>
+            </div>
+            <!-- Score & Confidence -->
+            <div class="md:col-span-4 bg-surface-container-low border border-purple-500/30 p-5 text-center space-y-3">
+              <div class="font-data-mono text-xs text-on-surface-variant uppercase">Module Score</div>
+              <div class="font-display-case-no text-5xl text-purple-400 font-bold leading-none">28<span class="text-xl text-on-surface-variant">/35</span></div>
+              <div class="space-y-1 pt-2 border-t border-outline-variant/40">
+                <div class="flex justify-between font-data-mono text-[11px]">
+                  <span class="text-on-surface-variant">Confidence</span>
+                  <span class="text-purple-400 font-bold">80%</span>
+                </div>
+                <div class="h-2 bg-surface-variant w-full overflow-hidden">
+                  <div class="h-full bg-purple-400 transition-all duration-700 w-[80%]"></div>
+                </div>
+                <div class="font-data-mono text-[10px] text-purple-400 text-right font-bold pt-0.5">Overall Confidence: High</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Badges Grid -->
+        <div class="space-y-3">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2">
+            <span class="material-symbols-outlined text-purple-400 text-lg">verified</span>
+            Corroboration Parameters
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">AP News Archive Match</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Associated Press story wire #AP-2024-882 verified.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Reuters Wire Verified</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Reuters media feed timestamp cross-checked & confirmed.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Local CCTV Stream Sync</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Municipal traffic camera feed #CCTV-42 matched.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">3 Independent Sources</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Multi-source field witness testimony match confirmed.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Timeline Progression</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Event progression matches verified public timeline.</p>
+              </div>
+            </div>
+            <div class="bg-surface-container border border-outline-variant p-4 flex items-center gap-3 hover:border-purple-400/60 transition-all group">
+              <span class="material-symbols-outlined text-purple-400 text-2xl group-hover:scale-110 transition-transform">check_circle</span>
+              <div>
+                <h3 class="font-h2 text-sm text-primary uppercase font-bold">Geolocation Triangulated</h3>
+                <p class="font-data-mono text-[11px] text-on-surface-variant">Cross-referenced with 3 satellite feeds & landmark map.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Evidence Details Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-purple-400 text-lg">newspaper</span>
+            Corroborative Sources & References
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 font-data-mono text-xs">
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">article</span> Primary News Wire
+              </span>
+              <p class="text-primary font-bold">Associated Press #AP-2024-882</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">live_tv</span> Broadcast Feeds
+              </span>
+              <p class="text-primary font-bold">Reuters & Municipal CCTV-42</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">group</span> Field Testimonies
+              </span>
+              <p class="text-primary font-bold">3 Independent Reports</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">folder</span> Archival Sources
+              </span>
+              <p class="text-primary font-bold">12 Public Dossiers Matched</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">public</span> Satellite Pass
+              </span>
+              <p class="text-primary font-bold">Sentinel-2 Earth Observation</p>
+            </div>
+            <div class="space-y-1">
+              <span class="text-on-surface-variant text-[10px] block uppercase flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm text-purple-400">verified</span> Trust Rating
+              </span>
+              <p class="text-primary font-bold">Grade A1 Credibility</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Explanation Card -->
+        <div class="bg-surface-container border border-outline-variant p-6 shadow-hard space-y-4">
+          <h2 class="font-h2 text-xl text-primary font-bold uppercase flex items-center gap-2 border-b border-outline-variant/60 pb-3">
+            <span class="material-symbols-outlined text-purple-400 text-lg">fact_check</span>
+            Why this Score? (28 / 35)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start font-data-mono text-xs">
+            <div class="md:col-span-7 space-y-2">
+              <span class="text-purple-400 font-bold uppercase text-[11px] block">Verified Positive Factors:</span>
+              <div class="space-y-1.5 text-on-surface-variant">
+                <div class="flex items-center gap-2"><span class="text-purple-400 font-bold">✔</span> AP & Reuters archival wire match (+10 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-purple-400 font-bold">✔</span> Local CCTV municipal camera stream sync (+10 pts)</div>
+                <div class="flex items-center gap-2"><span class="text-purple-400 font-bold">✔</span> 3 independent witness testimonies (+8 pts)</div>
+              </div>
+            </div>
+            <div class="md:col-span-5 bg-surface-container-low border border-amber-500/40 p-4 space-y-1">
+              <span class="text-amber-400 font-bold uppercase text-[11px] block flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">warning</span> Deduction (-7 pts):
+              </span>
+              <p class="text-on-surface-variant text-[11px] leading-relaxed">
+                ⚠ 1 secondary social media repost lacked original timestamp header.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Evidence Lightbox Modal (Click to Enlarge) -->
+  <div id="evidence-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant max-w-3xl w-full p-6 shadow-2xl relative space-y-4">
+      <div class="flex justify-between items-center border-b border-outline-variant pb-3">
+        <h3 id="modal-title" class="font-display-case-no text-xl text-primary font-bold uppercase">Evidence Preview</h3>
+        <button onclick="closeEvidenceModal()" class="text-on-surface-variant hover:text-primary p-1 flex items-center justify-center border border-outline-variant hover:border-primary">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+      <div class="w-full aspect-video bg-surface-container-low overflow-hidden border border-outline-variant">
+        <img id="modal-img" class="w-full h-full object-contain" alt="Enlarged Evidence" src=""/>
+      </div>
+      <div class="flex justify-between items-center font-data-mono text-xs border-t border-outline-variant pt-3">
+        <span id="modal-sub" class="text-on-surface-variant">FORENSIC PARAMETERS VERIFIED</span>
+        <button onclick="closeEvidenceModal()" class="px-4 py-1.5 bg-primary text-on-primary font-label-caps text-xs uppercase font-bold hover:opacity-80">
+          Close Lightbox
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="xl:ml-[320px] bg-surface-container-lowest border-t border-outline-variant">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 md:px-12 py-4 gap-4">
+      <p class="font-label-caps text-[10px] text-on-surface-variant uppercase">© 2024 VISSTYA AI ARCHIVAL DIVISION. ALL DATA ENCRYPTED.</p>
+      <div class="flex flex-wrap justify-center gap-6 font-label-caps text-[10px]">
+        <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Save Report</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Share Dossier</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="archive.html">Audit Trail</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/shader.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Lightbox modal helpers
+    function openEvidenceModal(title, imgSrc, sub) {
+      const modal = document.getElementById('evidence-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalImg = document.getElementById('modal-img');
+      const modalSub = document.getElementById('modal-sub');
+
+      if (modal && modalTitle && modalImg && modalSub) {
+        modalTitle.textContent = title;
+        modalImg.src = imgSrc;
+        modalSub.textContent = sub;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeEvidenceModal() {
+      const modal = document.getElementById('evidence-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const navButtons = document.querySelectorAll('.report-nav-item[data-target]');
+      const breadcrumb = document.getElementById('active-breadcrumb');
+
+      const views = {
+        metadata: {
+          el: document.getElementById('module-view-metadata'),
+          breadcrumb: 'Metadata Verification',
+          colorClass: 'text-[#aff1c4]',
+          activeStyle: 'border-l-4 border-[#aff1c4] bg-[#182920] text-white font-bold',
+          iconColor: 'text-[#aff1c4]'
+        },
+        vision: {
+          el: document.getElementById('module-view-vision'),
+          breadcrumb: 'Vision Core Analysis',
+          colorClass: 'text-blue-400',
+          activeStyle: 'border-l-4 border-blue-400 bg-blue-950/40 text-white font-bold',
+          iconColor: 'text-blue-400'
+        },
+        weather: {
+          el: document.getElementById('module-view-weather'),
+          breadcrumb: 'Atmospherics Correlation',
+          colorClass: 'text-cyan-300',
+          activeStyle: 'border-l-4 border-cyan-300 bg-cyan-950/40 text-white font-bold',
+          iconColor: 'text-cyan-300'
+        },
+        evidence: {
+          el: document.getElementById('module-view-evidence'),
+          breadcrumb: 'Corroboration Network',
+          colorClass: 'text-purple-400',
+          activeStyle: 'border-l-4 border-purple-400 bg-purple-950/40 text-white font-bold',
+          iconColor: 'text-purple-400'
+        }
+      };
+
+      const defaultStyle = 'text-on-surface-variant hover:bg-surface-variant/40 hover:text-on-surface transition-all duration-300 cursor-pointer block border-l-4 border-transparent';
+
+      function activateModule(targetKey) {
+        if (!views[targetKey]) targetKey = 'metadata';
+
+        // 1. Update views
+        Object.keys(views).forEach(key => {
+          if (views[key].el) {
+            if (key === targetKey) {
+              views[key].el.classList.remove('hidden');
+            } else {
+              views[key].el.classList.add('hidden');
+            }
+          }
+        });
+
+        // 2. Update sidebar buttons
+        navButtons.forEach(btn => {
+          const key = btn.getAttribute('data-target');
+          const icon = btn.querySelector('.material-symbols-outlined');
+
+          if (key === targetKey) {
+            btn.className = `report-nav-item w-full text-left flex items-center px-4 py-3 transition-all duration-300 cursor-pointer block ${views[key].activeStyle}`;
+            if (icon) icon.className = `material-symbols-outlined mr-3 ${views[key].iconColor}`;
+          } else if (key) {
+            btn.className = `report-nav-item w-full text-left flex items-center ${defaultStyle}`;
+            if (icon) icon.className = 'material-symbols-outlined mr-3 text-on-surface-variant';
+          }
+        });
+
+        // 3. Update breadcrumb
+        if (breadcrumb) {
+          breadcrumb.textContent = views[targetKey].breadcrumb;
+          breadcrumb.className = `font-bold tracking-wider ${views[targetKey].colorClass}`;
+        }
+
+        // 4. Update window hash silently
+        window.history.replaceState(null, '', `#module-${targetKey}`);
+
+        // 5. Scroll to top of module view
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = btn.getAttribute('data-target');
+          if (target) activateModule(target);
+        });
+      });
+
+      // Handle initial load hash
+      const hash = window.location.hash.toLowerCase();
+      if (hash.includes('vision') || hash.includes('02')) {
+        activateModule('vision');
+      } else if (hash.includes('weather') || hash.includes('03')) {
+        activateModule('weather');
+      } else if (hash.includes('evidence') || hash.includes('corroboration') || hash.includes('04')) {
+        activateModule('evidence');
+      } else {
+        activateModule('metadata');
+      }
+    });
+  </script>
+  <script src="js/i18n.js"></script>
+</body>
+</html>

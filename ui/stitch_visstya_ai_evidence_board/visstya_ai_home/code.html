@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Visstya AI | Modern Media Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Fira+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Custom scrollbar for investigative feel */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #101418; }
+        ::-webkit-scrollbar-thumb { background: #484740; }
+        
+        /* Grid background effect */
+        .grid-bg {
+            background-image: radial-gradient(#31353a 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .evidence-lane-connector {
+            position: absolute;
+            height: 1px;
+            background: #484740;
+            z-index: 0;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#101418",
+                        "on-surface-variant": "#cac6bd",
+                        "on-error": "#690005",
+                        "inverse-primary": "#605e57",
+                        "primary": "#ffffff",
+                        "on-primary-fixed": "#1c1c16",
+                        "surface-variant": "#31353a",
+                        "on-secondary-container": "#b2b9c1",
+                        "surface-container": "#1c2024",
+                        "on-surface": "#e0e3e8",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#94d5aa",
+                        "on-secondary": "#2a3138",
+                        "secondary-fixed": "#dce3ec",
+                        "on-tertiary-fixed-variant": "#0d5130",
+                        "outline-variant": "#484740",
+                        "secondary": "#c0c7d0",
+                        "secondary-fixed-dim": "#c0c7d0",
+                        "on-tertiary": "#00391f",
+                        "error": "#ffb4ab",
+                        "outline": "#939188",
+                        "on-primary-fixed-variant": "#484740",
+                        "background": "#101418",
+                        "tertiary": "#ffffff",
+                        "primary-fixed-dim": "#cac6be",
+                        "primary-container": "#e6e2d9",
+                        "on-primary": "#31302b",
+                        "primary-fixed": "#e6e2d9",
+                        "surface-container-high": "#262a2f",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#363a3e",
+                        "secondary-container": "#434a51",
+                        "inverse-surface": "#e0e3e8",
+                        "on-background": "#e0e3e8",
+                        "surface-container-low": "#181c20",
+                        "tertiary-container": "#aff1c4",
+                        "on-secondary-fixed": "#151c23",
+                        "on-tertiary-container": "#32704c",
+                        "on-tertiary-fixed": "#002110",
+                        "surface-tint": "#cac6be",
+                        "tertiary-fixed": "#aff1c4",
+                        "surface-container-lowest": "#0b0f12",
+                        "on-secondary-fixed-variant": "#41484f",
+                        "on-primary-container": "#66645d",
+                        "inverse-on-surface": "#2d3135",
+                        "surface": "#101418",
+                        "surface-container-highest": "#31353a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "display-case-no": ["Archivo Narrow"],
+                        "h2": ["Archivo Narrow"],
+                        "body-lg": ["Fira Sans"],
+                        "h1": ["Archivo Narrow"],
+                        "body-md": ["Fira Sans"],
+                        "data-mono": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                        "display-case-no": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "40px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface-dim text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<span class="font-display-case-no text-display-case-no uppercase tracking-tighter text-primary text-h2">Visstya AI</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-label-caps" href="#">Cases</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors" href="#">Archive</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-primary transition-colors" href="#">Directives</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-on-primary font-label-caps text-label-caps px-4 py-2 hover:opacity-80 transition-opacity uppercase">New Analysis</button>
+</div>
+</header>
+<main class="pt-16 min-h-screen flex flex-col">
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden grid-bg px-margin-mobile md:px-margin-desktop py-20">
+<!-- Shader Background -->
+<div class="absolute inset-0 z-0 opacity-40">
+<!-- STITCH_SHADER_START:ANIMATION_2 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_2" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_2');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+
+// Simplified convergence shader representing 4 threads (modules) pulling toward a central point
+void main() {
+    vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.y, u_resolution.x);
+    
+    // Pulse animation for the central "pin"
+    float pulse = 0.8 + 0.2 * sin(u_time * 2.0);
+    float center = smoothstep(0.12 * pulse, 0.1, length(uv));
+    
+    // Four strands converging
+    float strands = 0.0;
+    for(int i = 0; i < 4; i++) {
+        float angle = float(i) * 1.5708; // 90 degrees in radians
+        vec2 dir = vec2(cos(angle), sin(angle));
+        
+        // Ray from edge to center
+        float dist = abs(dot(uv, vec2(-dir.y, dir.x))); // Distance to line
+        float along = dot(uv, dir); // Distance along line
+        
+        // Only draw if outside center and moving inward
+        float line = smoothstep(0.015, 0.0, dist) * smoothstep(-1.5, 0.0, along);
+        
+        // Flowing effect along the line
+        float flow = smoothstep(0.1, 0.9, fract(along * 1.5 - u_time * 0.8));
+        strands += line * flow * 0.5;
+    }
+
+    // Colors from design system
+    vec3 ink = vec3(0.078, 0.094, 0.11); // #14181C
+    vec3 wire = vec3(0.54, 0.57, 0.60); // #8A9199
+    vec3 accent = vec3(0.247, 0.49, 0.345); // #3F7D58 (Trustable)
+    
+    vec3 color = mix(ink, wire, strands);
+    color = mix(color, accent, center);
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_2 -->
+</div>
+<div class="relative z-10 max-w-4xl text-center space-y-8">
+<div class="inline-block border border-outline-variant bg-surface-container-low/80 backdrop-blur px-3 py-1">
+<span class="font-data-mono text-[10px] text-on-surface-variant uppercase tracking-widest">System Status: Operative // v4.2.0</span>
+</div>
+<h1 class="font-display-case-no text-[64px] md:text-[84px] leading-[0.9] text-primary uppercase font-bold tracking-tighter">
+                    Shift the question: <br/>
+<span class="text-on-surface-variant">Does the evidence support the claim?</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto italic">
+                    Not a spam filter. Not a chatbot. An evidence-board for modern media verification.
+                </p>
+<!-- Primary Action Cluster -->
+<div class="mt-12 w-full max-w-3xl mx-auto space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Left: Input Area -->
+<div class="md:col-span-8 space-y-4">
+<!-- URL Input -->
+<div class="group relative bg-surface-container border border-outline-variant hover:border-primary transition-colors p-4 flex items-center">
+<span class="material-symbols-outlined text-on-surface-variant mr-3">link</span>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono w-full text-on-surface placeholder:text-outline p-0 uppercase" placeholder="PASTE SOURCE URL (VIDEO, ARTICLE, IMAGE)..." type="text"/>
+</div>
+<!-- Metadata Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="border-b border-outline-variant py-2">
+<label class="block font-label-caps text-[10px] text-outline mb-1">EVENT</label>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono w-full p-0 text-on-surface text-sm uppercase" placeholder="SPECIFY" type="text"/>
+</div>
+<div class="border-b border-outline-variant py-2">
+<label class="block font-label-caps text-[10px] text-outline mb-1">LOCATION</label>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono w-full p-0 text-on-surface text-sm uppercase" placeholder="COORDINATES" type="text"/>
+</div>
+<div class="border-b border-outline-variant py-2">
+<label class="block font-label-caps text-[10px] text-outline mb-1">DATE</label>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono w-full p-0 text-on-surface text-sm uppercase" placeholder="DD/MM/YYYY" type="text"/>
+</div>
+</div>
+</div>
+<!-- Right: Drag & Drop -->
+<div class="md:col-span-4 border-2 border-dashed border-outline-variant hover:border-primary transition-all flex flex-col items-center justify-center p-6 cursor-pointer group bg-surface-container-low/40">
+<span class="material-symbols-outlined text-outline group-hover:text-primary text-4xl mb-2">upload_file</span>
+<span class="font-label-caps text-label-caps text-outline group-hover:text-primary text-center">DRAG &amp; DROP MEDIA</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 font-display-case-no text-h2 uppercase hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-4">
+<span class="material-symbols-outlined">analytics</span>
+                        INITIATE FORENSIC AUDIT
+                    </button>
+</div>
+</div>
+</section>
+<!-- Parallel Lanes Section -->
+<section class="py-24 bg-surface-container-lowest relative overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="mb-16 border-l-4 border-primary pl-6">
+<h2 class="font-display-case-no text-[40px] text-primary uppercase">Engine Architecture</h2>
+<p class="font-label-caps text-on-surface-variant">THE CONVERGENCE OF PROBABILITY</p>
+</div>
+<div class="relative grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Lane 1 -->
+<div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#001</div>
+<span class="material-symbols-outlined text-primary mb-4">dataset</span>
+<h3 class="font-display-case-no text-h2 text-primary uppercase mb-2">Metadata</h3>
+<p class="font-body-md text-on-surface-variant mb-4">Origin tracing, file consistency, and chain-of-custody headers.</p>
+<div class="font-data-mono text-2xl text-primary">/15</div>
+<div class="mt-4 h-1 bg-surface-variant w-full">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+</div>
+<!-- Lane 2 -->
+<div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#002</div>
+<span class="material-symbols-outlined text-primary mb-4">visibility</span>
+<h3 class="font-display-case-no text-h2 text-primary uppercase mb-2">Vision</h3>
+<p class="font-body-md text-on-surface-variant mb-4">Shadow geometry, edge noise, and generative artifact detection.</p>
+<div class="font-data-mono text-2xl text-primary">/25</div>
+<div class="mt-4 h-1 bg-surface-variant w-full">
+<div class="h-full bg-primary w-[82%]"></div>
+</div>
+</div>
+<!-- Lane 3 -->
+<div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#003</div>
+<span class="material-symbols-outlined text-primary mb-4">cloudy_snowing</span>
+<h3 class="font-display-case-no text-h2 text-primary uppercase mb-2">Weather</h3>
+<p class="font-body-md text-on-surface-variant mb-4">Historical atmospheric correlation and lighting sync.</p>
+<div class="font-data-mono text-2xl text-primary">/25</div>
+<div class="mt-4 h-1 bg-surface-variant w-full">
+<div class="h-full bg-primary w-[45%]"></div>
+</div>
+</div>
+<!-- Lane 4 -->
+<div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary transition-colors">
+<div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#004</div>
+<span class="material-symbols-outlined text-primary mb-4">fact_check</span>
+<h3 class="font-display-case-no text-h2 text-primary uppercase mb-2">Corroboration</h3>
+<p class="font-body-md text-on-surface-variant mb-4">Cross-referencing global archival media and testimonies.</p>
+<div class="font-data-mono text-2xl text-primary">/35</div>
+<div class="mt-4 h-1 bg-surface-variant w-full">
+<div class="h-full bg-primary w-[70%]"></div>
+</div>
+</div>
+</div>
+<!-- Convergence Point -->
+<div class="mt-20 flex flex-col items-center">
+<div class="w-1 h-24 bg-gradient-to-b from-outline-variant to-primary mb-4"></div>
+<div class="p-8 border-4 border-primary bg-surface-container-high text-center">
+<span class="font-label-caps text-label-caps text-on-surface-variant block mb-2 tracking-[0.3em]">FINAL TRUST SCORE</span>
+<div class="font-display-case-no text-6xl text-primary leading-none">82.4</div>
+<div class="mt-4 px-4 py-1 bg-tertiary-container text-on-tertiary-container font-label-caps text-label-caps">TRUSTABLE</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Band Legend -->
+<section class="py-12 border-t border-outline-variant bg-surface-dim">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="font-label-caps text-on-surface-variant uppercase flex items-center gap-4">
+<span class="material-symbols-outlined">info</span>
+                        Understanding the Trust Band
+                    </div>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center gap-3 bg-surface-container p-3 border-l-4 border-error">
+<span class="font-data-mono text-error font-bold">FALSE</span>
+<span class="font-data-mono text-on-surface-variant text-xs">&lt; 40</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container p-3 border-l-4 border-secondary">
+<span class="font-data-mono text-secondary font-bold">AVERAGE</span>
+<span class="font-data-mono text-on-surface-variant text-xs">40 - 80</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container p-3 border-l-4 border-tertiary-fixed-dim">
+<span class="font-data-mono text-tertiary-fixed-dim font-bold">TRUSTABLE</span>
+<span class="font-data-mono text-on-surface-variant text-xs">80 - 100</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Latest Case Feed (Extra context for verification vibe) -->
+<section class="py-20 px-margin-desktop max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-12">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps text-outline uppercase tracking-widest">Global Audit Feed</span>
+<h2 class="font-display-case-no text-[32px] text-primary uppercase">Recent Verifications</h2>
+</div>
+<button class="font-label-caps text-label-caps text-primary border border-outline-variant px-6 py-2 hover:bg-surface-variant transition-colors uppercase">View All Archive</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+<!-- Case Item 1 -->
+<div class="bg-surface-container p-1 group cursor-pointer">
+<div class="relative aspect-video overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A grainy, dark surveillance-style photograph of a protest in a rain-slicked city square at night. The lighting is harsh from streetlights, casting long shadows. Overlaid on the image are glowing green data points and scanning lines in a technical, archival style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQHHoyaybLxk4lq0cs3EcERLrlAqyTqVcswXlLSjL48ThhwM9l99WFaC2ztZRCch2-X_ekCI_qLfsI9SFOb18A2sijLZilATQy7jVFWXv243eE3J-KhaIa0ih5zUVVruC_ExG0cdTj4VTeZH5RONmd8IuKyMDIxBNu3kQehlGkL5x7xxjmUIW6cEtSXqeTHPD9oWpify_uoGaItprdWgjWgPH_sV0wQYJiaPFIobkEiWdcrhsf8pM"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/80 backdrop-blur font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 992-K</div>
+</div>
+<div class="p-4 space-y-2">
+<h4 class="font-display-case-no text-h2 text-primary uppercase">Satellite Sync Alpha</h4>
+<p class="font-data-mono text-xs text-on-surface-variant truncate">GEO: 34.0522° N, 118.2437° W</p>
+<div class="flex justify-between items-center pt-2">
+<span class="font-label-caps text-[10px] text-error uppercase">Score: 12.1</span>
+<span class="font-label-caps text-[10px] text-outline uppercase">14 MIN AGO</span>
+</div>
+</div>
+</div>
+<!-- Case Item 2 -->
+<div class="bg-surface-container p-1 group cursor-pointer">
+<div class="relative aspect-video overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A stark, high-contrast black and white image of a digital circuit board viewed through a forensic lens. Dust particles and fine textures are visible. Tech markers and calibration rectangles are superimposed in the style of a professional intelligence report." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBdyPlFeTYAoO_ljr0hYLMK179DrQBu4n_VmWXwuBqWrxoi9n44Scl5IxP3a0zqozIV-g_6Ve5MvhoUhEs6gzhK_2-U7FfRD5uxwPp3ZJePuLkAH-M239P8AdspQE_dwrdgu5dka2fDX8ZR6HRkXdVA4w_rcxcJ8WeDjtPyT9Cs2SDUPN4CpT1egYHXxgWY5f5O-WmIsrpGNEtrbKUCijbteERqt2M2S8XEbT3fOdjVkxd4sWo41g"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/80 backdrop-blur font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 104-M</div>
+</div>
+<div class="p-4 space-y-2">
+<h4 class="font-display-case-no text-h2 text-primary uppercase">Bespoke Deepfake Audit</h4>
+<p class="font-data-mono text-xs text-on-surface-variant truncate">SRC: X-TERNAL UPLOAD</p>
+<div class="flex justify-between items-center pt-2">
+<span class="font-label-caps text-[10px] text-tertiary-fixed-dim uppercase">Score: 94.8</span>
+<span class="font-label-caps text-[10px] text-outline uppercase">2 HOURS AGO</span>
+</div>
+</div>
+</div>
+<!-- Case Item 3 -->
+<div class="bg-surface-container p-1 group cursor-pointer">
+<div class="relative aspect-video overflow-hidden mb-4">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="A legal dossier spread across a dark steel table, illuminated by a single overhead lamp. The paper is aged and yellowed, with red stamps that read VERIFIED. Various technical tools like a magnifying glass and a digital tablet with complex graphs are arranged neatly on the workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Q-D0pE2rltFLFukMnyjPlajcQNgMkMEsK1y52_yk7uutwrxI--1oilUr93LWCfPETffKC6WoK9vOziCluldAKVq0EGDf-lD_sS9iWTVK64MHiS-MnPIHECjw2MVfj60Z3ydxQqNHFPuRuo3YzAeFq2qnISnJNeIPqNhOcXSS33YA4w6dH6sBWjxKTJ4Rh0-9oUlyQ42CvI1bbC1Ml30oIs6lEyOTcGWkH8QINIa73PxzW4t3raI"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/80 backdrop-blur font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 821-P</div>
+</div>
+<div class="p-4 space-y-2">
+<h4 class="font-display-case-no text-h2 text-primary uppercase">Weather Corroboration</h4>
+<p class="font-data-mono text-xs text-on-surface-variant truncate">EVENT: FLOODING_MARCH_22</p>
+<div class="flex justify-between items-center pt-2">
+<span class="font-label-caps text-[10px] text-secondary uppercase">Score: 56.4</span>
+<span class="font-label-caps text-[10px] text-outline uppercase">6 HOURS AGO</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="flex justify-between items-center w-full px-margin-desktop py-8 mt-auto bg-surface-container-lowest border-t border-outline-variant">
+<div class="space-y-2">
+<span class="font-label-caps text-label-caps text-on-surface block">Visstya AI Archival Division</span>
+<p class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-tighter">© 2024 VISSTYA AI ARCHIVAL DIVISION. ALL DATA ENCRYPTED.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-on-surface cursor-pointer" href="#">Save Report</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-on-surface cursor-pointer" href="#">Share Dossier</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-on-surface cursor-pointer" href="#">Audit Trail</a>
+<a class="text-on-surface-variant font-label-caps text-label-caps hover:text-on-surface cursor-pointer underline" href="#">Chain of Custody</a>
+</div>
+</footer>
+<!-- Interactive Layer: Hover Pin Effects -->
+<script>
+        document.addEventListener('mousemove', (e) => {
+            // Optional micro-interaction for a subtle flashlight effect or grid follow
+        });
+
+        // Simple button interaction
+        const primaryBtn = document.querySelector('button');
+        primaryBtn.addEventListener('mousedown', () => primaryBtn.style.opacity = '0.8');
+        primaryBtn.addEventListener('mouseup', () => primaryBtn.style.opacity = '1');
+    </script>
+</body></html>

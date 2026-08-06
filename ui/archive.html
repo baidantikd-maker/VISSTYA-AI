@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Visstya AI | Global Audit Feed & Archive</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#101418",
+            "on-surface-variant": "#cac6bd",
+            "primary": "#ffffff",
+            "surface-variant": "#31353a",
+            "surface-container": "#1c2024",
+            "on-surface": "#e0e3e8",
+            "outline-variant": "#484740",
+            "error": "#ffb4ab",
+            "tertiary-fixed-dim": "#94d5aa"
+          },
+          fontFamily: {
+            "label-caps": ["JetBrains Mono"],
+            "display-case-no": ["Archivo Narrow"],
+            "h2": ["Archivo Narrow"],
+            "data-mono": ["JetBrains Mono"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-dim text-on-surface flex flex-col min-h-screen">
+  <!-- Dynamic Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay">
+    <div class="transition-spinner"></div>
+    <div class="transition-text" id="transition-message">RETRIEVING ARCHIVES...</div>
+  </div>
+
+  <!-- TopAppBar -->
+  <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-16 bg-surface-dim border-b border-outline-variant">
+    <div class="flex items-center gap-8">
+      <a href="index.html" class="font-display-case-no text-2xl uppercase tracking-tighter text-primary font-bold">Visstya AI</a>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-on-surface-variant font-label-caps text-xs hover:text-primary transition-colors" href="index.html">Cases</a>
+        <a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-xs" href="archive.html">Archive</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="login.html" class="border border-outline-variant text-on-surface-variant hover:text-primary px-3 py-1.5 font-label-caps text-xs uppercase">
+        Login Gateway
+      </a>
+      <a href="analysis.html" class="btn-green-tab font-label-caps text-xs px-4 py-2 uppercase font-bold transition-all shadow-sm">
+        New Analysis
+      </a>
+      <a href="settings.html" title="System Settings" class="border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary p-2 transition-all flex items-center justify-center">
+        <span class="material-symbols-outlined text-sm">settings</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Archive Content -->
+  <main class="pt-24 pb-16 px-6 md:px-12 max-w-6xl mx-auto flex-grow w-full">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-outline-variant pb-6">
+      <div>
+        <span class="font-data-mono text-xs text-outline uppercase tracking-widest block mb-1">OSINT REPOSITORY</span>
+        <h1 class="font-display-case-no text-4xl text-primary uppercase font-bold">Global Audit Archives</h1>
+      </div>
+      
+      <!-- Filter Tags -->
+      <div class="flex flex-wrap gap-2 font-data-mono text-xs">
+        <button class="bg-primary text-on-primary px-3 py-1 font-bold">ALL CASES</button>
+        <button class="bg-surface-container border border-outline-variant text-on-surface-variant hover:border-primary px-3 py-1">TRUSTABLE (80-100)</button>
+        <button class="bg-surface-container border border-outline-variant text-on-surface-variant hover:border-primary px-3 py-1">AVERAGE (40-80)</button>
+        <button class="bg-surface-container border border-outline-variant text-on-surface-variant hover:border-primary px-3 py-1">FALSE (&lt;40)</button>
+      </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="mb-8 relative">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+      <input type="text" class="w-full bg-surface-container border border-outline-variant text-on-surface font-data-mono text-sm pl-12 pr-4 py-3 focus:border-primary focus:ring-0 uppercase" placeholder="SEARCH CASE ID, LOCATION, EVENT NAME, OR SOURCE URL..."/>
+    </div>
+
+    <!-- Cases Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Case 1 -->
+      <a href="report.html" class="bg-surface-container border border-outline-variant p-4 hover:border-primary transition-all group block">
+        <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+          <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Satellite Sync Alpha" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQHHoyaybLxk4lq0cs3EcERLrlAqyTqVcswXlLSjL48ThhwM9l99WFaC2ztZRCch2-X_ekCI_qLfsI9SFOb18A2sijLZilATQy7jVFWXv243eE3J-KhaIa0ih5zUVVruC_ExG0cdTj4VTeZH5RONmd8IuKyMDIxBNu3kQehlGkL5x7xxjmUIW6cEtSXqeTHPD9oWpify_uoGaItprdWgjWgPH_sV0wQYJiaPFIobkEiWdcrhsf8pM"/>
+          <div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 992-K</div>
+        </div>
+        <h3 class="font-display-case-no text-xl text-primary font-bold uppercase mb-1">Satellite Sync Alpha</h3>
+        <p class="font-data-mono text-xs text-on-surface-variant mb-3">GEO: 34.0522° N, 118.2437° W</p>
+        <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+          <span class="font-label-caps text-[10px] text-error font-bold">SCORE: 12.1 // FALSE</span>
+          <span class="font-label-caps text-[10px] text-outline">14 MIN AGO</span>
+        </div>
+      </a>
+
+      <!-- Case 2 -->
+      <a href="report.html" class="bg-surface-container border border-outline-variant p-4 hover:border-primary transition-all group block">
+        <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+          <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Bespoke Deepfake Audit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBdyPlFeTYAoO_ljr0hYLMK179DrQBu4n_VmWXwuBqWrxoi9n44Scl5IxP3a0zqozIV-g_6Ve5MvhoUhEs6gzhK_2-U7FfRD5uxwPp3ZJePuLkAH-M239P8AdspQE_dwrdgu5dka2fDX8ZR6HRkXdVA4w_rcxcJ8WeDjtPyT9Cs2SDUPN4CpT1egYHXxgWY5f5O-WmIsrpGNEtrbKUCijbteERqt2M2S8XEbT3fOdjVkxd4sWo41g"/>
+          <div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 104-M</div>
+        </div>
+        <h3 class="font-display-case-no text-xl text-primary font-bold uppercase mb-1">Bespoke Deepfake Audit</h3>
+        <p class="font-data-mono text-xs text-on-surface-variant mb-3">SRC: X-TERNAL UPLOAD</p>
+        <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+          <span class="font-label-caps text-[10px] text-tertiary-fixed-dim font-bold">SCORE: 94.8 // TRUSTABLE</span>
+          <span class="font-label-caps text-[10px] text-outline">2 HOURS AGO</span>
+        </div>
+      </a>
+
+      <!-- Case 3 -->
+      <a href="report.html" class="bg-surface-container border border-outline-variant p-4 hover:border-primary transition-all group block">
+        <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+          <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Weather Corroboration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Q-D0pE2rltFLFukMnyjPlajcQNgMkMEsK1y52_yk7uutwrxI--1oilUr93LWCfPETffKC6WoK9vOziCluldAKVq0EGDf-lD_sS9iWTVK64MHiS-MnPIHECjw2MVfj60Z3ydxQqNHFPuRuo3YzAeFq2qnISnJNeIPqNhOcXSS33YA4w6dH6sBWjxKTJ4Rh0-9oUlyQ42CvI1bbC1Ml30oIs6lEyOTcGWkH8QINIa73PxzW4t3raI"/>
+          <div class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">ID: 821-P</div>
+        </div>
+        <h3 class="font-display-case-no text-xl text-primary font-bold uppercase mb-1">Weather Corroboration</h3>
+        <p class="font-data-mono text-xs text-on-surface-variant mb-3">EVENT: FLOODING_MARCH_22</p>
+        <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+          <span class="font-label-caps text-[10px] text-secondary font-bold">SCORE: 56.4 // AVERAGE</span>
+          <span class="font-label-caps text-[10px] text-outline">6 HOURS AGO</span>
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="px-6 md:px-12 py-6 bg-surface-container-lowest border-t border-outline-variant text-center">
+    <p class="font-label-caps text-[10px] text-on-surface-variant uppercase">© 2024 VISSTYA AI ARCHIVAL DIVISION // GLOBAL REPOSITORY</p>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

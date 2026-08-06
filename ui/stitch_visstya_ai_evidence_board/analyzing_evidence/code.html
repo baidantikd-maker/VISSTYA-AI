@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Visstya AI | Case Analysis In-Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&amp;family=Fira+Sans:wght@400;500&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#101418",
+                    "on-surface-variant": "#cac6bd",
+                    "on-error": "#690005",
+                    "inverse-primary": "#605e57",
+                    "primary": "#ffffff",
+                    "on-primary-fixed": "#1c1c16",
+                    "surface-variant": "#31353a",
+                    "on-secondary-container": "#b2b9c1",
+                    "surface-container": "#1c2024",
+                    "on-surface": "#e0e3e8",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#94d5aa",
+                    "on-secondary": "#2a3138",
+                    "secondary-fixed": "#dce3ec",
+                    "on-tertiary-fixed-variant": "#0d5130",
+                    "outline-variant": "#484740",
+                    "secondary": "#c0c7d0",
+                    "secondary-fixed-dim": "#c0c7d0",
+                    "on-tertiary": "#00391f",
+                    "error": "#ffb4ab",
+                    "outline": "#939188",
+                    "on-primary-fixed-variant": "#484740",
+                    "background": "#101418",
+                    "tertiary": "#ffffff",
+                    "primary-fixed-dim": "#cac6be",
+                    "primary-container": "#e6e2d9",
+                    "on-primary": "#31302b",
+                    "primary-fixed": "#e6e2d9",
+                    "surface-container-high": "#262a2f",
+                    "on-error-container": "#ffdad6",
+                    "surface-bright": "#363a3e",
+                    "secondary-container": "#434a51",
+                    "inverse-surface": "#e0e3e8",
+                    "on-background": "#e0e3e8",
+                    "surface-container-low": "#181c20",
+                    "tertiary-container": "#aff1c4",
+                    "on-secondary-fixed": "#151c23",
+                    "on-tertiary-container": "#32704c",
+                    "on-tertiary-fixed": "#002110",
+                    "surface-tint": "#cac6be",
+                    "tertiary-fixed": "#aff1c4",
+                    "surface-container-lowest": "#0b0f12",
+                    "on-secondary-fixed-variant": "#41484f",
+                    "on-primary-container": "#66645d",
+                    "inverse-on-surface": "#2d3135",
+                    "surface": "#101418",
+                    "surface-container-highest": "#31353a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "label-caps": ["JetBrains Mono"],
+                    "display-case-no": ["Archivo Narrow"],
+                    "h1-mobile": ["Archivo Narrow"],
+                    "h2": ["Archivo Narrow"],
+                    "body-lg": ["Fira Sans"],
+                    "h1": ["Archivo Narrow"],
+                    "body-md": ["Fira Sans"],
+                    "data-mono": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                    "display-case-no": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h1-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "h1": ["32px", {"lineHeight": "40px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #101418;
+            color: #e0e3e8;
+            overflow-x: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .data-stream-bg {
+            mask-image: linear-gradient(to bottom, transparent, black, transparent);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .paper-card {
+            background-color: #ffffff;
+            color: #101418;
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.4);
+            border: 1px solid #484740;
+        }
+
+        @keyframes scanning {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(300%); }
+        }
+
+        .scan-line {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            width: 100%;
+            position: absolute;
+            animation: scanning 2s linear infinite;
+        }
+
+        .wire-connector {
+            background: #484740;
+            position: absolute;
+            z-index: 0;
+        }
+
+        .pulse-hub {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.05); }
+        }
+
+        .progress-fill {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-surface-dim border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<span class="font-display-case-no text-display-case-no uppercase tracking-tighter text-primary text-[24px]">Visstya AI</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-label-caps" href="#">Cases</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-colors" href="#">Archive</a>
+<a class="text-on-surface-variant font-label-caps hover:text-primary transition-colors" href="#">Directives</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-variant border-none text-on-surface text-sm pl-10 pr-4 py-1.5 w-64 focus:ring-1 focus:ring-primary" placeholder="Search Archives..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 font-label-caps text-label-caps uppercase hover:opacity-80 transition-all">
+                New Analysis
+            </button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-[320px] flex flex-col py-6 bg-surface-container border-r border-outline-variant z-40 hidden lg:flex">
+<div class="px-6 mb-8">
+<h2 class="font-h2 text-h2 text-primary">Case File #882-Alpha</h2>
+<p class="font-data-mono text-data-mono text-on-surface-variant uppercase text-xs mt-1">Status: Verification Pending</p>
+</div>
+<nav class="flex-grow">
+<div class="bg-surface-variant text-primary border-l-4 border-primary px-4 py-3 flex items-center gap-4 cursor-default">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-caps text-label-caps">Evidence Index</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer">
+<span class="material-symbols-outlined">fingerprint</span>
+<span class="font-label-caps text-label-caps">Metadata</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-caps text-label-caps">Visual Core</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer">
+<span class="material-symbols-outlined">cloudy_snowing</span>
+<span class="font-label-caps text-label-caps">Atmospherics</span>
+</div>
+<div class="text-on-surface-variant px-4 py-3 flex items-center gap-4 hover:bg-surface-variant/50 hover:text-on-surface transition-all cursor-pointer">
+<span class="material-symbols-outlined">repeat</span>
+<span class="font-label-caps text-label-caps">Corroboration</span>
+</div>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full border border-outline text-primary py-3 font-label-caps text-label-caps uppercase hover:bg-primary hover:text-on-primary transition-all">
+                Export Dossier
+            </button>
+<div class="flex justify-between mt-6 pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-2 text-on-surface-variant cursor-pointer hover:text-on-surface">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="font-label-caps text-[10px]">Settings</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant cursor-pointer hover:text-on-surface">
+<span class="material-symbols-outlined text-sm">gavel</span>
+<span class="font-label-caps text-[10px]">Legal</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Stage -->
+<main class="ml-0 lg:ml-[320px] mt-16 flex-grow relative overflow-hidden flex flex-col items-center justify-center p-8">
+<!-- Animated Background Stream -->
+<div class="absolute inset-0 data-stream-bg font-data-mono text-[10px] p-4 leading-tight select-none overflow-hidden" id="bg-stream">
+<!-- Content populated by JS -->
+</div>
+<div class="relative z-10 w-full max-w-5xl flex flex-col items-center">
+<!-- Central Hub -->
+<div class="mb-12 relative">
+<div class="w-32 h-32 rounded-full border border-primary/20 flex items-center justify-center pulse-hub">
+<div class="w-24 h-24 rounded-full border-2 border-primary bg-surface-container flex flex-col items-center justify-center text-center p-4">
+<span class="material-symbols-outlined text-primary text-3xl mb-1" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-caps text-[10px] text-on-surface leading-none">ANALYZING</span>
+</div>
+</div>
+<!-- Pin Connectors -->
+<div class="absolute top-1/2 -left-32 w-32 h-[1px] bg-outline-variant"></div>
+<div class="absolute top-1/2 -right-32 w-32 h-[1px] bg-outline-variant"></div>
+<div class="absolute -top-16 left-1/2 w-[1px] h-16 bg-outline-variant"></div>
+<div class="absolute -bottom-16 left-1/2 w-[1px] h-16 bg-outline-variant"></div>
+</div>
+<!-- Analysis Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+<!-- Card 1: Metadata -->
+<div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 01 // File Integrity</span>
+<h3 class="font-h2 text-h2 uppercase mt-1">Metadata Verification</h3>
+</div>
+<span class="material-symbols-outlined text-2xl">fingerprint</span>
+</div>
+<p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Reading EXIF headers and camera signatures...</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-data-mono text-[10px] uppercase">Processing Core</span>
+<span class="font-data-mono text-[10px]" id="meta-percent">42%</span>
+</div>
+<div class="h-1 bg-surface-dim/10 w-full overflow-hidden">
+<div class="h-full bg-surface-dim progress-fill" id="meta-progress" style="width: 42%"></div>
+</div>
+</div>
+<div class="scan-line"></div>
+</div>
+<!-- Card 2: Vision -->
+<div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 02 // Spatial Analysis</span>
+<h3 class="font-h2 text-h2 uppercase mt-1">Vision Core</h3>
+</div>
+<span class="material-symbols-outlined text-2xl">visibility</span>
+</div>
+<p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Analyzing pixel lighting and shadow vectors...</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-data-mono text-[10px] uppercase">Shadow Vector Mapping</span>
+<span class="font-data-mono text-[10px]" id="vision-percent">68%</span>
+</div>
+<div class="h-1 bg-surface-dim/10 w-full overflow-hidden">
+<div class="h-full bg-surface-dim progress-fill" id="vision-progress" style="width: 68%"></div>
+</div>
+</div>
+<div class="scan-line" style="animation-delay: 0.5s"></div>
+</div>
+<!-- Card 3: Weather -->
+<div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 03 // Geospatial Archive</span>
+<h3 class="font-h2 text-h2 uppercase mt-1">Atmospherics</h3>
+</div>
+<span class="material-symbols-outlined text-2xl">cloudy_snowing</span>
+</div>
+<p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Querying historical meteorological data for Kolkata...</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-data-mono text-[10px] uppercase">Precipitation Match</span>
+<span class="font-data-mono text-[10px]" id="weather-percent">15%</span>
+</div>
+<div class="h-1 bg-surface-dim/10 w-full overflow-hidden">
+<div class="h-full bg-surface-dim progress-fill" id="weather-progress" style="width: 15%"></div>
+</div>
+</div>
+<div class="scan-line" style="animation-delay: 1.2s"></div>
+</div>
+<!-- Card 4: Evidence -->
+<div class="paper-card p-6 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="font-data-mono text-[10px] opacity-60 uppercase block">Node 04 // OSINT Network</span>
+<h3 class="font-h2 text-h2 uppercase mt-1">Evidence Corroboration</h3>
+</div>
+<span class="material-symbols-outlined text-2xl">repeat</span>
+</div>
+<p class="font-body-md text-sm mb-6 text-[#1c2024]/80">Cross-referencing trusted news databases and social feeds...</p>
+<div class="mt-auto">
+<div class="flex justify-between items-end mb-2">
+<span class="font-data-mono text-[10px] uppercase">Cross-Referencing Index</span>
+<span class="font-data-mono text-[10px]" id="evidence-percent">89%</span>
+</div>
+<div class="h-1 bg-surface-dim/10 w-full overflow-hidden">
+<div class="h-full bg-surface-dim progress-fill" id="evidence-progress" style="width: 89%"></div>
+</div>
+</div>
+<div class="scan-line" style="animation-delay: 0.8s"></div>
+</div>
+</div>
+<!-- Summary Status -->
+<div class="mt-12 flex items-center gap-3 bg-surface-variant/30 px-6 py-3 border border-outline-variant">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="font-label-caps text-label-caps text-on-surface">SYNCHRONIZING DATAPOINTS... SECURE HANDSHAKE ESTABLISHED</span>
+</div>
+</div>
+<!-- Wire Connectors (Visual only) -->
+<div class="hidden xl:block">
+<div class="wire-connector w-[2px] h-32 left-[calc(50%-1px)] top-[25%] -translate-y-full"></div>
+<div class="wire-connector w-[2px] h-32 left-[calc(50%-1px)] bottom-[20%] translate-y-full"></div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex justify-between items-center w-full px-margin-desktop py-4 mt-auto bg-surface-container-lowest border-t border-outline-variant z-50">
+<div class="flex items-center gap-6">
+<span class="font-label-caps text-label-caps text-on-surface">VISSTYA AI ARCHIVAL DIVISION</span>
+<div class="flex gap-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface cursor-pointer">Save Report</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface cursor-pointer">Share Dossier</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface cursor-pointer">Audit Trail</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface cursor-pointer">Chain of Custody</span>
+</div>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase opacity-50">© 2024 VISSTYA AI ARCHIVAL DIVISION. ALL DATA ENCRYPTED.</span>
+</footer>
+<script>
+        // Background data stream simulation
+        const streamContainer = document.getElementById('bg-stream');
+        const generateData = () => {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/[]{}:;-_=+<>';
+            let output = '';
+            for(let i = 0; i < 5000; i++) {
+                output += chars.charAt(Math.floor(Math.random() * chars.length));
+                if(i % 120 === 0) output += '<br>';
+            }
+            streamContainer.innerHTML = output;
+        }
+        generateData();
+        setInterval(generateData, 2000);
+
+        // Progress bar simulation logic
+        const modules = [
+            { id: 'meta', progress: 42 },
+            { id: 'vision', progress: 68 },
+            { id: 'weather', progress: 15 },
+            { id: 'evidence', progress: 89 }
+        ];
+
+        function updateProgress() {
+            modules.forEach(mod => {
+                // Slower increment for simulation feel
+                if(mod.progress < 100) {
+                    mod.progress += Math.random() * 2;
+                    if(mod.progress > 100) mod.progress = 100;
+                    
+                    const bar = document.getElementById(`${mod.id}-progress`);
+                    const text = document.getElementById(`${mod.id}-percent`);
+                    
+                    if(bar) bar.style.width = `${mod.progress}%`;
+                    if(text) text.innerText = `${Math.floor(mod.progress)}%`;
+                }
+            });
+        }
+
+        setInterval(updateProgress, 800);
+    </script>
+</body></html>

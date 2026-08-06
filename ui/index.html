@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Visstya AI | Modern Media Verification Landing</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#101418",
+            "on-surface-variant": "#cac6bd",
+            "on-error": "#690005",
+            "inverse-primary": "#605e57",
+            "primary": "#ffffff",
+            "on-primary-fixed": "#1c1c16",
+            "surface-variant": "#31353a",
+            "on-secondary-container": "#b2b9c1",
+            "surface-container": "#1c2024",
+            "on-surface": "#e0e3e8",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#94d5aa",
+            "on-secondary": "#2a3138",
+            "outline-variant": "#484740",
+            "secondary": "#c0c7d0",
+            "error": "#ffb4ab",
+            "outline": "#939188",
+            "background": "#101418",
+            "primary-container": "#e6e2d9",
+            "on-primary": "#31302b",
+            "surface-container-high": "#262a2f",
+            "surface-container-low": "#181c20",
+            "tertiary-container": "#aff1c4",
+            "on-tertiary-container": "#32704c",
+            "surface-container-lowest": "#0b0f12"
+          },
+          fontFamily: {
+            "label-caps": ["JetBrains Mono"],
+            "display-case-no": ["Archivo Narrow"],
+            "h2": ["Archivo Narrow"],
+            "body-lg": ["Fira Sans"],
+            "h1": ["Archivo Narrow"],
+            "body-md": ["Fira Sans"],
+            "data-mono": ["JetBrains Mono"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-surface-dim text-on-surface flex flex-col min-h-screen">
+  <!-- Dynamic Page Transition Overlay -->
+  <div id="page-transition-overlay" class="page-transition-overlay">
+    <div class="transition-spinner"></div>
+    <div class="transition-text" id="transition-message">INITIALIZING VISSTYA AI...</div>
+  </div>
+
+  <!-- TopAppBar Header -->
+  <header
+    class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 h-16 bg-surface-dim border-b border-outline-variant">
+    <div class="flex items-center gap-8">
+      <a href="index.html"
+        class="font-display-case-no text-2xl uppercase tracking-tighter text-primary font-bold">Visstya AI</a>
+      <nav class="hidden md:flex gap-6">
+        <a class="text-primary border-b-2 border-primary pb-1 font-label-caps text-xs" href="index.html">Cases</a>
+        <a class="text-on-surface-variant font-label-caps text-xs hover:text-primary transition-colors"
+          href="archive.html">Archive</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="header-agent-id"
+        class="font-data-mono text-xs text-tertiary-fixed-dim uppercase tracking-wider hidden sm:inline-block">
+        AUTHENTICATED AGENT
+      </span>
+      <a href="login.html"
+        class="border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary px-3 py-1.5 font-label-caps text-xs uppercase transition-all">
+        Login Gateway
+      </a>
+      <a href="analysis.html"
+        class="btn-green-tab font-label-caps text-xs px-4 py-2 uppercase font-bold transition-all shadow-sm">
+        New Analysis
+      </a>
+      <a href="settings.html" title="System Settings"
+        class="border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary p-2 transition-all flex items-center justify-center">
+        <span class="material-symbols-outlined text-sm">settings</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-16 min-h-screen flex flex-col">
+    <!-- Hero Section -->
+    <section
+      class="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden grid-bg px-4 md:px-12 py-20">
+      <!-- WebGL Shader Background Canvas -->
+      <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+        <canvas id="hero-shader-canvas" class="w-full h-full block"></canvas>
+      </div>
+
+      <div class="relative z-10 max-w-4xl text-center space-y-8 fade-in-up">
+        <div class="inline-block border border-outline-variant bg-surface-container-low/80 backdrop-blur px-3 py-1">
+          <span class="font-data-mono text-[10px] text-on-surface-variant uppercase tracking-widest">System Status:
+            Operative // v4.2.0</span>
+        </div>
+
+        <h1
+          class="font-display-case-no text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-primary uppercase font-bold tracking-tighter">
+          Shift the question: <br />
+          <span class="text-on-surface-variant">Does the evidence support the claim?</span>
+        </h1>
+
+        <p class="font-body-lg text-lg text-on-surface-variant max-w-2xl mx-auto italic">
+          Not a spam filter. Not a chatbot. An evidence-board for modern media verification.
+        </p>
+
+        <!-- Primary Action Cluster -->
+        <div id="audit-section" class="mt-12 w-full max-w-3xl mx-auto space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <!-- Left: Input Area -->
+            <div class="md:col-span-8 space-y-4">
+              <!-- URL Input -->
+              <div
+                class="group relative bg-surface-container border border-outline-variant hover:border-primary transition-colors p-4 flex items-center">
+                <span class="material-symbols-outlined text-on-surface-variant mr-3">link</span>
+                <input id="source-url-input"
+                  class="bg-transparent border-none focus:ring-0 font-data-mono text-xs md:text-sm w-full text-on-surface placeholder:text-outline p-0 uppercase"
+                  placeholder="PASTE SOURCE URL (VIDEO, ARTICLE, IMAGE)..." type="text" />
+              </div>
+
+              <!-- Metadata Row -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="border-b border-outline-variant py-2">
+                  <label class="block font-label-caps text-[10px] text-outline mb-1">EVENT</label>
+                  <input
+                    class="bg-transparent border-none focus:ring-0 font-data-mono text-xs w-full p-0 text-on-surface uppercase"
+                    placeholder="SPECIFY" type="text" />
+                </div>
+                <div class="border-b border-outline-variant py-2">
+                  <label class="block font-label-caps text-[10px] text-outline mb-1">LOCATION</label>
+                  <input
+                    class="bg-transparent border-none focus:ring-0 font-data-mono text-xs w-full p-0 text-on-surface uppercase"
+                    placeholder="COORDINATES" type="text" />
+                </div>
+                <div class="border-b border-outline-variant py-2">
+                  <label class="block font-label-caps text-[10px] text-outline mb-1">DATE</label>
+                  <input
+                    class="bg-transparent border-none focus:ring-0 font-data-mono text-xs w-full p-0 text-on-surface uppercase"
+                    placeholder="DD/MM/YYYY" type="text" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Drag & Drop Area -->
+            <div
+              class="md:col-span-4 border-2 border-dashed border-outline-variant hover:border-primary transition-all flex flex-col items-center justify-center p-6 cursor-pointer group bg-surface-container-low/40">
+              <span
+                class="material-symbols-outlined text-outline group-hover:text-primary text-4xl mb-2">upload_file</span>
+              <span class="font-label-caps text-xs text-outline group-hover:text-primary text-center">DRAG & DROP
+                MEDIA</span>
+            </div>
+          </div>
+
+          <!-- Audit Trigger Button -->
+          <button id="initiate-audit-btn"
+            class="w-full bg-primary text-on-primary py-4 font-display-case-no text-2xl uppercase font-bold hover:bg-on-surface-variant transition-colors flex items-center justify-center gap-4 cursor-pointer">
+            <span class="material-symbols-outlined text-2xl">analytics</span>
+            INITIATE FORENSIC AUDIT
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Parallel Lanes Section (Engine Architecture) -->
+    <section class="py-24 bg-surface-container-lowest relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6 md:px-12">
+        <div class="mb-16 border-l-4 border-primary pl-6">
+          <h2 class="font-display-case-no text-4xl text-primary uppercase font-bold">Engine Architecture</h2>
+          <p class="font-label-caps text-xs text-on-surface-variant uppercase tracking-widest mt-1">THE CONVERGENCE OF
+            PROBABILITY</p>
+        </div>
+
+        <!-- Four Informational Engine Cards — no navigation, informational only -->
+        <div class="relative grid grid-cols-1 md:grid-cols-4 gap-6">
+
+          <!-- Card 1: Metadata -->
+          <div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary hover:-translate-y-1 transition-all duration-300 cursor-default">
+            <div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#001</div>
+            <span class="material-symbols-outlined text-primary text-3xl mb-4 block">dataset</span>
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold mb-3">Metadata</h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4 leading-relaxed">Verifies EXIF metadata, GPS coordinates, timestamps, device information, and file integrity.</p>
+            <div class="font-data-mono text-2xl text-primary">/15</div>
+            <div class="mt-4 h-1 bg-surface-variant w-full">
+              <div class="h-full bg-primary w-[65%]"></div>
+            </div>
+            <div class="mt-3 font-data-mono text-[9px] text-outline uppercase tracking-wider border-t border-outline-variant/40 pt-3">Architecture Reference Only</div>
+          </div>
+
+          <!-- Card 2: Vision -->
+          <div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary hover:-translate-y-1 transition-all duration-300 cursor-default">
+            <div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#002</div>
+            <span class="material-symbols-outlined text-primary text-3xl mb-4 block">visibility</span>
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold mb-3">Vision</h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4 leading-relaxed">Analyzes lighting, shadows, AI-generated artifacts, image manipulation, and scene consistency.</p>
+            <div class="font-data-mono text-2xl text-primary">/25</div>
+            <div class="mt-4 h-1 bg-surface-variant w-full">
+              <div class="h-full bg-primary w-[82%]"></div>
+            </div>
+            <div class="mt-3 font-data-mono text-[9px] text-outline uppercase tracking-wider border-t border-outline-variant/40 pt-3">Architecture Reference Only</div>
+          </div>
+
+          <!-- Card 3: Weather -->
+          <div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary hover:-translate-y-1 transition-all duration-300 cursor-default">
+            <div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#003</div>
+            <span class="material-symbols-outlined text-primary text-3xl mb-4 block">cloudy_snowing</span>
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold mb-3">Weather</h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4 leading-relaxed">Matches historical meteorological records with environmental conditions visible in the uploaded media.</p>
+            <div class="font-data-mono text-2xl text-primary">/25</div>
+            <div class="mt-4 h-1 bg-surface-variant w-full">
+              <div class="h-full bg-primary w-[45%]"></div>
+            </div>
+            <div class="mt-3 font-data-mono text-[9px] text-outline uppercase tracking-wider border-t border-outline-variant/40 pt-3">Architecture Reference Only</div>
+          </div>
+
+          <!-- Card 4: Corroboration -->
+          <div class="bg-surface-container-low border border-outline-variant p-6 relative group hover:border-primary hover:-translate-y-1 transition-all duration-300 cursor-default">
+            <div class="absolute top-0 right-0 p-2 text-outline font-data-mono text-[10px]">#004</div>
+            <span class="material-symbols-outlined text-primary text-3xl mb-4 block">fact_check</span>
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold mb-3">Corroboration</h3>
+            <p class="font-body-md text-sm text-on-surface-variant mb-4 leading-relaxed">Cross-checks trusted news sources, official records, and independent evidence to validate the submitted claim.</p>
+            <div class="font-data-mono text-2xl text-primary">/35</div>
+            <div class="mt-4 h-1 bg-surface-variant w-full">
+              <div class="h-full bg-primary w-[70%]"></div>
+            </div>
+            <div class="mt-3 font-data-mono text-[9px] text-outline uppercase tracking-wider border-t border-outline-variant/40 pt-3">Architecture Reference Only</div>
+          </div>
+
+        </div>
+
+        <!-- How the Trust Engine Works: Sequential Horizontal Workflow -->
+        <div class="mt-24">
+          <div class="mb-10 border-l-4 border-outline-variant pl-6">
+            <h2 class="font-display-case-no text-3xl text-primary uppercase font-bold">How the Trust Engine Works</h2>
+            <p class="font-label-caps text-xs text-on-surface-variant uppercase tracking-widest mt-1">SEQUENTIAL VERIFICATION PIPELINE</p>
+          </div>
+
+          <div class="flex flex-col lg:flex-row items-stretch justify-between gap-3 lg:gap-2">
+
+            <!-- Step 1 -->
+            <div class="flex-1 border border-outline-variant bg-surface-container p-4 flex flex-col items-center text-center justify-between space-y-3">
+              <div class="flex items-center justify-between w-full border-b border-outline-variant/40 pb-2">
+                <span class="font-data-mono text-[10px] text-outline uppercase tracking-widest">Step 1</span>
+                <span class="material-symbols-outlined text-outline text-lg">dataset</span>
+              </div>
+              <div class="w-8 h-8 border border-primary flex items-center justify-center font-data-mono text-xs text-primary font-bold my-1">01</div>
+              <h4 class="font-display-case-no text-sm md:text-base text-primary uppercase font-bold">Metadata Verification</h4>
+            </div>
+
+            <!-- Connector 1 -->
+            <div class="hidden lg:flex items-center justify-center text-outline px-1">
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </div>
+            <div class="flex lg:hidden items-center justify-center text-outline py-1">
+              <span class="material-symbols-outlined text-xl">arrow_downward</span>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="flex-1 border border-outline-variant bg-surface-container p-4 flex flex-col items-center text-center justify-between space-y-3">
+              <div class="flex items-center justify-between w-full border-b border-outline-variant/40 pb-2">
+                <span class="font-data-mono text-[10px] text-outline uppercase tracking-widest">Step 2</span>
+                <span class="material-symbols-outlined text-outline text-lg">visibility</span>
+              </div>
+              <div class="w-8 h-8 border border-primary flex items-center justify-center font-data-mono text-xs text-primary font-bold my-1">02</div>
+              <h4 class="font-display-case-no text-sm md:text-base text-primary uppercase font-bold">Vision Analysis</h4>
+            </div>
+
+            <!-- Connector 2 -->
+            <div class="hidden lg:flex items-center justify-center text-outline px-1">
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </div>
+            <div class="flex lg:hidden items-center justify-center text-outline py-1">
+              <span class="material-symbols-outlined text-xl">arrow_downward</span>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="flex-1 border border-outline-variant bg-surface-container p-4 flex flex-col items-center text-center justify-between space-y-3">
+              <div class="flex items-center justify-between w-full border-b border-outline-variant/40 pb-2">
+                <span class="font-data-mono text-[10px] text-outline uppercase tracking-widest">Step 3</span>
+                <span class="material-symbols-outlined text-outline text-lg">cloudy_snowing</span>
+              </div>
+              <div class="w-8 h-8 border border-primary flex items-center justify-center font-data-mono text-xs text-primary font-bold my-1">03</div>
+              <h4 class="font-display-case-no text-sm md:text-base text-primary uppercase font-bold">Weather Correlation</h4>
+            </div>
+
+            <!-- Connector 3 -->
+            <div class="hidden lg:flex items-center justify-center text-outline px-1">
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </div>
+            <div class="flex lg:hidden items-center justify-center text-outline py-1">
+              <span class="material-symbols-outlined text-xl">arrow_downward</span>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="flex-1 border border-outline-variant bg-surface-container p-4 flex flex-col items-center text-center justify-between space-y-3">
+              <div class="flex items-center justify-between w-full border-b border-outline-variant/40 pb-2">
+                <span class="font-data-mono text-[10px] text-outline uppercase tracking-widest">Step 4</span>
+                <span class="material-symbols-outlined text-outline text-lg">fact_check</span>
+              </div>
+              <div class="w-8 h-8 border border-primary flex items-center justify-center font-data-mono text-xs text-primary font-bold my-1">04</div>
+              <h4 class="font-display-case-no text-sm md:text-base text-primary uppercase font-bold">Evidence Corroboration</h4>
+            </div>
+
+            <!-- Final Connector -->
+            <div class="hidden lg:flex items-center justify-center text-primary px-1">
+              <span class="material-symbols-outlined text-xl font-bold">arrow_forward</span>
+            </div>
+            <div class="flex lg:hidden items-center justify-center text-primary py-1">
+              <span class="material-symbols-outlined text-xl font-bold">arrow_downward</span>
+            </div>
+
+            <!-- Final Output -->
+            <div class="flex-1 border-2 border-primary bg-surface-container-high p-4 flex flex-col items-center text-center justify-between space-y-3">
+              <div class="flex items-center justify-center w-full border-b border-outline-variant/40 pb-2">
+                <span class="font-label-caps text-[9px] text-on-surface-variant tracking-widest uppercase">FINAL OUTPUT</span>
+              </div>
+              <h4 class="font-display-case-no text-sm md:text-base text-primary uppercase font-bold">Explainable Trust Report</h4>
+              <div class="px-2.5 py-1 bg-tertiary-container text-on-tertiary-container font-label-caps text-[10px] uppercase font-bold">Verdict</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Platform Philosophy Note -->
+        <div class="mt-14 border-l-4 border-outline-variant pl-6 py-2 max-w-3xl">
+          <p class="font-body-lg text-sm text-on-surface-variant leading-relaxed italic">
+            Our platform never labels a claim as simply <span class="text-primary font-bold not-italic">True</span> or <span class="text-primary font-bold not-italic">False</span>. Instead, it combines evidence from four independent verification engines to generate an explainable Trust Report, empowering users to make informed decisions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Score Interpretation Section -->
+    <section class="py-16 border-t border-outline-variant bg-surface-dim">
+      <div class="max-w-6xl mx-auto px-6 md:px-12 space-y-10">
+
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant/60 pb-6">
+          <div>
+            <div class="font-label-caps text-xs text-on-surface-variant uppercase tracking-widest flex items-center gap-2 mb-1">
+              <span class="material-symbols-outlined text-base">analytics</span>
+              Scoring Methodology
+            </div>
+            <h2 class="font-display-case-no text-3xl text-primary uppercase font-bold">Trust Score Interpretation</h2>
+          </div>
+          <p class="font-data-mono text-xs text-on-surface-variant max-w-md">
+            Evaluation framework based on cross-engine evidence convergence.
+          </p>
+        </div>
+
+        <!-- Horizontal Confidence Scale Bar -->
+        <div class="bg-surface-container border border-outline-variant p-4 rounded-lg space-y-2">
+          <div class="flex justify-between items-center font-data-mono text-[11px] uppercase tracking-wider">
+            <span class="text-red-400 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-500"></span> Low Confidence (0 – 39)</span>
+            <span class="text-amber-400 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Moderate Confidence (40 – 79)</span>
+            <span class="text-emerald-400 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> High Confidence (80 – 100)</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden flex">
+            <div class="h-full w-[40%] bg-gradient-to-r from-red-600 to-red-500"></div>
+            <div class="h-full w-[40%] bg-gradient-to-r from-amber-500 to-amber-400"></div>
+            <div class="h-full w-[20%] bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_10px_#10b981]"></div>
+          </div>
+        </div>
+
+        <!-- 3 Modern Confidence Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Card 1: Low Confidence -->
+          <div class="bg-surface-container border border-red-500/40 hover:border-red-400 rounded-lg p-6 space-y-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] group relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-data-mono text-xs font-bold text-red-400 px-2.5 py-1 bg-red-950/40 border border-red-500/30 rounded uppercase flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Low Confidence
+              </span>
+              <span class="font-data-mono text-xs font-bold text-red-400">0 – 39</span>
+            </div>
+            <p class="font-body-md text-xs text-on-surface-variant leading-relaxed pt-1">
+              Evidence collected is limited, inconsistent, or insufficient to strongly support the claim.
+            </p>
+          </div>
+
+          <!-- Card 2: Moderate Confidence -->
+          <div class="bg-surface-container border border-amber-500/40 hover:border-amber-400 rounded-lg p-6 space-y-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] group relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-data-mono text-xs font-bold text-amber-400 px-2.5 py-1 bg-amber-950/40 border border-amber-500/30 rounded uppercase flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span> Moderate Confidence
+              </span>
+              <span class="font-data-mono text-xs font-bold text-amber-400">40 – 79</span>
+            </div>
+            <p class="font-body-md text-xs text-on-surface-variant leading-relaxed pt-1">
+              Some evidence supports the claim, but additional verification or corroboration is recommended.
+            </p>
+          </div>
+
+          <!-- Card 3: High Confidence (Active Glow) -->
+          <div class="bg-surface-container border-2 border-emerald-500/70 hover:border-emerald-400 rounded-lg p-6 space-y-3 transition-all duration-300 hover:-translate-y-1 shadow-[0_0_25px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.35)] group relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between">
+              <span class="font-data-mono text-xs font-bold text-emerald-400 px-2.5 py-1 bg-emerald-950/50 border border-emerald-500/40 rounded uppercase flex items-center gap-1.5 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> High Confidence
+              </span>
+              <span class="font-data-mono text-xs font-bold text-emerald-400">80 – 100</span>
+            </div>
+            <p class="font-body-md text-xs text-on-surface-variant leading-relaxed pt-1">
+              Multiple independent verification engines consistently support the submitted claim, resulting in a strong level of confidence.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Description Note -->
+        <div class="p-4 bg-surface-container-low border-l-4 border-primary rounded-r-lg">
+          <p class="font-body-lg text-xs text-on-surface-variant leading-relaxed">
+            The Trust Score represents the strength and consistency of evidence collected from four independent verification engines. It is designed to help users make informed decisions and should not be interpreted as an absolute True or False verdict.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Recent Verifications Feed -->
+    <section class="py-20 px-6 md:px-12 max-w-6xl mx-auto">
+      <div class="flex justify-between items-end mb-12">
+        <div class="space-y-2">
+          <span class="font-label-caps text-xs text-outline uppercase tracking-widest">Global Audit Feed</span>
+          <h2 class="font-display-case-no text-3xl text-primary uppercase font-bold">Recent Verifications</h2>
+        </div>
+        <a href="archive.html"
+          class="font-label-caps text-xs text-primary border border-outline-variant px-6 py-2 hover:bg-surface-variant transition-colors uppercase">View
+          All Archive</a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Case Item 1 -->
+        <a href="report.html"
+          class="bg-surface-container p-4 border border-outline-variant hover:border-primary transition-all group block">
+          <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+            <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              alt="Satellite Sync Alpha"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQHHoyaybLxk4lq0cs3EcERLrlAqyTqVcswXlLSjL48ThhwM9l99WFaC2ztZRCch2-X_ekCI_qLfsI9SFOb18A2sijLZilATQy7jVFWXv243eE3J-KhaIa0ih5zUVVruC_ExG0cdTj4VTeZH5RONmd8IuKyMDIxBNu3kQehlGkL5x7xxjmUIW6cEtSXqeTHPD9oWpify_uoGaItprdWgjWgPH_sV0wQYJiaPFIobkEiWdcrhsf8pM" />
+            <div
+              class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">
+              ID: 992-K</div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold">Satellite Sync Alpha</h3>
+            <p class="font-data-mono text-xs text-on-surface-variant truncate">GEO: 34.0522° N, 118.2437° W</p>
+            <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+              <span class="font-label-caps text-[10px] text-error font-bold uppercase">Score: 12.1</span>
+              <span class="font-label-caps text-[10px] text-outline uppercase">14 MIN AGO</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Case Item 2 -->
+        <a href="report.html"
+          class="bg-surface-container p-4 border border-outline-variant hover:border-primary transition-all group block">
+          <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+            <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              alt="Bespoke Deepfake Audit"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBdyPlFeTYAoO_ljr0hYLMK179DrQBu4n_VmWXwuBqWrxoi9n44Scl5IxP3a0zqozIV-g_6Ve5MvhoUhEs6gzhK_2-U7FfRD5uxwPp3ZJePuLkAH-M239P8AdspQE_dwrdgu5dka2fDX8ZR6HRkXdVA4w_rcxcJ8WeDjtPyT9Cs2SDUPN4CpT1egYHXxgWY5f5O-WmIsrpGNEtrbKUCijbteERqt2M2S8XEbT3fOdjVkxd4sWo41g" />
+            <div
+              class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">
+              ID: 104-M</div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold">Bespoke Deepfake Audit</h3>
+            <p class="font-data-mono text-xs text-on-surface-variant truncate">SRC: X-TERNAL UPLOAD</p>
+            <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+              <span class="font-label-caps text-[10px] text-tertiary-fixed-dim font-bold uppercase">Score: 94.8</span>
+              <span class="font-label-caps text-[10px] text-outline uppercase">2 HOURS AGO</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Case Item 3 -->
+        <a href="report.html"
+          class="bg-surface-container p-4 border border-outline-variant hover:border-primary transition-all group block">
+          <div class="relative aspect-video overflow-hidden mb-4 bg-surface-container-low">
+            <img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+              alt="Weather Corroboration"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Q-D0pE2rltFLFukMnyjPlajcQNgMkMEsK1y52_yk7uutwrxI--1oilUr93LWCfPETffKC6WoK9vOziCluldAKVq0EGDf-lD_sS9iWTVK64MHiS-MnPIHECjw2MVfj60Z3ydxQqNHFPuRuo3YzAeFq2qnISnJNeIPqNhOcXSS33YA4w6dH6sBWjxKTJ4Rh0-9oUlyQ42CvI1bbC1Ml30oIs6lEyOTcGWkH8QINIa73PxzW4t3raI" />
+            <div
+              class="absolute top-2 right-2 px-2 py-1 bg-surface-dim/90 font-data-mono text-[10px] text-on-surface border border-outline-variant">
+              ID: 821-P</div>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-display-case-no text-xl text-primary uppercase font-bold">Weather Corroboration</h3>
+            <p class="font-data-mono text-xs text-on-surface-variant truncate">EVENT: FLOODING_MARCH_22</p>
+            <div class="flex justify-between items-center pt-2 border-t border-outline-variant/40">
+              <span class="font-label-caps text-[10px] text-secondary font-bold uppercase">Score: 56.4</span>
+              <span class="font-label-caps text-[10px] text-outline uppercase">6 HOURS AGO</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer
+    class="flex flex-col md:flex-row justify-between items-center w-full px-6 md:px-12 py-8 bg-surface-container-lowest border-t border-outline-variant gap-4">
+    <div class="space-y-1">
+      <span class="font-label-caps text-xs text-on-surface font-bold">Visstya AI Archival Division</span>
+      <p class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-tighter">© 2024 VISSTYA AI
+        ARCHIVAL DIVISION. ALL DATA ENCRYPTED.</p>
+    </div>
+    <div class="flex flex-wrap gap-6 font-label-caps text-xs">
+      <a href="report.html" class="text-on-surface-variant hover:text-on-surface cursor-pointer">Save Report</a>
+      <a href="report.html" class="text-on-surface-variant hover:text-on-surface cursor-pointer">Share Dossier</a>
+      <a href="archive.html" class="text-on-surface-variant hover:text-on-surface cursor-pointer">Audit Trail</a>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/shader.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initVisstyaShader('hero-shader-canvas');
+    });
+  </script>
+</body>
+
+</html>

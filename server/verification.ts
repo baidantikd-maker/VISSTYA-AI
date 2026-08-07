@@ -153,7 +153,7 @@ export async function analyzeVision(
       score: Math.min(score, 25),
       maxScore: 25,
       findings,
-      details: analysis,
+      details: analysis as unknown as Record<string, unknown>,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown vision analysis error";

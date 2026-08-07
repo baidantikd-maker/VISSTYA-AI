@@ -1,6 +1,8 @@
 import { AppShell } from "@/components/AppShell";
 import { ClaimForm } from "@/components/ClaimForm";
+import LightRays from "@/components/LightRays/LightRays";
 import { UploadDropzone } from "@/components/UploadDropzone";
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import type { AnalysisInput, ClaimContext, MediaInfo } from "@/mock/types";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -30,6 +32,8 @@ export function clearPendingInput() {
 
 export default function Verify() {
   const [, setLocation] = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [step, setStep] = useState<1 | 2>(1);
   const [media, setMedia] = useState<MediaInfo | null>(null);
   const [claim, setClaim] = useState<ClaimContext>({ event: "" });
@@ -52,17 +56,36 @@ export default function Verify() {
 
   return (
     <AppShell>
-      <div className="container max-w-3xl py-10 md:py-16">
-        <div className="fade-in text-center">
-          <p className="section-label">New verification</p>
-          <h1 className="mt-3 text-balance text-4xl md:text-5xl">
-            Verify a piece of content
-          </h1>
-          <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
-            Add the media, then tell us the claim being made about it. Visstya
-            will compare it against evidence and show you how well it holds up.
-          </p>
-        </div>
+      <div className="relative min-h-[85vh] overflow-hidden">
+        {isDark && (
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#7E3FF3"
+              raysSpeed={1.5}
+              lightSpread={0.8}
+              rayLength={1.2}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0.1}
+              distortion={0.05}
+            />
+          </div>
+        )}
+
+        <div className="relative z-10">
+          <div className="container max-w-3xl py-10 md:py-16">
+            <div className="fade-in text-center">
+              <p className="section-label eyebrow-glow">New verification</p>
+              <h1 className="section-title-glow mt-3 text-balance text-4xl md:text-5xl">
+                Verify a piece of content
+              </h1>
+              <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
+                Add the media, then tell us the claim being made about it.
+                Visstya will compare it against evidence and show you how well
+                it holds up.
+              </p>
+            </div>
 
         {/* Step indicator */}
         <div className="mt-8 flex items-center gap-3">
@@ -71,9 +94,13 @@ export default function Verify() {
               <span
                 className={cn(
                   "flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-medium",
-                  step >= s
-                    ? "border-transparent bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
-                    : "border-[hsl(var(--border))] text-[hsl(var(--muted))]"
+                  isDark
+                    ? step >= s
+                      ? "border-transparent bg-[hsl(261_88%_60%)] text-white"
+                      : "border-white text-white"
+                    : step >= s
+                      ? "border-transparent bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
+                      : "border-[hsl(var(--border))] text-[hsl(var(--muted))]"
                 )}
               >
                 {s}
@@ -81,14 +108,28 @@ export default function Verify() {
               <span
                 className={cn(
                   "text-sm",
-                  step >= s
-                    ? "font-medium text-[hsl(var(--foreground))]"
-                    : "text-[hsl(var(--muted))]"
+                  isDark
+                    ? cn(
+                        "font-medium text-[hsl(261_88%_60%)]",
+                        step < s && "opacity-80"
+                      )
+                    : step >= s
+                      ? "font-medium text-[hsl(var(--foreground))]"
+                      : "text-[hsl(var(--muted))]"
                 )}
               >
                 {s === 1 ? "Add content" : "Claim context"}
               </span>
-              {s === 1 && <span className="h-px flex-1 bg-[hsl(var(--border))]" />}
+              {s === 1 && (
+                <span
+                  className={cn(
+                    "h-px flex-1",
+                    isDark
+                      ? "bg-white/70 shadow-[0_0_6px_rgba(255,255,255,0.7),0_0_12px_rgba(255,255,255,0.35)]"
+                      : "bg-[hsl(var(--border))]"
+                  )}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -102,10 +143,15 @@ export default function Verify() {
                   type="button"
                   disabled={!canProceedToContext}
                   onClick={() => setStep(2)}
-                  className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40"
+                  className={cn(
+                    "inline-flex h-11 items-center rounded-md px-6 transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40",
+                    isDark
+                      ? "justify-center bg-[hsl(261_88%_60%)] text-base font-bold text-white"
+                      : "gap-2 bg-[hsl(var(--primary))] text-sm font-medium text-[hsl(var(--primary-foreground))]"
+                  )}
                 >
                   Continue
-                  <ArrowRight className="size-4" />
+                  {!isDark && <ArrowRight className="size-4" />}
                 </button>
               </div>
             </div>
@@ -134,7 +180,9 @@ export default function Verify() {
             </div>
           )}
         </div>
-      </div>
+        </div>
+          </div>
+        </div>
     </AppShell>
   );
 }

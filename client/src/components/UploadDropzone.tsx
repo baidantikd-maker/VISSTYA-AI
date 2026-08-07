@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 import { FileUp, ImagePlus, Link2, X } from "lucide-react";
 import { useRef, useState, type DragEvent } from "react";
 import type { MediaInfo } from "@/mock/types";
@@ -21,6 +22,8 @@ export function UploadDropzone({
   const [urlInput, setUrlInput] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [showUrl, setShowUrl] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const readFile = (file: File) => {
     const kind = isVideoFile(file.name) ? "video" : "image";
@@ -90,10 +93,14 @@ export function UploadDropzone({
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
         className={cn(
-          "flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-12 text-center transition-colors",
-          dragOver
-            ? "border-[hsl(var(--foreground))] bg-[hsl(var(--secondary))]"
-            : "border-[hsl(var(--border))] hover:border-[hsl(var(--foreground))/40] hover:bg-[hsl(var(--secondary))/30]"
+          "flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed px-6 py-12 text-center transition-all duration-300",
+          isDark
+            ? dragOver
+              ? "border-white bg-[hsl(var(--secondary))] shadow-[0_0_22px_rgba(255,255,255,0.5)]"
+              : "border-white/50 hover:border-white hover:bg-[hsl(var(--secondary))/30] shadow-[0_0_18px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.12)]"
+            : dragOver
+              ? "border-[hsl(var(--primary))] bg-[hsl(var(--secondary))]"
+              : "border-[hsl(var(--input))] hover:border-[hsl(var(--foreground))]"
         )}
       >
         <span className="flex size-11 items-center justify-center rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
@@ -150,9 +157,14 @@ export function UploadDropzone({
           <button
             type="button"
             onClick={() => setShowUrl(true)}
-            className="inline-flex items-center gap-2 text-sm text-[hsl(var(--muted))] transition-colors hover:text-[hsl(var(--foreground))]"
+            className={cn(
+              "inline-flex items-center gap-2 transition-colors hover:text-[hsl(var(--foreground))]",
+              isDark
+                ? "text-base font-semibold text-[hsl(var(--muted))]"
+                : "text-sm text-[hsl(var(--muted))]"
+            )}
           >
-            <Link2 className="size-4" />
+            <Link2 className={isDark ? "size-5" : "size-4"} />
             Paste a media URL instead
           </button>
         )}

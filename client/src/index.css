@@ -354,6 +354,14 @@
     color: hsl(var(--card-foreground));
   }
 
+  .sample-badge {
+    border-radius: 0.375rem;
+    border: 1px solid hsl(var(--border));
+  }
+  .dark .sample-badge {
+    border: 1px solid hsla(261 88% 60% / 0.8);
+  }
+
   /* Card glow — indigo accent radial highlight across the top edge (dark mode only) */
   .dark .card-glow,
   .dark .panel,
@@ -393,6 +401,15 @@
   }
   .dark .panel-hover-glow:hover::before {
     opacity: 1;
+  }
+
+  /* Dashboard stat cards — hairline sharp white border (dark mode only) */
+  .dark .panel-white-border {
+    border: 0.25px solid rgb(255 255 255 / 0.8);
+  }
+  .dark .panel-white-border::before {
+    border: 0;
+    box-shadow: none;
   }
 
   /* Settings page — reduced card glow (dark mode only) */
@@ -462,6 +479,31 @@
   .border-trustable {
     border-color: hsl(var(--status-trustable-border));
   }
+
+  .scale-false {
+    background-color: hsl(0 88% 42%);
+    box-shadow:
+      0 0 5px hsl(0 88% 42% / 0.6),
+      0 0 14px hsl(0 88% 42% / 0.35);
+  }
+  .dark .scale-false {
+    background-color: hsl(0 90% 60%);
+    box-shadow:
+      0 0 5px hsl(0 90% 60% / 0.6),
+      0 0 14px hsl(0 90% 60% / 0.35);
+  }
+  .scale-average {
+    background-color: hsl(var(--status-average));
+    box-shadow:
+      0 0 5px hsl(var(--status-average) / 0.6),
+      0 0 14px hsl(var(--status-average) / 0.35);
+  }
+  .scale-trustable {
+    background-color: hsl(var(--status-trustable));
+    box-shadow:
+      0 0 5px hsl(var(--status-trustable) / 0.6),
+      0 0 14px hsl(var(--status-trustable) / 0.35);
+  }
 }
 
 /* ============================================================================
@@ -529,6 +571,32 @@
 
 .scale-in {
   animation: scale-in 0.35s var(--ease-out) forwards;
+}
+
+/* Scroll reveal — fades content up as it enters the viewport */
+.reveal {
+  opacity: 0;
+}
+.reveal.revealed {
+  animation: reveal-up 0.7s var(--ease-out) both;
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+  }
+  .reveal.revealed {
+    animation: none;
+  }
 }
 
 @keyframes pulse-dot {

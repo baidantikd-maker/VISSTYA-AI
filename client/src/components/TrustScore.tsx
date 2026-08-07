@@ -61,10 +61,15 @@ export function TrustScore({
   );
 }
 
-const SEGMENTS: Array<{ from: number; to: number; band: "FALSE" | "AVERAGE" | "TRUSTABLE" }> = [
-  { from: 0, to: 40, band: "FALSE" },
-  { from: 40, to: 80, band: "AVERAGE" },
-  { from: 80, to: 100, band: "TRUSTABLE" },
+const SEGMENTS: Array<{
+  from: number;
+  to: number;
+  band: "FALSE" | "AVERAGE" | "TRUSTABLE";
+  scaleClass: string;
+}> = [
+  { from: 0, to: 40, band: "FALSE", scaleClass: "scale-false" },
+  { from: 40, to: 80, band: "AVERAGE", scaleClass: "scale-average" },
+  { from: 80, to: 100, band: "TRUSTABLE", scaleClass: "scale-trustable" },
 ];
 
 export function TrustScale({
@@ -80,22 +85,19 @@ export function TrustScale({
   return (
     <div className={cn("w-full", className)}>
       <div className="relative">
-        <div className="flex h-2 w-full overflow-hidden rounded-full">
-          {SEGMENTS.map((s) => {
-            const meta = STATUS_META[s.band];
+        <div className="flex h-2 w-full">
+          {SEGMENTS.map((s, i) => {
             return (
               <div
                 key={s.band}
                 style={{ width: `${s.to - s.from}%` }}
-                className={cn("relative", meta.bgClass)}
-              >
-                <div
-                  className={cn(
-                    "absolute inset-y-0 left-1/2 w-px",
-                    s.band !== "FALSE" && "bg-[hsl(var(--background))]"
-                  )}
-                />
-              </div>
+                className={cn(
+                  "relative",
+                  s.scaleClass,
+                  i === 0 && "rounded-l-full",
+                  i === SEGMENTS.length - 1 && "rounded-r-full"
+                )}
+              />
             );
           })}
         </div>
@@ -110,16 +112,22 @@ export function TrustScale({
         )}
       </div>
 
-      <div className="mt-2 flex justify-between text-[11px] font-medium text-[hsl(var(--muted))]">
-        <span className="text-false">FALSE</span>
-        <span className="text-average">AVERAGE</span>
-        <span className="text-trustable">TRUSTABLE</span>
+      <div className="relative mt-2 h-4 text-[10px] font-medium text-[hsl(var(--foreground))]">
+        <span className="absolute left-0 -translate-x-1/2">0</span>
+        <span className="absolute left-[40%] -translate-x-1/2">40</span>
+        <span className="absolute left-[80%] -translate-x-1/2">80</span>
+        <span className="absolute left-full -translate-x-1/2">100</span>
       </div>
-      <div className="mt-1 flex justify-between text-[10px] text-[hsl(var(--muted))]">
-        <span>0</span>
-        <span>40</span>
-        <span>80</span>
-        <span>100</span>
+      <div className="relative mt-3 h-4 text-[11px] font-medium">
+        <span className="absolute left-[20%] -translate-x-1/2 text-false">
+          Low confidence
+        </span>
+        <span className="absolute left-[60%] -translate-x-1/2 text-average">
+          Average
+        </span>
+        <span className="absolute left-[90%] -translate-x-1/2 text-trustable">
+          Trustable
+        </span>
       </div>
     </div>
   );

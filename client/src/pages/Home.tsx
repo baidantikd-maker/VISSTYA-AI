@@ -5,7 +5,9 @@ import { ScoreBar } from "@/components/ScoreBar";
 import { TrustScale, TrustScore } from "@/components/TrustScore";
 import { useTheme } from "@/contexts/ThemeContext";
 import { SAMPLE_REPORT_84 } from "@/mock/data";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 const STEPS = [
@@ -73,15 +75,17 @@ function SectionHeading({
   detail,
   eyebrowClassName,
   titleClassName,
+  className,
 }: {
   eyebrow: string;
   title: string;
   detail?: string;
   eyebrowClassName?: string;
   titleClassName?: string;
+  className?: string;
 }) {
   return (
-    <div className="mx-auto max-w-2xl text-center">
+    <div className={cn("mx-auto max-w-2xl text-center", className)}>
       <p
         className={`section-label${eyebrowClassName ? ` ${eyebrowClassName}` : ""}`}
       >
@@ -105,6 +109,29 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const { theme } = useTheme();
   const sample = SAMPLE_REPORT_84;
+
+  useEffect(() => {
+    const els = Array.from(
+      document.querySelectorAll<HTMLElement>(".reveal")
+    );
+    if (!("IntersectionObserver" in window)) {
+      els.forEach(el => el.classList.add("revealed"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+    els.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[hsl(var(--background))]">
@@ -158,10 +185,12 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setLocation("/verify")}
-              className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              className={`inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 transition-all duration-200 hover:opacity-90 active:scale-[0.98] ${
+                theme === "dark" ? "text-base font-bold" : "text-sm font-medium"
+              } text-[hsl(var(--primary-foreground))]`}
             >
               Verify Content
-              <ArrowRight className="size-4" />
+              {theme === "light" && <ArrowRight className="size-4" />}
             </button>
             <button
               type="button"
@@ -170,7 +199,11 @@ export default function Home() {
                   .getElementById("how-it-works")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              className="inline-flex h-11 items-center rounded-md border border-[hsl(var(--border))] px-6 text-sm font-medium text-[hsl(var(--foreground))] transition-all duration-200 hover:bg-[hsl(var(--secondary))] active:scale-[0.98]"
+              className={`inline-flex h-11 items-center rounded-md px-6 transition-all duration-200 hover:bg-[hsl(var(--secondary))] active:scale-[0.98] ${
+                theme === "dark"
+                  ? "border border-white/50 text-base font-bold text-[hsl(var(--foreground))] shadow-[0_0_10px_rgba(255,255,255,0.35),0_0_22px_rgba(255,255,255,0.15)]"
+                  : "border border-[hsl(var(--border))] text-sm font-medium text-[hsl(var(--foreground))]"
+              }`}
             >
               See how it works
             </button>
@@ -247,6 +280,7 @@ export default function Home() {
             eyebrowClassName="eyebrow-glow"
             title="From media to a scored evidence report"
             titleClassName="section-title-glow"
+            className="reveal"
             detail="Five stages, each traceable. Nothing about the process is hidden — every score in the final report points back to evidence."
           />
 
@@ -254,7 +288,8 @@ export default function Home() {
             {STEPS.map((step, i) => (
               <div
                 key={step.n}
-                className="card-glow bg-[hsl(var(--card))] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--secondary))/30]"
+                className="reveal card-glow bg-[hsl(var(--card))] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--secondary))/30]"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className="flex items-center justify-between">
                   <span className="step-number font-mono text-xs">{step.n}</span>
@@ -275,23 +310,35 @@ export default function Home() {
       <section id="modules" className="scroll-mt-20 container py-16 md:py-24">
         <SectionHeading
           eyebrow="Analysis modules"
+          eyebrowClassName="eyebrow-glow"
           title="Four signals, one score"
+          titleClassName="section-title-glow"
+          className="reveal"
           detail="The trust score combines four weighted modules. You can expand each one in any report to see exactly what was checked."
         />
 
         <div className="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {MODULES.map(mod => (
+          {MODULES.map((mod, i) => (
             <div
               key={mod.n}
-              className="panel panel-hover-glow flex flex-col p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+              className="reveal panel panel-hover-glow flex flex-col p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+              style={{ animationDelay: `${i * 0.08}s` }}
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-[hsl(var(--muted))]">
-                  {mod.n}
-                </span>
-                <span className="text-xs text-[hsl(var(--muted))]">
-                  weight /{mod.max}
-                </span>
+                {theme === "dark" ? (
+                  <span className="ml-auto text-xs font-bold text-[hsl(261_88%_60%)]">
+                    {mod.max} points
+                  </span>
+                ) : (
+                  <>
+                    <span className="font-mono text-xs text-[hsl(var(--muted))]">
+                      {mod.n}
+                    </span>
+                    <span className="text-xs text-[hsl(var(--muted))]">
+                      weight /{mod.max}
+                    </span>
+                  </>
+                )}
               </div>
               <p className="module-title mt-5">{mod.title}</p>
               <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted))]">
@@ -310,15 +357,22 @@ export default function Home() {
         <div className="container">
           <SectionHeading
             eyebrow="Trust scale"
+            eyebrowClassName="eyebrow-glow"
             title="Three bands, one horizontal scale"
+            titleClassName={
+              theme === "dark"
+                ? "section-title-glow whitespace-nowrap!"
+                : "section-title-glow"
+            }
+            className="reveal"
             detail="Every report places the claim on the same 0–100 scale. Under 40 is unsupported, 40–79 is partially supported, and 80 or above is well-supported by the evidence. The score is always a starting point — the sources are the substance."
           />
 
-          <div className="panel mx-auto mt-10 max-w-xl p-6">
-            <div className="flex items-baseline justify-center gap-2">
-              <span className="text-sm text-[hsl(var(--muted))]">
-                Sample placement
-              </span>
+          <div className="reveal panel mx-auto mt-10 max-w-xl p-6">
+            <span className="sample-badge inline-block px-2 py-1 text-[11px] font-extrabold uppercase tracking-wide text-[hsl(var(--foreground))]">
+              Sample placement
+            </span>
+            <div className="mt-6 flex items-baseline justify-center gap-2">
               <TrustScore score={84} animated={false} size="md" />
             </div>
             <TrustScale score={84} className="mt-6" />
@@ -328,15 +382,24 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="container py-16 md:py-24">
-        <div className="panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16">
-          <p className="section-label">Ready when you are</p>
-          <h2 className="max-w-xl text-balance">
+        <div className="reveal panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16">
+          <p className="reveal section-label eyebrow-glow" style={{ animationDelay: "0.1s" }}>
+            Ready when you are
+          </p>
+          <h2
+            className={`reveal section-title-glow max-w-xl text-balance${theme === "dark" ? " whitespace-nowrap!" : ""}`}
+            style={{ animationDelay: "0.2s" }}
+          >
             Have something you don't trust?
           </h2>
           <button
             type="button"
             onClick={() => setLocation("/verify")}
-            className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-7 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            className={`inline-flex h-11 items-center gap-2 rounded-md px-7 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.98] ${
+              theme === "dark"
+                ? "bg-[hsl(261_88%_60%)] text-white"
+                : "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
+            }`}
           >
             Verify Content
             <ArrowRight className="size-4" />

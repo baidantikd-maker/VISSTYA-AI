@@ -1,5 +1,7 @@
 import { AppShell } from "@/components/AppShell";
+import LightRays from "@/components/LightRays/LightRays";
 import { StatusBadge } from "@/components/StatusBadge";
+import { useTheme } from "@/contexts/ThemeContext";
 import { formatDate } from "@/lib/format";
 import { mockStore } from "@/mock/store";
 import { ArrowRight, Plus } from "lucide-react";
@@ -23,7 +25,7 @@ function StatCard({
   className?: string;
 }) {
   return (
-    <div className="panel p-5">
+    <div className="panel panel-white-border p-5">
       <p className="text-sm text-[hsl(var(--muted))]">{label}</p>
       <p className={`mt-2 text-3xl font-medium tabular-nums text-[hsl(var(--foreground))] ${className ?? ""}`}>
         {value}
@@ -34,6 +36,8 @@ function StatCard({
 
 export default function Dashboard() {
   const [, setLocation] = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const reports = useMemo(() => mockStore.list(), []);
 
   const stats = useMemo(() => {
@@ -49,6 +53,24 @@ export default function Dashboard() {
 
   return (
     <AppShell>
+      <div className="relative min-h-[85vh] overflow-hidden">
+        {isDark && (
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#7E3FF3"
+              raysSpeed={1.5}
+              lightSpread={0.8}
+              rayLength={1.2}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0.1}
+              distortion={0.05}
+            />
+          </div>
+        )}
+
+        <div className="relative z-10">
       <div className="container max-w-5xl py-10 md:py-14">
         <div className="fade-in text-center">
           <p className="section-label">Overview</p>
@@ -117,6 +139,8 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
+        </div>
+      </div>
       </div>
     </AppShell>
   );

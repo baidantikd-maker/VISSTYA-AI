@@ -186,7 +186,7 @@ export function TrustReportView({
         <h2 className="mt-2 text-xl md:text-2xl">Important limitations</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {report.limitations.map((lim) => (
-            <div key={lim.title} className="rounded-lg border border-[hsl(var(--border))] p-4">
+            <div key={lim.title} className="card-glow rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
               <p className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--foreground))]">
                 <ShieldAlert className="size-4 text-average" />
                 {lim.title}

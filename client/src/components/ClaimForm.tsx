@@ -58,7 +58,7 @@ export function ClaimForm({
         </div>
       </div>
 
-      <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--secondary))/40] px-4 py-3">
+      <div className="card-glow rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--secondary))/40] px-4 py-3">
         <p className="text-xs leading-relaxed text-[hsl(var(--muted))]">
           Visstya does not decide what is true. It gathers evidence — metadata,
           visual analysis, weather records and dated sources — and shows you how

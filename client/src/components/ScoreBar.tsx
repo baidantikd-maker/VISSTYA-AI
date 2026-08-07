@@ -6,11 +6,13 @@ export function ScoreBar({
   score,
   max,
   className,
+  barClassName,
 }: {
   label: string;
   score: number;
   max: number;
   className?: string;
+  barClassName?: string;
 }) {
   const pct = Math.round((score / max) * 100);
   const meta = scoreToBand((score / max) * 100);
@@ -25,14 +27,14 @@ export function ScoreBar({
     <div className={cn("w-full", className)}>
       <div className="mb-1.5 flex items-baseline justify-between">
         <span className="text-sm text-[hsl(var(--foreground))]">{label}</span>
-        <span className="text-sm tabular-nums text-[hsl(var(--muted))]">
+        <span className="score-mark text-sm tabular-nums">
           {score}
-          <span className="text-[hsl(var(--muted))]/70"> / {max}</span>
+          <span className="score-mark-suffix"> / {max}</span>
         </span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
         <div
-          className={cn("h-full rounded-full", barColor)}
+          className={cn("h-full rounded-full", barColor, barClassName)}
           style={{ width: `${pct}%` }}
         />
       </div>

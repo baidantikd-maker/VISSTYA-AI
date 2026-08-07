@@ -214,6 +214,131 @@
     color: hsl(var(--muted));
   }
 
+  /* Glowing indigo text — sharp, tight halo (dark mode only) */
+  .dark .text-glow-accent {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: hsl(261 88% 60%);
+    text-shadow: 0 0 1px hsla(261 88% 60% / 0.5);
+  }
+
+  /* Glowing green bar — bright fill with a tight, sharp halo (dark mode only) */
+  .dark .bar-glow-success {
+    background-color: hsl(158 84% 45%) !important;
+    box-shadow:
+      0 0 4px hsla(158 84% 45% / 0.7),
+      0 0 10px hsla(158 84% 45% / 0.4);
+  }
+
+  /* Glowing red bar — bright fill with a tight, sharp halo (dark mode only) */
+  .dark .bar-glow-false {
+    background-color: hsl(8 72% 45%) !important;
+    box-shadow:
+      0 0 4px hsla(8 72% 45% / 0.7),
+      0 0 10px hsla(8 72% 45% / 0.4);
+  }
+
+  /* Location chip — plain in light mode, indigo ring + white text in dark mode */
+  .chip-location {
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--muted));
+  }
+  .dark .chip-location {
+    border: 2px solid hsla(261 88% 60% / 0.8);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* Score marks — plain in light mode, white in dark mode */
+  .score-mark {
+    color: hsl(var(--muted));
+  }
+  .score-mark-suffix {
+    color: hsl(var(--muted) / 0.7);
+  }
+  .dark .score-mark {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+  }
+  .dark .score-mark-suffix {
+    color: hsl(var(--foreground) / 0.7);
+  }
+
+  /* Step numbers — plain in light mode, indigo glow in dark mode */
+  .step-number {
+    color: hsl(var(--muted));
+  }
+  .dark .step-number {
+    color: hsl(261 88% 60%);
+    text-shadow: 0 0 1px hsla(261 88% 60% / 0.5);
+  }
+
+  /* Step card titles — plain in light mode, bold white with indigo glow in dark mode */
+  .step-title {
+    color: hsl(var(--foreground));
+  }
+  .dark .step-title {
+    color: hsl(var(--foreground));
+    text-shadow:
+      0 0 4px hsla(261 88% 60% / 0.5),
+      0 0 12px hsla(261 88% 60% / 0.25);
+  }
+
+  /* Step card detail text — plain in light mode, indigo in dark mode */
+  .step-detail {
+    color: hsl(var(--muted));
+  }
+  .dark .step-detail {
+    color: hsl(261 70% 68%);
+  }
+
+  /* Section eyebrow — indigo, larger, sharp glow (dark mode only) */
+  .dark .eyebrow-glow {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: hsl(261 88% 60%);
+    text-shadow: 0 0 1px hsla(261 88% 60% / 0.6);
+  }
+
+  /* Section title — white, bold, indigo glow (dark mode only) */
+  .dark .section-title-glow {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: hsl(var(--foreground));
+    text-shadow:
+      0 0 1px hsla(261 88% 60% / 0.5),
+      0 0 10px hsla(261 88% 60% / 0.25);
+  }
+  @media (min-width: 768px) {
+    .dark .section-title-glow {
+      font-size: 2.75rem;
+    }
+  }
+
+  /* Module card titles — original in light mode, larger/bold/glowing in dark mode */
+  .module-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+  }
+  .dark .module-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    text-shadow:
+      0 0 1px hsla(261 88% 60% / 0.5),
+      0 0 8px hsla(261 88% 60% / 0.3);
+  }
+
+  /* Hero heading glow — crisp letters with a luminous, breathing halo */
+  .heading-glow {
+    animation:
+      stagger-in 0.5s ease-out forwards,
+      heading-glow-pulse 4.5s ease-in-out infinite;
+  }
+
   /* Panels */
   .panel {
     border-radius: 0.625rem;
@@ -227,6 +352,64 @@
     border: 1px solid hsl(var(--border));
     background-color: hsl(var(--secondary) / 0.45);
     color: hsl(var(--card-foreground));
+  }
+
+  /* Card glow — indigo accent radial highlight across the top edge (dark mode only) */
+  .dark .card-glow,
+  .dark .panel,
+  .dark .panel-subtle {
+    position: relative;
+    background-image: radial-gradient(
+      130% 70% at 50% 0%,
+      hsla(261 88% 60% / 0.24) 0%,
+      hsla(261 88% 60% / 0.07) 45%,
+      transparent 72%
+    );
+  }
+
+  /* Glowing indigo border — luminous ring around the card edge (dark mode only) */
+  .dark .card-glow::before,
+  .dark .panel::before,
+  .dark .panel-subtle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid hsla(261 88% 60% / 0.8);
+    box-shadow:
+      inset 0 0 10px hsla(261 88% 60% / 0.16),
+      0 0 18px hsla(261 88% 60% / 0.5),
+      0 0 36px hsla(261 88% 60% / 0.28);
+    pointer-events: none;
+  }
+
+  /* Cards with hover-only glow — clean indigo border by default, glow on hover (dark mode) */
+  .dark .panel-hover-glow {
+    border: 2px solid hsla(261 88% 60% / 0.5);
+  }
+  .dark .panel-hover-glow::before {
+    opacity: 0;
+    transition: opacity 0.25s var(--ease-out);
+  }
+  .dark .panel-hover-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* Settings page — reduced card glow (dark mode only) */
+  .dark .settings-page .panel {
+    background-image: radial-gradient(
+      130% 70% at 50% 0%,
+      hsla(261 88% 60% / 0.14) 0%,
+      hsla(261 88% 60% / 0.04) 45%,
+      transparent 72%
+    );
+  }
+  .dark .settings-page .panel::before {
+    border: 1px solid hsla(261 88% 60% / 0.45);
+    box-shadow:
+      inset 0 0 6px hsla(261 88% 60% / 0.1),
+      0 0 10px hsla(261 88% 60% / 0.28),
+      0 0 20px hsla(261 88% 60% / 0.16);
   }
 
   /* Link with arrow affordance */
@@ -293,6 +476,26 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes heading-glow-pulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px hsla(202 95% 60% / 0.75),
+      0 0 16px hsla(202 95% 60% / 0.55),
+      0 0 36px hsla(202 95% 60% / 0.35),
+      0 0 80px hsla(202 95% 60% / 0.22),
+      0 0 140px hsla(202 95% 60% / 0.12);
+  }
+  50% {
+    text-shadow:
+      0 0 8px hsla(202 95% 60% / 0.9),
+      0 0 24px hsla(202 95% 60% / 0.7),
+      0 0 52px hsla(202 95% 60% / 0.5),
+      0 0 110px hsla(202 95% 60% / 0.32),
+      0 0 180px hsla(202 95% 60% / 0.2);
   }
 }
 

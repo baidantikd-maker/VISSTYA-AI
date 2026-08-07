@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 function Section({
   title,
@@ -55,6 +57,7 @@ function RetentionOption({
 
 export default function Settings() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme, switchable } = useTheme();
   const [name, setName] = useState(user?.name ?? "Demo User");
   const [email] = useState(user?.email ?? "demo@vistya.ai");
   const [publicProfile, setPublicProfile] = useState(true);
@@ -63,7 +66,7 @@ export default function Settings() {
 
   return (
     <AppShell>
-      <div className="container max-w-3xl py-10 md:py-14">
+      <div className="settings-page container max-w-3xl py-10 md:py-14">
         <div className="fade-in text-center">
           <p className="section-label">Preferences</p>
           <h1 className="mt-3 text-balance text-3xl md:text-4xl">Settings</h1>
@@ -73,6 +76,41 @@ export default function Settings() {
         </div>
 
         <div className="mt-8 space-y-6">
+          {/* Appearance */}
+          <Section
+            title="Appearance"
+            description="Choose how Visstya looks for you."
+          >
+            {switchable && toggleTheme ? (
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-[hsl(var(--foreground))]">
+                    {theme === "dark" ? "Dark mode" : "Light mode"}
+                  </p>
+                  <p className="text-xs text-[hsl(var(--muted))]">
+                    Toggle between dark and light appearance.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={toggleTheme}
+                  aria-label="Toggle dark mode"
+                >
+                  {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-sm font-medium text-[hsl(var(--foreground))]">Dark mode</p>
+                  <p className="text-xs text-[hsl(var(--muted))]">Theme switching is disabled.</p>
+                </div>
+                <Switch checked={false} disabled />
+              </div>
+            )}
+          </Section>
+
           {/* Profile */}
           <Section title="Profile" description="How you appear across Visstya.">
             <div className="grid gap-4 sm:grid-cols-2">

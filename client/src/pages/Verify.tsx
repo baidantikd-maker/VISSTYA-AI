@@ -55,7 +55,7 @@ export default function Verify() {
       <div className="container max-w-3xl py-10 md:py-16">
         <div className="fade-in text-center">
           <p className="section-label">New verification</p>
-          <h1 className="mt-3 text-balance text-3xl md:text-4xl">
+          <h1 className="mt-3 text-balance text-4xl md:text-5xl">
             Verify a piece of content
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">

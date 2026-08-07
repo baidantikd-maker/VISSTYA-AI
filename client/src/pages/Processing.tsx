@@ -54,7 +54,7 @@ export default function Processing() {
           {/* Media + claim */}
           <div className="order-2 md:order-1">
             <MediaPreview media={input.media} size="sm" className="md:aspect-[4/3]" />
-            <div className="mt-3 rounded-lg border border-[hsl(var(--border))] p-4">
+            <div className="card-glow mt-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
               <p className="text-xs text-[hsl(var(--muted))]">Claim under analysis</p>
               <p className="mt-1 text-sm font-medium leading-snug text-[hsl(var(--foreground))]">
                 {input.claim.event}

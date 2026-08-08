@@ -214,6 +214,13 @@
     color: hsl(var(--muted));
   }
 
+  /* Section label blended toward the animation background hue (bolder) */
+  .section-label-tone {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: hsl(261 88% 60%);
+  }
+
   /* Glowing indigo text — sharp, tight halo (dark mode only) */
   .dark .text-glow-accent {
     font-size: 0.8rem;
@@ -412,6 +419,32 @@
     box-shadow: none;
   }
 
+  /* Border-only container — no card fill or glow, just the border */
+  .panel-border-only {
+    border-radius: 0.625rem;
+    border: 1px solid hsl(var(--border));
+  }
+  .dark .panel-border-only {
+    border: 0.25px solid rgb(255 255 255 / 0.8);
+  }
+
+  /* Dashed border variant */
+  .panel-border-dashed {
+    border-style: dashed;
+  }
+  .dark .panel-border-dashed {
+    border-style: dashed;
+  }
+
+  /* White luminous border ring (dark mode only) */
+  .dark .panel-white-glow::before {
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow:
+      inset 0 0 6px rgba(255, 255, 255, 0.08),
+      0 0 10px rgba(255, 255, 255, 0.18),
+      0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
   /* Settings page — reduced card glow (dark mode only) */
   .dark .settings-page .panel {
     background-image: radial-gradient(
@@ -478,6 +511,44 @@
   }
   .border-trustable {
     border-color: hsl(var(--status-trustable-border));
+  }
+
+  /* Sharper, more vivid stat number colors with a crisp halo */
+  .stat-number-trustable {
+    color: hsl(158 90% 26%);
+    text-shadow:
+      0 0 12px hsla(158 90% 40% / 0.6),
+      0 0 28px hsla(158 90% 40% / 0.4);
+  }
+  .stat-number-average {
+    color: hsl(34 95% 36%);
+    text-shadow:
+      0 0 12px hsla(34 95% 50% / 0.6),
+      0 0 28px hsla(34 95% 50% / 0.4);
+  }
+  .stat-number-false {
+    color: hsl(8 82% 40%);
+    text-shadow:
+      0 0 12px hsla(8 82% 50% / 0.6),
+      0 0 28px hsla(8 82% 50% / 0.4);
+  }
+  .dark .stat-number-trustable {
+    color: hsl(158 90% 68%);
+    text-shadow:
+      0 0 12px hsla(158 90% 55% / 0.75),
+      0 0 30px hsla(158 90% 55% / 0.5);
+  }
+  .dark .stat-number-average {
+    color: hsl(36 95% 70%);
+    text-shadow:
+      0 0 12px hsla(36 95% 60% / 0.75),
+      0 0 30px hsla(36 95% 60% / 0.5);
+  }
+  .dark .stat-number-false {
+    color: hsl(8 88% 74%);
+    text-shadow:
+      0 0 12px hsla(8 88% 60% / 0.75),
+      0 0 30px hsla(8 88% 60% / 0.5);
   }
 
   .scale-false {

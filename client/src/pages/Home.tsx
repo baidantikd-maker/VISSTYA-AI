@@ -1,4 +1,5 @@
 import DarkVeil from "@/components/DarkVeil";
+import DotField from "@/components/DotField/DotField";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { ScoreBar } from "@/components/ScoreBar";
@@ -382,28 +383,42 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="container py-16 md:py-24">
-        <div className="reveal panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16">
-          <p className="reveal section-label eyebrow-glow" style={{ animationDelay: "0.1s" }}>
-            Ready when you are
-          </p>
-          <h2
-            className={`reveal section-title-glow max-w-xl text-balance${theme === "dark" ? " whitespace-nowrap!" : ""}`}
-            style={{ animationDelay: "0.2s" }}
-          >
-            Have something you don't trust?
-          </h2>
-          <button
-            type="button"
-            onClick={() => setLocation("/verify")}
-            className={`inline-flex h-11 items-center gap-2 rounded-md px-7 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.98] ${
-              theme === "dark"
-                ? "bg-[hsl(261_88%_60%)] text-white"
-                : "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
-            }`}
-          >
-            Verify Content
-            <ArrowRight className="size-4" />
-          </button>
+        <div className="reveal panel-border-only panel-white-glow relative flex flex-col items-center gap-6 overflow-hidden px-6 py-14 text-center shadow-[0_0_16px_rgba(255,255,255,0.15)] md:py-16">
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <DotField
+              dotRadius={2.2}
+              dotSpacing={14}
+              bulgeStrength={67}
+              glowRadius={160}
+              sparkle={false}
+              waveAmplitude={0}
+              gradientFrom="rgba(168, 85, 247, 0.65)"
+              gradientTo="rgba(180, 151, 207, 0.5)"
+            />
+          </div>
+          <div className="relative z-10 flex flex-col items-center gap-6">
+            <p className="reveal section-label eyebrow-glow" style={{ animationDelay: "0.1s" }}>
+              Ready when you are
+            </p>
+            <h2
+              className={`reveal section-title-glow max-w-xl text-balance${theme === "dark" ? " whitespace-nowrap!" : ""}`}
+              style={{ animationDelay: "0.2s" }}
+            >
+              Have something you don't trust?
+            </h2>
+            <button
+              type="button"
+              onClick={() => setLocation("/verify")}
+              className={`inline-flex h-11 items-center gap-2 rounded-md px-7 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.98] ${
+                theme === "dark"
+                  ? "bg-[hsl(261_88%_60%)] text-white"
+                  : "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
+              }`}
+            >
+              Verify Content
+              <ArrowRight className="size-4" />
+            </button>
+          </div>
         </div>
       </section>
 

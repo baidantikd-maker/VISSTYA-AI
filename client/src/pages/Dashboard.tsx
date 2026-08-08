@@ -4,6 +4,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { useTheme } from "@/contexts/ThemeContext";
 import { formatDate } from "@/lib/format";
 import { mockStore } from "@/mock/store";
+import { STATUS_META } from "@/lib/status";
 import { ArrowRight, Plus } from "lucide-react";
 import { useMemo } from "react";
 import { useLocation } from "wouter";
@@ -25,8 +26,8 @@ function StatCard({
   className?: string;
 }) {
   return (
-    <div className="panel panel-white-border p-5">
-      <p className="text-sm text-[hsl(var(--muted))]">{label}</p>
+    <div className="panel-border-only panel-border-dashed p-5">
+      <p className="text-sm font-bold uppercase tracking-wide text-white [text-shadow:0_0_12px_hsl(261_88%_60%_/_1),0_0_28px_hsl(261_88%_60%_/_0.7),0_0_48px_hsl(261_88%_60%_/_0.4)]">{label}</p>
       <p className={`mt-2 text-3xl font-medium tabular-nums text-[hsl(var(--foreground))] ${className ?? ""}`}>
         {value}
       </p>
@@ -73,15 +74,19 @@ export default function Dashboard() {
         <div className="relative z-10">
       <div className="container max-w-5xl py-10 md:py-14">
         <div className="fade-in text-center">
-          <p className="section-label">Overview</p>
-          <h1 className="mt-3 text-balance text-3xl md:text-4xl">
+          <p className="section-label section-label-tone">Overview</p>
+          <h1 className="mt-3 text-balance text-4xl font-bold md:text-6xl">
             {greeting()}, <span className="text-[hsl(var(--muted))]">researcher</span>
           </h1>
           <div className="mt-6 flex justify-center">
             <button
               type="button"
               onClick={() => setLocation("/verify")}
-              className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-5 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+              className={`inline-flex h-11 items-center gap-2 rounded-md px-6 transition-all duration-200 hover:bg-white hover:text-black active:scale-[0.98] ${
+                theme === "dark"
+                  ? "border border-white/50 text-base font-bold text-[hsl(var(--foreground))] shadow-[0_0_10px_rgba(255,255,255,0.35),0_0_22px_rgba(255,255,255,0.15)]"
+                  : "border border-[hsl(var(--border))] text-sm font-medium text-[hsl(var(--foreground))]"
+              } bg-white/10 backdrop-blur-sm`}
             >
               <Plus className="size-4" />
               New Verification
@@ -92,26 +97,26 @@ export default function Dashboard() {
         {/* Stats */}
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatCard label="Total verifications" value={stats.total} />
-          <StatCard label="Trustable" value={stats.trustable} className="text-trustable" />
-          <StatCard label="Average" value={stats.average} className="text-average" />
-          <StatCard label="False" value={stats.false} className="text-false" />
+          <StatCard label="Trustable" value={stats.trustable} className="stat-number-trustable" />
+          <StatCard label="Average" value={stats.average} className="stat-number-average" />
+          <StatCard label="False" value={stats.false} className="stat-number-false" />
         </div>
 
         {/* Recent */}
         <div className="mt-12">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl md:text-2xl">Recent verifications</h2>
+            <h2 className="text-2xl font-semibold text-white md:text-3xl">Recent verifications</h2>
             <button
               type="button"
               onClick={() => setLocation("/history")}
-              className="link-arrow"
+              className="inline-flex h-9 items-center gap-2 rounded-md bg-[hsl(261_88%_60%)] px-4 text-sm font-medium text-white transition-all duration-200 hover:bg-[hsl(261_88%_66%)] hover:shadow-[0_0_12px_hsl(261_88%_60%_/_0.6)] active:scale-[0.98]"
             >
               View all
               <ArrowRight className="size-4" />
             </button>
           </div>
 
-          <div className="panel mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden">
+          <div className="panel-border-only mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden shadow-[0_0_18px_rgba(255,255,255,0.3),0_0_50px_rgba(255,255,255,0.12)]">
             {recent.map((report) => (
               <button
                 key={report.id}
@@ -120,7 +125,7 @@ export default function Dashboard() {
                 className="group flex w-full items-center gap-4 px-4 py-4 text-left transition-colors hover:bg-[hsl(var(--secondary))/40]"
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-[hsl(var(--foreground))]">
+                  <span className="block truncate text-base font-medium text-white">
                     {report.claim.event}
                   </span>
                   <span className="mt-0.5 block truncate text-xs text-[hsl(var(--muted))]">
@@ -131,7 +136,7 @@ export default function Dashboard() {
                   </span>
                 </span>
                 <StatusBadge score={report.totalScore} size="sm" />
-                <span className="w-12 text-right text-lg font-medium tabular-nums text-[hsl(var(--foreground))]">
+                <span className={`w-12 text-right text-lg font-medium tabular-nums ${STATUS_META[report.statusBand].textClass}`}>
                   {report.totalScore}
                 </span>
                 <ArrowRight className="size-4 shrink-0 text-[hsl(var(--muted))] opacity-0 transition-opacity group-hover:opacity-100" />

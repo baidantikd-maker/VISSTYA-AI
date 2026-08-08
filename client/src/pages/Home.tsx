@@ -383,20 +383,28 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="container py-16 md:py-24">
-        <div className="reveal panel-border-only panel-white-glow relative flex flex-col items-center gap-6 overflow-hidden px-6 py-14 text-center shadow-[0_0_16px_rgba(255,255,255,0.15)] md:py-16">
-          <div className="pointer-events-none absolute inset-0 z-0">
-            <DotField
-              dotRadius={2.2}
-              dotSpacing={14}
-              bulgeStrength={67}
-              glowRadius={160}
-              sparkle={false}
-              waveAmplitude={0}
-              gradientFrom="rgba(168, 85, 247, 0.65)"
-              gradientTo="rgba(180, 151, 207, 0.5)"
-            />
-          </div>
-          <div className="relative z-10 flex flex-col items-center gap-6">
+        <div
+          className={
+            theme === "dark"
+              ? "reveal panel-border-only panel-white-glow relative flex flex-col items-center gap-6 overflow-hidden px-6 py-14 text-center shadow-[0_0_16px_rgba(255,255,255,0.15)] md:py-16"
+              : "reveal panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16"
+          }
+        >
+          {theme === "dark" && (
+            <div className="pointer-events-none absolute inset-0 z-0">
+              <DotField
+                dotRadius={2.2}
+                dotSpacing={14}
+                bulgeStrength={67}
+                glowRadius={160}
+                sparkle={false}
+                waveAmplitude={0}
+                gradientFrom="rgba(168, 85, 247, 0.65)"
+                gradientTo="rgba(180, 151, 207, 0.5)"
+              />
+            </div>
+          )}
+          <div className={theme === "dark" ? "relative z-10 flex flex-col items-center gap-6" : "flex flex-col items-center gap-6"}>
             <p className="reveal section-label eyebrow-glow" style={{ animationDelay: "0.1s" }}>
               Ready when you are
             </p>

@@ -214,8 +214,8 @@
     color: hsl(var(--muted));
   }
 
-  /* Section label blended toward the animation background hue (bolder) */
-  .section-label-tone {
+  /* Section label blended toward the animation background hue (dark mode only) */
+  .dark .section-label-tone {
     font-size: 0.85rem;
     font-weight: 800;
     color: hsl(261 88% 60%);
@@ -419,19 +419,13 @@
     box-shadow: none;
   }
 
-  /* Border-only container — no card fill or glow, just the border */
-  .panel-border-only {
-    border-radius: 0.625rem;
-    border: 1px solid hsl(var(--border));
-  }
+  /* Border-only container — no card fill or glow, just the border (dark mode only) */
   .dark .panel-border-only {
+    border-radius: 0.625rem;
     border: 0.25px solid rgb(255 255 255 / 0.8);
   }
 
-  /* Dashed border variant */
-  .panel-border-dashed {
-    border-style: dashed;
-  }
+  /* Dashed border variant (dark mode only) */
   .dark .panel-border-dashed {
     border-style: dashed;
   }
@@ -513,25 +507,7 @@
     border-color: hsl(var(--status-trustable-border));
   }
 
-  /* Sharper, more vivid stat number colors with a crisp halo */
-  .stat-number-trustable {
-    color: hsl(158 90% 26%);
-    text-shadow:
-      0 0 12px hsla(158 90% 40% / 0.6),
-      0 0 28px hsla(158 90% 40% / 0.4);
-  }
-  .stat-number-average {
-    color: hsl(34 95% 36%);
-    text-shadow:
-      0 0 12px hsla(34 95% 50% / 0.6),
-      0 0 28px hsla(34 95% 50% / 0.4);
-  }
-  .stat-number-false {
-    color: hsl(8 82% 40%);
-    text-shadow:
-      0 0 12px hsla(8 82% 50% / 0.6),
-      0 0 28px hsla(8 82% 50% / 0.4);
-  }
+  /* Sharper, more vivid stat number colors with a crisp halo (dark mode only) */
   .dark .stat-number-trustable {
     color: hsl(158 90% 68%);
     text-shadow:

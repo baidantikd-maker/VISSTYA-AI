@@ -16,7 +16,7 @@ export const startLogin = () => {
   const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
 
   // No OAuth portal configured (e.g. local demo mode): the server auto-signs
-  // requests in as a demo user, so just head straight to the app.
+  // requests in as a guest, so just head straight to the app.
   if (!oauthPortalUrl) {
     window.location.href = "/verify";
     return;

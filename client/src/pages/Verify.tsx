@@ -1,227 +1,188 @@
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useLocation } from "wouter";
+import { AppShell } from "@/components/AppShell";
+import { ClaimForm } from "@/components/ClaimForm";
+import LightRays from "@/components/LightRays/LightRays";
+import { UploadDropzone } from "@/components/UploadDropzone";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
+import type { AnalysisInput, ClaimContext, MediaInfo } from "@/mock/types";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
-import { Upload, Loader2, AlertCircle } from "lucide-react";
-import { toast } from "sonner";
+import { useLocation } from "wouter";
+
+const PENDING_KEY = "vistai.mock.pending";
+
+export function setPendingInput(input: AnalysisInput) {
+  sessionStorage.setItem(PENDING_KEY, JSON.stringify(input));
+}
+
+export function getPendingInput(): AnalysisInput | null {
+  try {
+    const raw = sessionStorage.getItem(PENDING_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AnalysisInput;
+    return parsed.media && parsed.claim ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearPendingInput() {
+  sessionStorage.removeItem(PENDING_KEY);
+}
 
 export default function Verify() {
-  const { user, isAuthenticated, loading } = useAuth();
   const [, setLocation] = useLocation();
-  const [mediaUrl, setMediaUrl] = useState("");
-  const [mediaType, setMediaType] = useState<"image" | "video">("image");
-  const [claimEvent, setClaimEvent] = useState("");
-  const [claimLocation, setClaimLocation] = useState("");
-  const [claimDate, setClaimDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useTheme();
+  const { t } = useLanguage();
+  const isDark = theme === "dark";
+  const [step, setStep] = useState<1 | 2>(1);
+  const [media, setMedia] = useState<MediaInfo | null>(null);
+  const [claim, setClaim] = useState<ClaimContext>({ event: "" });
 
-  const analyzeMutation = trpc.verification.analyze.useMutation({
-    onSuccess: (report) => {
-      setIsLoading(false);
-      toast.success("Verification complete!");
-      setLocation(`/report/${report.id}`);
-    },
-    onError: (error) => {
-      setIsLoading(false);
-      toast.error(error.message || "Verification failed");
-    },
-  });
+  const canProceedToContext = Boolean(media);
+  const canAnalyze = canProceedToContext && claim.event.trim().length > 2;
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[hsl(var(--background))] flex items-center justify-center p-4">
-        <Loader2 className="w-8 h-8 text-accent animate-spin" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[hsl(var(--background))] flex items-center justify-center p-4">
-        <div className="max-w-md text-center space-y-4">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
-          <h1 className="text-2xl font-bold">Sign In Required</h1>
-          <p className="text-[hsl(var(--muted))]">Please sign in to verify media content.</p>
-          <Button onClick={() => setLocation("/")} className="w-full">
-            Back to Home
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!mediaUrl.trim()) {
-      toast.error("Please enter a media URL");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await analyzeMutation.mutateAsync({
-        mediaUrl,
-        mediaType,
-        claimEvent: claimEvent || undefined,
-        claimLocation: claimLocation || undefined,
-        claimDate: claimDate ? new Date(claimDate) : undefined,
-      });
-    } catch (error) {
-      setIsLoading(false);
-    }
+  const submit = () => {
+    if (!media || !canAnalyze) return;
+    setPendingInput({
+      media,
+      claim: {
+        event: claim.event.trim(),
+        location: claim.location?.trim() || undefined,
+        date: claim.date?.trim() || undefined,
+      },
+    });
+    setLocation("/verify/processing");
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))]">
-      {/* Header */}
-      <div className="border-b" style={{ borderBottomColor: "hsl(var(--border))" }}>
-        <div className="container py-6">
-          <h1 className="text-3xl font-bold">Verify Media</h1>
-          <p className="text-[hsl(var(--muted))] mt-2">Upload or paste a URL to analyze media authenticity</p>
-        </div>
-      </div>
+    <AppShell>
+      <div className="relative min-h-[85vh] overflow-hidden">
+        {isDark && (
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#7E3FF3"
+              raysSpeed={1.5}
+              lightSpread={0.8}
+              rayLength={1.2}
+              followMouse={true}
+              mouseInfluence={0.1}
+              noiseAmount={0.1}
+              distortion={0.05}
+            />
+          </div>
+        )}
 
-      {/* Main Content */}
-      <div className="container py-12">
-        <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Media Input Section */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
-                <Upload className="w-5 h-5" />
-                Media Input
-              </h2>
-
-              <div className="space-y-2">
-                <Label htmlFor="media-url">Media URL *</Label>
-                <Input
-                  id="media-url"
-                  type="url"
-                  placeholder="https://example.com/image.jpg"
-                  value={mediaUrl}
-                  onChange={(e) => setMediaUrl(e.target.value)}
-                  disabled={isLoading}
-                  required
-                  className="bg-[hsl(var(--card))]"
-                />
-                <p className="text-xs text-[hsl(var(--muted))]">Enter a direct link to an image or video file</p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="media-type">Media Type *</Label>
-                <div className="flex gap-4">
-                  {(["image", "video"] as const).map((type) => (
-                    <label key={type} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="media-type"
-                        value={type}
-                        checked={mediaType === type}
-                        onChange={(e) => setMediaType(e.target.value as "image" | "video")}
-                        disabled={isLoading}
-                        className="w-4 h-4"
-                      />
-                      <span className="capitalize">{type}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Claim Context Section */}
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Claim Context (Optional)</h2>
-              <p className="text-sm text-[hsl(var(--muted))]">
-                Provide details about the claim to improve verification accuracy
+        <div className="relative z-10">
+          <div className="container max-w-3xl py-10 md:py-16">
+            <div className="fade-in text-center">
+              <p className="section-label eyebrow-glow">{t("verify.eyebrow")}</p>
+              <h1 className="section-title-glow mt-3 text-balance text-4xl md:text-5xl">
+                {t("verify.title")}
+              </h1>
+              <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
+                {t("verify.detail")}
               </p>
-
-              <div className="space-y-2">
-                <Label htmlFor="claim-event">Event Description</Label>
-                <Textarea
-                  id="claim-event"
-                  placeholder="What event or claim does this media represent?"
-                  value={claimEvent}
-                  onChange={(e) => setClaimEvent(e.target.value)}
-                  disabled={isLoading}
-                  className="bg-[hsl(var(--card))] min-h-24"
-                />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="claim-location">Location</Label>
-                  <Input
-                    id="claim-location"
-                    placeholder="e.g., New Delhi, India"
-                    value={claimLocation}
-                    onChange={(e) => setClaimLocation(e.target.value)}
-                    disabled={isLoading}
-                    className="bg-[hsl(var(--card))]"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="claim-date">Date</Label>
-                  <Input
-                    id="claim-date"
-                    type="date"
-                    value={claimDate}
-                    onChange={(e) => setClaimDate(e.target.value)}
-                    disabled={isLoading}
-                    className="bg-[hsl(var(--card))]"
-                  />
-                </div>
-              </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="flex gap-4">
-              <Button
-                type="submit"
-                disabled={isLoading || !mediaUrl.trim()}
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Start Verification
-                  </>
+        {/* Step indicator */}
+        <div className="mt-8 flex items-center gap-3">
+          {[1, 2].map((s) => (
+            <div key={s} className="flex flex-1 items-center gap-3">
+              <span
+                className={cn(
+                  "flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-medium",
+                  isDark
+                    ? step >= s
+                      ? "border-transparent bg-[hsl(261_88%_60%)] text-white"
+                      : "border-white text-white"
+                    : step >= s
+                      ? "border-transparent bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]"
+                      : "border-[hsl(var(--border))] text-[hsl(var(--muted))]"
                 )}
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setLocation("/")}
-                disabled={isLoading}
               >
-                Cancel
-              </Button>
+                {s}
+              </span>
+              <span
+                className={cn(
+                  "text-sm",
+                  isDark
+                    ? cn(
+                        "font-medium text-[hsl(261_88%_60%)]",
+                        step < s && "opacity-80"
+                      )
+                    : step >= s
+                      ? "font-medium text-[hsl(var(--foreground))]"
+                      : "text-[hsl(var(--muted))]"
+                )}
+              >
+                {s === 1 ? t("verify.stepAdd") : t("verify.stepContext")}
+              </span>
+              {s === 1 && (
+                <span
+                  className={cn(
+                    "h-px flex-1",
+                    isDark
+                      ? "bg-white/70 shadow-[0_0_6px_rgba(255,255,255,0.7),0_0_12px_rgba(255,255,255,0.35)]"
+                      : "bg-[hsl(var(--border))]"
+                  )}
+                />
+              )}
             </div>
-
-            {/* Info Box */}
-            <div className="bg-[hsl(var(--secondary))]/30 rounded-lg p-4 border" style={{ borderColor: "hsl(var(--border))" }}>
-              <h3 className="font-semibold mb-2">How Verification Works</h3>
-              <ul className="text-sm text-[hsl(var(--muted))] space-y-1">
-                <li>• Metadata Analysis: Checks EXIF data and file integrity</li>
-                <li>• Vision Analysis: AI examines visual content and objects</li>
-                <li>• Weather Verification: Cross-checks location and date against historical data</li>
-                <li>• Evidence Corroboration: Searches trusted sources for supporting evidence</li>
-              </ul>
-            </div>
-          </form>
+          ))}
         </div>
-      </div>
-    </div>
+
+        <div className="mt-10">
+          {step === 1 ? (
+            <div className="scale-in">
+              <UploadDropzone value={media} onChange={setMedia} />
+              <div className="mt-8 flex justify-end">
+                <button
+                  type="button"
+                  disabled={!canProceedToContext}
+                  onClick={() => setStep(2)}
+                  className={cn(
+                    "inline-flex min-h-11 items-center rounded-md px-6 transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40",
+                    isDark
+                      ? "justify-center bg-[hsl(261_88%_60%)] text-base font-bold text-white"
+                      : "gap-2 bg-[hsl(var(--primary))] text-sm font-medium text-[hsl(var(--primary-foreground))]"
+                  )}
+                >
+                  {t("common.continue")}
+                  {!isDark && <ArrowRight className="size-4" />}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="scale-in">
+              <ClaimForm value={claim} onChange={setClaim} />
+              <div className="mt-8 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm text-[hsl(var(--muted))] transition-colors hover:text-[hsl(var(--foreground))]"
+                >
+                  <ArrowLeft className="size-4" />
+                  {t("common.back")}
+                </button>
+                <button
+                  type="button"
+                  disabled={!canAnalyze}
+                  onClick={submit}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40"
+                >
+                  {t("verify.analyzeEvidence")}
+                  <ArrowRight className="size-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        </div>
+          </div>
+        </div>
+    </AppShell>
   );
 }

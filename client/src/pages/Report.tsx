@@ -12,6 +12,7 @@ export default function Report() {
 
   return (
     <AppShell>
+      <div className="relative z-10">
       <div className="container max-w-5xl py-10 md:py-14">
         {report === undefined ? (
           <ErrorState
@@ -21,6 +22,7 @@ export default function Report() {
         ) : (
           <TrustReportView report={report} />
         )}
+      </div>
       </div>
     </AppShell>
   );

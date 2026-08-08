@@ -13,7 +13,7 @@ export function WarningBanner({
   return (
     <div
       className={cn(
-        "flex items-start gap-3 rounded-lg border border-average bg-average px-4 py-3.5",
+        "flex items-start gap-3 rounded-lg border border-average bg-average px-4 py-3.5 dark:bg-[hsl(var(--status-average-bg)/0.4)] dark:backdrop-blur-md",
         className
       )}
     >

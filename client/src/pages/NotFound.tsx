@@ -1,12 +1,30 @@
+import DarkVeil from "@/components/DarkVeil";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useLocation } from "wouter";
 
 export default function NotFound() {
   const [, setLocation] = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
-    <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
+    <div className="relative flex min-h-screen flex-col bg-[hsl(var(--background))]">
+      {isDark && (
+        <div
+          className="pointer-events-none fixed inset-0 z-0"
+          aria-hidden="true"
+        >
+          <DarkVeil
+            scanlineIntensity={0.58}
+            speed={1.1}
+            scanlineFrequency={4}
+          />
+          <div className="absolute inset-0 bg-[hsl(var(--background))/70]" />
+        </div>
+      )}
+      <div className="relative z-10 flex min-h-screen flex-col">
       <Navbar />
       <main className="container flex flex-1 flex-col items-center justify-center py-24 text-center">
         <p className="font-mono text-7xl font-light tracking-tight text-[hsl(var(--foreground))]">
@@ -25,6 +43,7 @@ export default function NotFound() {
         </button>
       </main>
       <Footer />
+      </div>
     </div>
   );
 }

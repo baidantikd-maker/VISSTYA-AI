@@ -15,7 +15,7 @@ export function SourceCard({ source }: { source: Source }) {
       href={source.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="card-glow group block rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--foreground))/20]"
+      className="card-glow group block rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 transition-colors hover:border-[hsl(var(--foreground))/20] dark:border-2 dark:border-dotted dark:border-white/80 dark:bg-transparent dark:shadow-[0_0_6px_rgba(255,255,255,0.18),0_0_14px_rgba(255,255,255,0.08)] dark:hover:border-solid dark:hover:border-white"
     >
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 items-center gap-1.5 text-xs font-medium text-[hsl(var(--foreground))]">

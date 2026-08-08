@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 import { LayoutDashboard, History, Settings, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLocation } from "wouter";
+import DarkVeil from "./DarkVeil";
 import { Logo } from "./Logo";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -15,6 +17,8 @@ const NAV_ITEMS = [
 export function AppShell({ children }: { children: ReactNode }) {
   const [location, setLocation] = useLocation();
   const { user, logout } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const initials = (user?.name ?? "V")
     .split(" ")
@@ -29,7 +33,21 @@ export function AppShell({ children }: { children: ReactNode }) {
       : location.startsWith(href);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
+    <div className="relative min-h-screen flex-col bg-[hsl(var(--background))]">
+      {isDark && (
+        <div
+          className="pointer-events-none fixed inset-0 z-0"
+          aria-hidden="true"
+        >
+          <DarkVeil
+            scanlineIntensity={0.58}
+            speed={1.1}
+            scanlineFrequency={4}
+          />
+          <div className="absolute inset-0 bg-[hsl(var(--background))/70]" />
+        </div>
+      )}
+      <div className="relative z-10 flex min-h-screen flex-col">
       {/* Top bar */}
       <header className="sticky top-0 z-40 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))/85] backdrop-blur-md">
         <div className="container flex h-14 items-center justify-between">
@@ -115,6 +133,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </div>
       </nav>
+      </div>
     </div>
   );
 }

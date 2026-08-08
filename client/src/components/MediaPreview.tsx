@@ -1,4 +1,5 @@
 import type { MediaInfo } from "@/mock/types";
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { FileImage, Play } from "lucide-react";
 import { useState } from "react";
@@ -13,6 +14,10 @@ export function MediaPreview({
   size?: "sm" | "md" | "lg";
 }) {
   const [failed, setFailed] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const frame = isDark ? "border-white" : "";
 
   const aspect =
     size === "sm"
@@ -44,6 +49,7 @@ export function MediaPreview({
         className={cn(
           "group relative w-full overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--secondary))/40]",
           aspect,
+          frame,
           className
         )}
       >
@@ -74,6 +80,7 @@ export function MediaPreview({
       className={cn(
         "relative w-full overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--secondary))/40]",
         aspect,
+        frame,
         className
       )}
     >

@@ -21,7 +21,7 @@ export function ClaimForm({
       <div>
         <Label
           htmlFor="claim-event"
-          className={cn("mb-2 block", isDark && "text-[hsl(261_88%_60%)]")}
+          className={cn("mb-2 block", isDark && "text-base uppercase tracking-wide text-white")}
         >
           What is the claim?
         </Label>
@@ -32,18 +32,18 @@ export function ClaimForm({
           placeholder="e.g. A video shows a flooded metro station in Mumbai after heavy rain"
           rows={3}
           className={cn(
-            "w-full resize-none rounded-md border bg-[hsl(var(--card))] px-3 py-2.5 text-sm leading-relaxed outline-none transition-colors",
+            "w-full resize-none rounded-md border px-3 py-2.5 text-sm leading-relaxed outline-none transition-colors",
             isDark
-              ? "border-[hsl(261_88%_60%)] text-[hsl(261_88%_60%)] placeholder:text-[hsl(261_88%_60%)] placeholder:opacity-60 focus:border-[hsl(261_88%_60%)]"
-              : "border-[hsl(var(--input))] placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
+              ? "border-dashed border-white/60 bg-transparent text-white placeholder:text-[hsl(var(--muted))] focus:border-solid focus:border-white shadow-[0_0_10px_rgba(255,255,255,0.25),0_0_20px_rgba(255,255,255,0.1)]"
+              : "border-[hsl(var(--input))] bg-[hsl(var(--card))] placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
           )}
         />
         <p
           className={cn(
-            "mt-1.5 text-xs leading-relaxed",
+            "mt-1.5 leading-relaxed",
             isDark
-              ? "text-[hsl(261_88%_60%)] opacity-80"
-              : "text-[hsl(var(--muted))]"
+              ? "text-[13px] text-[hsl(261_60%_65%)]/50"
+              : "text-xs text-[hsl(var(--muted))]"
           )}
         >
           {EVENT_HELPER}
@@ -54,15 +54,11 @@ export function ClaimForm({
         <div>
           <Label
             htmlFor="claim-location"
-            className={cn("mb-2 block", isDark && "text-[hsl(261_88%_60%)]")}
+            className={cn("mb-2 block", isDark && "text-base uppercase tracking-wide text-white")}
           >
             Location{" "}
-            <span
-              className={cn(
-                isDark ? "text-[hsl(261_88%_60%)] opacity-70" : "text-[hsl(var(--muted))]"
-              )}
-            >
-              (optional)
+            <span className="normal-case text-[hsl(var(--muted))]">
+              (Optional)
             </span>
           </Label>
           <input
@@ -71,25 +67,21 @@ export function ClaimForm({
             onChange={(e) => onChange({ ...value, location: e.target.value })}
             placeholder="e.g. Dharavi, Mumbai"
             className={cn(
-              "h-10 w-full rounded-md border bg-[hsl(var(--card))] px-3 text-sm outline-none transition-colors",
-              isDark
-                ? "border-[hsl(261_88%_60%)] text-[hsl(261_88%_60%)] placeholder:text-[hsl(261_88%_60%)] placeholder:opacity-60 focus:border-[hsl(261_88%_60%)]"
-                : "border-[hsl(var(--input))] placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
+            "h-10 w-full rounded-md border px-3 text-sm outline-none transition-colors",
+            isDark
+              ? "border-dashed border-white/60 bg-transparent text-white placeholder:text-[hsl(var(--muted))] focus:border-solid focus:border-white shadow-[0_0_10px_rgba(255,255,255,0.25),0_0_20px_rgba(255,255,255,0.1)]"
+                : "border-[hsl(var(--input))] bg-[hsl(var(--card))] placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
             )}
           />
         </div>
         <div>
           <Label
             htmlFor="claim-date"
-            className={cn("mb-2 block", isDark && "text-[hsl(261_88%_60%)]")}
+            className={cn("mb-2 block", isDark && "text-base uppercase tracking-wide text-white")}
           >
             When is it claimed to have happened?{" "}
-            <span
-              className={cn(
-                isDark ? "text-[hsl(261_88%_60%)] opacity-70" : "text-[hsl(var(--muted))]"
-              )}
-            >
-              (optional)
+            <span className="normal-case text-[hsl(var(--muted))]">
+              (Optional)
             </span>
           </Label>
           <input
@@ -98,10 +90,13 @@ export function ClaimForm({
             value={value.date ?? ""}
             onChange={(e) => onChange({ ...value, date: e.target.value })}
             className={cn(
-              "h-10 w-full rounded-md border bg-[hsl(var(--card))] px-3 text-sm outline-none transition-colors",
-              isDark
-                ? "border-[hsl(261_88%_60%)] text-[hsl(261_88%_60%)] focus:border-[hsl(261_88%_60%)]"
-                : "border-[hsl(var(--input))] focus:border-[hsl(var(--foreground))]"
+            "h-10 w-full rounded-md border px-3 text-sm outline-none transition-colors",
+            isDark
+              ? cn(
+                  "border-dashed border-white/60 bg-transparent [&::-webkit-calendar-picker-indicator]:invert focus:border-solid focus:border-white shadow-[0_0_10px_rgba(255,255,255,0.25),0_0_20px_rgba(255,255,255,0.1)]",
+                  value.date ? "text-white" : "text-[hsl(var(--muted))]"
+                )
+                : "border-[hsl(var(--input))] bg-[hsl(var(--card))] focus:border-[hsl(var(--foreground))]"
             )}
           />
         </div>
@@ -109,16 +104,17 @@ export function ClaimForm({
 
       <div
         className={cn(
-          "card-glow rounded-lg border bg-[hsl(var(--secondary))/40] px-4 py-3",
-          isDark ? "border-[hsl(261_88%_60%)]" : "border-[hsl(var(--border))]"
+          isDark
+            ? "-ml-4 w-fit rounded-lg bg-[hsl(var(--secondary))/40] px-4 py-3"
+            : "card-glow rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--secondary))/40] px-4 py-3"
         )}
       >
         <p
           className={cn(
-            "text-xs leading-relaxed",
+            "leading-relaxed",
             isDark
-              ? "text-[hsl(261_88%_60%)] opacity-80"
-              : "text-[hsl(var(--muted))]"
+              ? "text-[13px] text-[hsl(261_60%_65%)]/50"
+              : "text-xs text-[hsl(var(--muted))]"
           )}
         >
           Visstya does not decide what is true. It gathers evidence — metadata,

@@ -1,5 +1,4 @@
 import { AppShell } from "@/components/AppShell";
-import LightRays from "@/components/LightRays/LightRays";
 import { StatusBadge } from "@/components/StatusBadge";
 import { useTheme } from "@/contexts/ThemeContext";
 import { formatDate } from "@/lib/format";
@@ -28,7 +27,7 @@ function StatCard({
   const { theme } = useTheme();
   const isDark = theme === "dark";
   return (
-    <div className={isDark ? "panel-border-only panel-border-dashed p-5" : "panel panel-white-border p-5"}>
+    <div className={isDark ? "panel-border-only panel-border-dashed glass p-5" : "panel panel-white-border p-5"}>
       <p className={isDark ? "text-sm font-bold uppercase tracking-wide text-white [text-shadow:0_0_12px_hsl(261_88%_60%_/_1),0_0_28px_hsl(261_88%_60%_/_0.7),0_0_48px_hsl(261_88%_60%_/_0.4)]" : "text-sm text-[hsl(var(--muted))]"}>{label}</p>
       <p className={`mt-2 text-3xl font-medium tabular-nums text-[hsl(var(--foreground))] ${className ?? ""}`}>
         {value}
@@ -56,24 +55,7 @@ export default function Dashboard() {
 
   return (
     <AppShell>
-      <div className="relative min-h-[85vh] overflow-hidden">
-        {isDark && (
-          <div className="pointer-events-none absolute inset-0 z-0">
-            <LightRays
-              raysOrigin="top-center"
-              raysColor="#7E3FF3"
-              raysSpeed={1.5}
-              lightSpread={0.8}
-              rayLength={1.2}
-              followMouse={true}
-              mouseInfluence={0.1}
-              noiseAmount={0.1}
-              distortion={0.05}
-            />
-          </div>
-        )}
-
-        <div className="relative z-10">
+      <div className="relative z-10">
       <div className="container max-w-5xl py-10 md:py-14">
         <div className="fade-in text-center">
           <p className="section-label section-label-tone">Overview</p>
@@ -122,7 +104,7 @@ export default function Dashboard() {
             </button>
           </div>
 
-          <div className={isDark ? "panel-border-only mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden shadow-[0_0_18px_rgba(255,255,255,0.3),0_0_50px_rgba(255,255,255,0.12)]" : "panel mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden"}>
+          <div className={isDark ? "panel-border-only glass mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden shadow-[0_0_18px_rgba(255,255,255,0.3),0_0_50px_rgba(255,255,255,0.12)]" : "panel mt-5 divide-y divide-[hsl(var(--border))] overflow-hidden"}>
             {recent.map((report) => (
               <button
                 key={report.id}
@@ -149,9 +131,8 @@ export default function Dashboard() {
               </button>
             ))}
           </div>
+          </div>
         </div>
-        </div>
-      </div>
       </div>
     </AppShell>
   );

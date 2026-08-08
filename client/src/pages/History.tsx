@@ -1,6 +1,7 @@
 import { AppShell } from "@/components/AppShell";
 import { EmptyState } from "@/components/States";
 import { StatusBadge } from "@/components/StatusBadge";
+import { useTheme } from "@/contexts/ThemeContext";
 import { formatDate } from "@/lib/format";
 import { STATUS_META, scoreToBand } from "@/lib/status";
 import { cn } from "@/lib/utils";
@@ -19,8 +20,11 @@ const FILTERS: Array<{ key: StatusBand | "ALL"; label: string }> = [
 
 export default function History() {
   const [, setLocation] = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<StatusBand | "ALL">("ALL");
+  const [focused, setFocused] = useState(false);
 
   const reports = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -40,12 +44,13 @@ export default function History() {
 
   return (
     <AppShell>
-      <div className="container max-w-5xl py-10 md:py-14">
-        <div className="fade-in text-center">
-          <p className="section-label">Archive</p>
-          <h1 className="mt-3 text-balance text-3xl md:text-4xl">
-            Verification history
-          </h1>
+      <div className="relative z-10">
+          <div className="container max-w-5xl py-10 md:py-14">
+            <div className="fade-in text-center">
+              <p className="section-label eyebrow-glow">Archive</p>
+              <h1 className="section-title-glow mt-3 text-balance text-3xl dark:text-4xl md:text-4xl md:dark:text-5xl">
+                Verification history
+              </h1>
           <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
             Every claim you've run through Visstya, with its evidence score.
           </p>
@@ -54,13 +59,49 @@ export default function History() {
         {/* Search + filters */}
         <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[hsl(var(--muted))]" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search claims, locations or reports…"
-              className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--card))] pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
-            />
+            {isDark ? (
+              <div
+                className={cn(
+                  "flex h-11 w-full items-center gap-2 rounded-full border px-2 transition-all duration-300",
+                  "border-white/15 bg-white/10 backdrop-blur-sm",
+                  focused && "border-[hsl(261_88%_60%)]/60 bg-white/15"
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex size-8 shrink-0 items-center justify-center rounded-full transition-all duration-300",
+                    focused && "ml-auto"
+                  )}
+                  style={{
+                    background:
+                      "radial-gradient(circle at 30% 30%, hsl(261 88% 72%), hsl(261 88% 60%))",
+                  }}
+                >
+                  <Search className="size-4 text-white" strokeWidth={2.5} />
+                </span>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  placeholder="Search claims, locations or reports"
+                  className="w-full bg-transparent text-sm text-[hsl(var(--foreground))] outline-none placeholder:text-[hsl(var(--muted))]"
+                />
+                {focused && (
+                  <span className="mr-1 h-4 w-0.5 shrink-0 animate-pulse rounded-full bg-[hsl(261_88%_60%)]" />
+                )}
+              </div>
+            ) : (
+              <>
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[hsl(var(--muted))]" />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search claims, locations or reports…"
+                  className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--card))] pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-[hsl(var(--muted))] focus:border-[hsl(var(--foreground))]"
+                />
+              </>
+            )}
           </div>
           <div className="flex items-center gap-1">
             {FILTERS.map((f) => (
@@ -72,7 +113,9 @@ export default function History() {
                   "rounded-md px-3 py-1.5 text-sm transition-colors",
                   filter === f.key
                     ? "bg-[hsl(var(--primary))] font-medium text-[hsl(var(--primary-foreground))]"
-                    : "text-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--foreground))]"
+                    : isDark
+                      ? "text-[hsl(var(--muted))] hover:bg-[hsl(261_88%_90%)]/40 hover:text-[hsl(var(--foreground))]"
+                      : "text-[hsl(var(--muted))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--foreground))]"
                 )}
               >
                 {f.label}
@@ -94,7 +137,14 @@ export default function History() {
               }
             />
           ) : (
-            <div className="panel divide-y divide-[hsl(var(--border))] overflow-hidden">
+            <div
+              className={cn(
+                "divide-y divide-[hsl(var(--border))] overflow-hidden",
+                isDark
+                  ? "panel-border-only glass shadow-[0_0_18px_rgba(255,255,255,0.3),0_0_50px_rgba(255,255,255,0.12)]"
+                  : "panel"
+              )}
+            >
               {reports.map((report) => {
                 const band = scoreToBand(report.totalScore);
                 const meta = STATUS_META[band];
@@ -131,20 +181,27 @@ export default function History() {
                       <StatusBadge score={report.totalScore} size="sm" />
                     </span>
                     <span className="shrink-0 text-right">
-                      <span className="block text-lg font-medium tabular-nums text-[hsl(var(--foreground))]">
+                      <span className={cn("block text-lg font-medium tabular-nums", isDark ? meta.textClass : "text-[hsl(var(--foreground))]")}>
                         {report.totalScore}
                       </span>
-                      <span className="block text-[10px] text-[hsl(var(--muted))]">/ 100</span>
+                      <span className={cn("block text-[10px]", isDark ? "text-white" : "text-[hsl(var(--muted))]")}>/ 100</span>
                     </span>
-                    <span className="link-arrow hidden sm:inline-flex">
-                      Open Report
-                      <ArrowRight className="size-4" />
-                    </span>
+                    {isDark ? (
+                      <span className="hidden shrink-0 items-center rounded-md bg-[hsl(261_88%_60%)] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:inline-flex">
+                        Open Report
+                      </span>
+                    ) : (
+                      <span className="link-arrow hidden sm:inline-flex">
+                        Open Report
+                        <ArrowRight className="size-4" />
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
           )}
+          </div>
         </div>
       </div>
     </AppShell>

@@ -93,7 +93,7 @@ function SectionHeading({
         {eyebrow}
       </p>
       <h2
-        className={`mt-3 text-balance${titleClassName ? ` ${titleClassName}` : ""}`}
+        className={`mt-3 text-balance font-serif${titleClassName ? ` ${titleClassName}` : ""}`}
       >
         {title}
       </h2>
@@ -135,25 +135,25 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[hsl(var(--background))]">
-      <Navbar />
+    <div className="relative min-h-screen overflow-x-hidden bg-[hsl(var(--background))]">
+      {theme === "dark" && (
+        <div
+          className="pointer-events-none fixed inset-0 z-0"
+          aria-hidden="true"
+        >
+          <DarkVeil
+            scanlineIntensity={0.58}
+            speed={1.1}
+            scanlineFrequency={4}
+          />
+          <div className="absolute inset-0 bg-[hsl(var(--background))/70]" />
+        </div>
+      )}
+      <div className="relative z-10">
+        <Navbar />
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden="true"
-        >
-          {theme === "dark" && (
-            <DarkVeil
-              scanlineIntensity={0.58}
-              speed={1.1}
-              scanlineFrequency={4}
-            />
-          )}
-          <div className="absolute inset-0 bg-[hsl(var(--background))/75]" />
-        </div>
-
         <div className="container relative flex flex-col items-center pt-20 pb-16 text-center md:pt-28 md:pb-20">
           <p
             className="section-label stagger-item"
@@ -162,7 +162,7 @@ export default function Home() {
             Evidence-based verification
           </p>
           <h1
-            className="heading-glow stagger-item mt-5 max-w-4xl text-balance text-[2.5rem] leading-[1.05] text-[hsl(var(--foreground))] md:text-6xl lg:text-7xl"
+            className="heading-glow stagger-item mt-5 max-w-4xl text-balance font-serif text-[2.5rem] leading-[1.05] text-[hsl(var(--foreground))] md:text-6xl lg:text-7xl"
             style={{ animationDelay: "0.08s" }}
           >
             Don't ask if it's AI.
@@ -215,7 +215,13 @@ export default function Home() {
             className="scale-in mt-16 w-full max-w-xl md:mt-20"
             style={{ animationDelay: "0.26s" }}
           >
-            <div className="panel p-6 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)] md:p-8">
+            <div
+              className={
+                theme === "dark"
+                  ? "rounded-md border border-white/60 bg-transparent p-6 text-left shadow-[0_0_14px_rgba(255,255,255,0.35),0_0_30px_rgba(255,255,255,0.18)] backdrop-blur-md md:p-8"
+                  : "panel p-6 text-left shadow-[0_1px_2px_rgba(0,0,0,0.04),0_16px_40px_rgba(0,0,0,0.07)] md:p-8"
+              }
+            >
               <div className="flex items-center justify-between">
                 <p className="section-label text-glow-accent">Sample report</p>
                 <span className="chip-location rounded-full px-2.5 py-0.5 text-[11px]">
@@ -223,7 +229,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <p className="mt-4 text-[15px] font-medium leading-snug text-[hsl(var(--foreground))]">
+              <p className="mt-4 font-serif text-[15px] font-medium leading-snug text-[hsl(var(--foreground))]">
                 {sample.claim.event}
               </p>
 
@@ -273,7 +279,7 @@ export default function Home() {
       {/* How it works */}
       <section
         id="how-it-works"
-        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 md:py-24"
+        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 dark:bg-transparent md:py-24"
       >
         <div className="container">
           <SectionHeading
@@ -285,17 +291,27 @@ export default function Home() {
             detail="Five stages, each traceable. Nothing about the process is hidden — every score in the final report points back to evidence."
           />
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--border))] md:grid-cols-5">
+          <div
+            className={
+              theme === "dark"
+                ? "mt-12 grid gap-4 md:grid-cols-5"
+                : "mt-12 grid gap-px overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--border))] md:grid-cols-5"
+            }
+          >
             {STEPS.map((step, i) => (
               <div
                 key={step.n}
-                className="reveal card-glow bg-[hsl(var(--card))] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--secondary))/30]"
+                className={`reveal rounded-md p-6 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--secondary))/30] ${
+                  theme === "dark"
+                    ? "border border-white/25 bg-transparent backdrop-blur-md hover:border-white/60 hover:shadow-[0_0_10px_rgba(255,255,255,0.25),0_0_20px_rgba(255,255,255,0.12)]"
+                    : "card-glow bg-[hsl(var(--card))]"
+                }`}
                 style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className="flex items-center justify-between">
                   <span className="step-number font-mono text-xs">{step.n}</span>
                 </div>
-                <p className="step-title mt-5 text-xl font-bold">
+                <p className="step-title mt-5 font-serif text-xl font-bold">
                   {step.title}
                 </p>
                 <p className="step-detail mt-2 text-xs leading-relaxed">
@@ -322,7 +338,11 @@ export default function Home() {
           {MODULES.map((mod, i) => (
             <div
               key={mod.n}
-              className="reveal panel panel-hover-glow flex flex-col p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+              className={`reveal flex flex-col rounded-md p-6 transition-all duration-300 hover:-translate-y-0.5 ${
+                theme === "dark"
+                  ? "border border-white/25 bg-transparent backdrop-blur-md hover:border-white/60 hover:bg-[hsl(var(--secondary))/30] hover:shadow-[0_0_10px_rgba(255,255,255,0.25),0_0_20px_rgba(255,255,255,0.12)]"
+                  : "panel panel-hover-glow hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
+              }`}
               style={{ animationDelay: `${i * 0.08}s` }}
             >
               <div className="flex items-center justify-between">
@@ -341,7 +361,7 @@ export default function Home() {
                   </>
                 )}
               </div>
-              <p className="module-title mt-5">{mod.title}</p>
+              <p className="module-title mt-5 font-serif">{mod.title}</p>
               <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--muted))]">
                 {mod.detail}
               </p>
@@ -353,7 +373,7 @@ export default function Home() {
       {/* Trust scale */}
       <section
         id="scale"
-        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 md:py-24"
+        className="scroll-mt-20 border-y border-[hsl(var(--border))] bg-[hsl(var(--card))] py-16 dark:bg-transparent md:py-24"
       >
         <div className="container">
           <SectionHeading
@@ -369,7 +389,13 @@ export default function Home() {
             detail="Every report places the claim on the same 0–100 scale. Under 40 is unsupported, 40–79 is partially supported, and 80 or above is well-supported by the evidence. The score is always a starting point — the sources are the substance."
           />
 
-          <div className="reveal panel mx-auto mt-10 max-w-xl p-6">
+          <div
+            className={`reveal mx-auto mt-10 max-w-xl rounded-md p-6 ${
+              theme === "dark"
+                ? "border border-white/60 bg-transparent shadow-[0_0_14px_rgba(255,255,255,0.35),0_0_30px_rgba(255,255,255,0.18)] backdrop-blur-md"
+                : "panel"
+            }`}
+          >
             <span className="sample-badge inline-block px-2 py-1 text-[11px] font-extrabold uppercase tracking-wide text-[hsl(var(--foreground))]">
               Sample placement
             </span>
@@ -386,7 +412,7 @@ export default function Home() {
         <div
           className={
             theme === "dark"
-              ? "reveal panel-border-only panel-white-glow relative flex flex-col items-center gap-6 overflow-hidden px-6 py-14 text-center shadow-[0_0_16px_rgba(255,255,255,0.15)] md:py-16"
+              ? "reveal panel-border-only panel-white-glow glass relative flex flex-col items-center gap-6 overflow-hidden px-6 py-14 text-center shadow-[0_0_16px_rgba(255,255,255,0.15)] md:py-16"
               : "reveal panel-subtle flex flex-col items-center gap-6 px-6 py-14 text-center md:py-16"
           }
         >
@@ -409,7 +435,7 @@ export default function Home() {
               Ready when you are
             </p>
             <h2
-              className={`reveal section-title-glow max-w-xl text-balance${theme === "dark" ? " whitespace-nowrap!" : ""}`}
+              className={`reveal section-title-glow max-w-xl text-balance font-serif${theme === "dark" ? " whitespace-nowrap!" : ""}`}
               style={{ animationDelay: "0.2s" }}
             >
               Have something you don't trust?
@@ -431,6 +457,7 @@ export default function Home() {
       </section>
 
       <Footer />
+      </div>
     </div>
   );
 }

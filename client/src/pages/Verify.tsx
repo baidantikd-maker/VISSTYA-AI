@@ -1,6 +1,5 @@
 import { AppShell } from "@/components/AppShell";
 import { ClaimForm } from "@/components/ClaimForm";
-import LightRays from "@/components/LightRays/LightRays";
 import { UploadDropzone } from "@/components/UploadDropzone";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
@@ -56,24 +55,7 @@ export default function Verify() {
 
   return (
     <AppShell>
-      <div className="relative min-h-[85vh] overflow-hidden">
-        {isDark && (
-          <div className="pointer-events-none absolute inset-0 z-0">
-            <LightRays
-              raysOrigin="top-center"
-              raysColor="#7E3FF3"
-              raysSpeed={1.5}
-              lightSpread={0.8}
-              rayLength={1.2}
-              followMouse={true}
-              mouseInfluence={0.1}
-              noiseAmount={0.1}
-              distortion={0.05}
-            />
-          </div>
-        )}
-
-        <div className="relative z-10">
+      <div className="relative z-10">
           <div className="container max-w-3xl py-10 md:py-16">
             <div className="fade-in text-center">
               <p className="section-label eyebrow-glow">New verification</p>
@@ -171,18 +153,22 @@ export default function Verify() {
                   type="button"
                   disabled={!canAnalyze}
                   onClick={submit}
-                  className="inline-flex h-11 items-center gap-2 rounded-md bg-[hsl(var(--primary))] px-6 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40"
+                  className={cn(
+                    "inline-flex h-11 items-center rounded-md px-6 transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40",
+                    isDark
+                      ? "justify-center bg-[hsl(261_88%_60%)] text-base font-bold text-white"
+                      : "gap-2 bg-[hsl(var(--primary))] text-sm font-medium text-[hsl(var(--primary-foreground))]"
+                  )}
                 >
                   Analyze Evidence
-                  <ArrowRight className="size-4" />
+                  {!isDark && <ArrowRight className="size-4" />}
                 </button>
               </div>
             </div>
           )}
         </div>
-        </div>
-          </div>
-        </div>
+      </div>
+      </div>
     </AppShell>
   );
 }

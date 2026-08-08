@@ -18,7 +18,7 @@ function Section({
 }) {
   return (
     <div className="panel p-6">
-      <p className="text-base font-medium text-[hsl(var(--foreground))]">{title}</p>
+      <p className="font-serif text-base font-semibold text-[hsl(var(--foreground))]">{title}</p>
       {description && (
         <p className="mt-1 text-sm leading-relaxed text-[hsl(var(--muted))]">{description}</p>
       )}
@@ -56,20 +56,21 @@ function RetentionOption({
 }
 
 export default function Settings() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { theme, toggleTheme, switchable } = useTheme();
-  const [name, setName] = useState(user?.name ?? "Demo User");
-  const [email] = useState(user?.email ?? "demo@vistya.ai");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [publicProfile, setPublicProfile] = useState(true);
   const [shareReports, setShareReports] = useState(true);
   const [retention, setRetention] = useState("none");
 
   return (
     <AppShell>
-      <div className="settings-page container max-w-3xl py-10 md:py-14">
+      <div className="relative z-10">
+          <div className="settings-page container max-w-3xl py-10 md:py-14">
         <div className="fade-in text-center">
-          <p className="section-label">Preferences</p>
-          <h1 className="mt-3 text-balance text-3xl md:text-4xl">Settings</h1>
+          <p className="section-label eyebrow-glow">Preferences</p>
+          <h1 className="section-title-glow mt-3 text-balance text-3xl dark:text-4xl md:text-4xl md:dark:text-5xl">Settings</h1>
           <p className="mx-auto mt-3 max-w-xl text-[hsl(var(--muted))]">
             Your profile, privacy and data controls.
           </p>
@@ -131,9 +132,11 @@ export default function Settings() {
                 </label>
                 <input
                   id="s-email"
+                  type="email"
                   value={email}
-                  readOnly
-                  className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--secondary))] px-3 text-sm text-[hsl(var(--muted))] outline-none"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@gmail.com"
+                  className="h-10 w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--card))] px-3 text-sm outline-none focus:border-[hsl(var(--foreground))]"
                 />
               </div>
             </div>
@@ -253,6 +256,7 @@ export default function Settings() {
             </Button>
           </Section>
         </div>
+          </div>
       </div>
     </AppShell>
   );
